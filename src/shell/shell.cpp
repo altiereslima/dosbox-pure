@@ -677,7 +677,7 @@ void SHELL_Init() {
 	MSG_Add("SHELL_CMD_ATTRIB_HELP","Exibe ou altera atributos de arquivos.\n");
 	MSG_Add("SHELL_CMD_PATH_HELP","Exibe ou define um caminho de pesquisa para arquivos execut veis.\n");
 	MSG_Add("SHELL_CMD_VER_HELP","Exibe a vers„o do DOS informada pelo MSDos.\n");
-	MSG_Add("SHELL_CMD_VER_VER","DOSBox vers„o %s (%s). Vers„o do DOS informada %d.%02d.\n");
+	MSG_Add("SHELL_CMD_VER_VER","DOSBox vers„o %s. Vers„o do DOS informada %d.%02d.\n");
 
 	/* Regular startup */
 	call_shellstop=CALLBACK_Allocate();
