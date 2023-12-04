@@ -2020,7 +2020,7 @@ void DOS_SetupPrograms(void) {
         "imagem deve estar previamente montada usando o comando \033[34;1mIMGMOUNT\033[0m.\n\n"
         "A sintaxe deste comando Ç uma das seguintes:\n\n"
         "\033[34;1mBOOT [letra_da_unidade:]\033[0m\n"
-        "\033[34;1mBOOT diskimg1.img [diskimg2.img ...] [-L letra_da_unidade]\033[0m\n\n"
+        "\033[34;1mBOOT [diskimg1.img diskimg2.img] [-l letra_da_unidade]\033[0m\n\n"
         "Nota: Um arquivo de imagem com dois pontos Ö esquerda (:) ser† inicializada com\n"
 		"somente leitura se a opáÑo \"proteger contra escrita com dois pontos iniciais\"\n"
 		"estiver ativada.\n\n"
@@ -2032,7 +2032,7 @@ void DOS_SetupPrograms(void) {
 	MSG_Add("PROGRAM_BOOT_UNABLE","NÑo foi poss°vel inicializar a partir da unidade %c");
 	MSG_Add("PROGRAM_BOOT_IMAGE_MOUNTED", "Imagem(ns) de disquete j† montada(s).\n");
 	MSG_Add("PROGRAM_BOOT_IMAGE_OPEN","Abrindo arquivo imagem: %s\n");
-	MSG_Add("PROGRAM_BOOT_IMAGE_NOT_OPEN","NÑo foi poss°vel abrir %s\n");
+	MSG_Add("PROGRAM_BOOT_IMAGE_NOT_OPEN","NÑo foi poss°vel abrir %s");
 	MSG_Add("PROGRAM_BOOT_BOOT","Iniciando a partir da unidade %c...\n");
 	MSG_Add("PROGRAM_BOOT_CART_WO_PCJR","Cartucho PCjr encontrado, mas a m†quina nÑo Ç um PCjr");
 	MSG_Add("PROGRAM_BOOT_CART_LIST_CMDS","Comandos dispon°veis no cartucho PCjr: %s");
@@ -2046,11 +2046,11 @@ void DOS_SetupPrograms(void) {
 	MSG_Add("PROGRAM_LOADROM_BASIC_LOADED","BASIC ROM carregada.\n");
 
 	MSG_Add("PROGRAM_IMGMOUNT_SPECIFY_DRIVE","ê necess†rio especificar a letra da unidade onde a imagem ser† montada.\n");
-	MSG_Add("PROGRAM_IMGMOUNT_SPECIFY2","ê necess†rio especificar o n£mero da unidade (0 Ö %d) para montar a imagem em\n0,1=fda,fdb;2,3=hda,hdb).\n");
+	MSG_Add("PROGRAM_IMGMOUNT_SPECIFY2","ê necess†rio especificar o n£mero da unidade (0 ou 3) para montar a imagem em\n0,1=fda,fdb;2,3=hda,hdb).\n");
 	MSG_Add("PROGRAM_IMGMOUNT_SPECIFY_GEOMETRY",
 		"Para imagens de \033[33mCD-ROM\033[0m:   \033[34;1mIMGMOUNT letra-da-unidade caminho-da-imagem -t iso\033[0m\n"
 		"\n"
-		"Para imagens de \033[33mhard drive\033[0m: ê necess†rio especificar a geometria da unidade para discos r°gidos:\n"
+		"Para imagens de \033[33mharddrive\033[0m: ê necess†rio especificar a geometria da unidade para discos r°gidos:\n"
 		"bytes_por_setor, setores_por_cilindro, cabeáas_por_cilindro, quantidade_de_cilindros.\n"
 		"\033[34;1mIMGMOUNT letra_da_unidade local_da_imagem -size bps,spc,hpc,cyl\033[0m\n");
 	MSG_Add("PROGRAM_IMGMOUNT_INVALID_IMAGE","NÑo foi poss°vel carregar o arquivo de imagem..\n"
