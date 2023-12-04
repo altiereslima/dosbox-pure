@@ -1879,7 +1879,7 @@ void DOS_SetupPrograms(void) {
 	MSG_Add("PROGRAM_MOUNT_UMOUNT_NOT_MOUNTED","Unidade %c n„o montada.\n");
 	MSG_Add("PROGRAM_MOUNT_UMOUNT_SUCCESS","A unidade %c foi desmontada com sucesso.\n");
 	MSG_Add("PROGRAM_MOUNT_UMOUNT_NO_VIRTUAL","As unidades virtuais n„o podem ser desmontadas.\n");
-	MSG_Add("PROGRAM_MOUNT_WARNING_WIN","\033[31;1mAviso: Montar C:\ n„o ‚ recomendado.\033[0m\n");
+	MSG_Add("PROGRAM_MOUNT_WARNING_WIN","\033[31;1mAviso: Montar C:\\ n„o ‚ recomendado.\033[0m\n");
 	MSG_Add("PROGRAM_MOUNT_WARNING_OTHER","\033[31;1mAviso: Montar / n„o ‚ recomendado.\033[0m\n");
 #ifdef C_DBP_NATIVE_OVERLAY
 	MSG_Add("PROGRAM_MOUNT_OVERLAY_NO_BASE","Por favor, MONTE primeiro uma pasta normal antes de adicionar uma sobreposi‡„o sobre ela.\n");
@@ -2029,7 +2029,7 @@ void DOS_SetupPrograms(void) {
         "\033[32;1mBOOT :DOS.IMG\033[0m - inicia a partir da imagem de disquete DOS.IMG\n"
 		"                em modo somente leitura.\n"
 		);
-	MSG_Add("PROGRAM_BOOT_UNABLE","N„o foi poss¡vel inicializar a partir da unidade %c.\n");
+	MSG_Add("PROGRAM_BOOT_UNABLE","N„o foi poss¡vel inicializar a partir da unidade %c");
 	MSG_Add("PROGRAM_BOOT_IMAGE_MOUNTED", "Imagem(ns) de disquete j  montada(s).\n");
 	MSG_Add("PROGRAM_BOOT_IMAGE_OPEN","Abrindo arquivo imagem: %s\n");
 	MSG_Add("PROGRAM_BOOT_IMAGE_NOT_OPEN","N„o foi poss¡vel abrir %s\n");
@@ -2051,7 +2051,7 @@ void DOS_SetupPrograms(void) {
 		"Para imagens de \033[33mCD-ROM\033[0m:   \033[34;1mIMGMOUNT letra-da-unidade caminho-da-imagem -t iso\033[0m\n"
 		"\n"
 		"Para imagens de \033[33mhard drive\033[0m:  necess rio especificar a geometria da unidade para discos r¡gidos:\n"
-		"bytes_por_setor, setores_por_cilindro, cabe‡as_por_cilindro, quantidade_de_cilindros.\n");
+		"bytes_por_setor, setores_por_cilindro, cabe‡as_por_cilindro, quantidade_de_cilindros.\n"
 		"\033[34;1mIMGMOUNT letra_da_unidade local_da_imagem -size bps,spc,hpc,cyl\033[0m\n");
 	MSG_Add("PROGRAM_IMGMOUNT_INVALID_IMAGE","N„o foi poss¡vel carregar o arquivo de imagem..\n"
 		"Verifique se o caminho est  correto e a imagem acess¡vel.\n");
@@ -2085,7 +2085,6 @@ void DOS_SetupPrograms(void) {
 	MSG_Add("PROGRAM_KEYB_INVALIDFILE","Arquivo de teclado %s inv lido\n");
 	MSG_Add("PROGRAM_KEYB_LAYOUTNOTFOUND","N„o existe esquema em %s para a p gina de c¢digo %i\n");
 	MSG_Add("PROGRAM_KEYB_INVCPFILE","Nenhum arquivo de p gina de c¢digo ou ‚ inv lido para o esquema %s\n\n");
-
 
 	/*regular setup*/
 	PROGRAMS_MakeFile("MOUNT.COM",MOUNT_ProgramStart);
