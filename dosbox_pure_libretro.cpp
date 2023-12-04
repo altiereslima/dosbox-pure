@@ -103,11 +103,11 @@ struct DBP_InputBind
 enum { DBP_MAX_PORTS = 8, DBP_JOY_ANALOG_RANGE = 0x8000 }; // analog stick range is -0x8000 to 0x8000
 static const char* DBP_KBDNAMES[] =
 {
-	"None","1","2","3","4","5","6","7","8","9","0","Q","W","E","R","T","Y","U","I","O","P","A","S","D","F","G","H","J","K","L","Z","X","C","V","B","N","M",
-	"F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","F11","F12","Esc","Tab","Backspace","Enter","Space","Left-Alt","Right-Alt","Left-Ctrl","Right-Ctrl","Left-Shift","Right-Shift",
-	"Caps-Lock","Scroll-Lock","Num-Lock","Grave `","Minus -","Equals =","Backslash","Left-Bracket [","Right-Bracket ]","Semicolon ;","Quote '","Period .","Comma ,","Slash /","Backslash \\",
-	"Print-Screen","Pause","Insert","Home","Page-Up","Delete","End","Page-Down","Left","Up","Down","Right","NP-1","NP-2","NP-3","NP-4","NP-5","NP-6","NP-7","NP-8","NP-9","NP-0",
-	"NP-Divide /","NP-Multiply *","NP-Minus -","NP-Plus +","NP-Enter","NP-Period .",""
+	"Nada","1","2","3","4","5","6","7","8","9","0","Q","W","E","R","T","Y","U","I","O","P","A","S","D","F","G","H","J","K","L","Z","X","C","V","B","N","M",
+	"F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","F11","F12","Esc","Tab","Backspace","Enter","Espaco","Alt-esquerdo","Alt-direito","Ctrl-esquerdo","Ctrl-direito","Shift-esquerdo","Shift-direito",
+	"Caps-Lock","Scroll-Lock","Num-Lock","Grave `","Menos -","Igual =","Barra invertida","Colchete aberto [","Colchete fechado ]","Ponto e virgula ;","Apostrofo '","Ponto .","Virgula ,","Barra /","Barra invertida \\",
+	"Print-Screen","Pause","Insert","Home","Page-Up","Delete","End","Page-Down","Esquerda","Cima","Baixo","Direita","1-NP","2-NP","3-NP","4-NP","5-NP","6-NP","7-NP","8-NP","9-NP","0-NP",
+	"Dividir-NP /","Multiplicar-NP *","Menos-NP -","Mais-NP +","Enter-NP","Ponto-NP .",""
 };
 static std::vector<DBP_InputBind> dbp_input_binds;
 static std::vector<Bit8u> dbp_custom_mapping;
@@ -152,35 +152,35 @@ enum DBP_Event_Type : Bit8u
 	_DBPET_MAX
 };
 //static const char* DBP_Event_Type_Names[] = { "JOY1X", "JOY1Y", "JOY2X", "JOY2Y", "JOYMX", "JOYMY", "MOUSEMOVE", "MOUSEDOWN", "MOUSEUP", "MOUSESETSPEED", "MOUSERESETSPEED", "JOYHATSETBIT", "JOYHATUNSETBIT", "JOY1DOWN", "JOY1UP", "JOY2DOWN", "JOY2UP", "KEYDOWN", "KEYUP", "ONSCREENKEYBOARD", "ONSCREENKEYBOARDUP", "AXIS_TO_KEY", "CHANGEMOUNTS", "MAX" };
-static const char *DBPDEV_Keyboard = "Keyboard", *DBPDEV_Mouse = "Mouse", *DBPDEV_Joystick = "Joystick";
+static const char *DBPDEV_Keyboard = "Teclado", *DBPDEV_Mouse = "Mouse", *DBPDEV_Joystick = "Joystick";
 static const struct DBP_SpecialMapping { int16_t evt, meta; const char *dev, *name; } DBP_SpecialMappings[] =
 {
-	{ DBPET_JOYMY,         -1, DBPDEV_Mouse,    "Move Up"      }, // 200
-	{ DBPET_JOYMY,          1, DBPDEV_Mouse,    "Move Down"    }, // 201
-	{ DBPET_JOYMX,         -1, DBPDEV_Mouse,    "Move Left"    }, // 202
-	{ DBPET_JOYMX,          1, DBPDEV_Mouse,    "Move Right"   }, // 203
-	{ DBPET_MOUSEDOWN,      0, DBPDEV_Mouse,    "Left Click"   }, // 204
-	{ DBPET_MOUSEDOWN,      1, DBPDEV_Mouse,    "Right Click"  }, // 205
-	{ DBPET_MOUSEDOWN,      2, DBPDEV_Mouse,    "Middle Click" }, // 206
-	{ DBPET_MOUSESETSPEED,  1, DBPDEV_Mouse,    "Speed Up"     }, // 207
-	{ DBPET_MOUSESETSPEED, -1, DBPDEV_Mouse,    "Slow Down"    }, // 208
-	{ DBPET_JOY1Y,         -1, DBPDEV_Joystick, "Up"           }, // 209
-	{ DBPET_JOY1Y,          1, DBPDEV_Joystick, "Down"         }, // 210
-	{ DBPET_JOY1X,         -1, DBPDEV_Joystick, "Left"         }, // 211
-	{ DBPET_JOY1X,          1, DBPDEV_Joystick, "Right"        }, // 212
-	{ DBPET_JOY1DOWN,       0, DBPDEV_Joystick, "Button 1"     }, // 213
-	{ DBPET_JOY1DOWN,       1, DBPDEV_Joystick, "Button 2"     }, // 214
-	{ DBPET_JOY2DOWN,       0, DBPDEV_Joystick, "Button 3"     }, // 215
-	{ DBPET_JOY2DOWN,       1, DBPDEV_Joystick, "Button 4"     }, // 216
-	{ DBPET_JOYHATSETBIT,   8, DBPDEV_Joystick, "Hat Up"       }, // 217
-	{ DBPET_JOYHATSETBIT,   2, DBPDEV_Joystick, "Hat Down"     }, // 218
-	{ DBPET_JOYHATSETBIT,   1, DBPDEV_Joystick, "Hat Left"     }, // 219
-	{ DBPET_JOYHATSETBIT,   4, DBPDEV_Joystick, "Hat Right"    }, // 220
-	{ DBPET_JOY2Y,         -1, DBPDEV_Joystick, "Joy 2 Up"     }, // 221
-	{ DBPET_JOY2Y,          1, DBPDEV_Joystick, "Joy 2 Down"   }, // 222
-	{ DBPET_JOY2X,         -1, DBPDEV_Joystick, "Joy 2 Left"   }, // 223
-	{ DBPET_JOY2X,          1, DBPDEV_Joystick, "Joy 2 Right"  }, // 224
-	{ DBPET_ONSCREENKEYBOARD, 0, NULL, "On Screen Keyboard"    }, // 225
+	{ DBPET_JOYMY,         -1, DBPDEV_Mouse,    "para cima"      }, // 200
+	{ DBPET_JOYMY,          1, DBPDEV_Mouse,    "para baixo"    }, // 201
+	{ DBPET_JOYMX,         -1, DBPDEV_Mouse,    "para a esquerda"    }, // 202
+	{ DBPET_JOYMX,          1, DBPDEV_Mouse,    "para a direita"   }, // 203
+	{ DBPET_MOUSEDOWN,      0, DBPDEV_Mouse,    "Clique esquerdo"   }, // 204
+	{ DBPET_MOUSEDOWN,      1, DBPDEV_Mouse,    "Clique direito"  }, // 205
+	{ DBPET_MOUSEDOWN,      2, DBPDEV_Mouse,    "Clique no meio" }, // 206
+	{ DBPET_MOUSESETSPEED,  1, DBPDEV_Mouse,    "Acelerar"     }, // 207
+	{ DBPET_MOUSESETSPEED, -1, DBPDEV_Mouse,    "Desacelerar"    }, // 208
+	{ DBPET_JOY1Y,         -1, DBPDEV_Joystick, "Cima"           }, // 209
+	{ DBPET_JOY1Y,          1, DBPDEV_Joystick, "Baixo"         }, // 210
+	{ DBPET_JOY1X,         -1, DBPDEV_Joystick, "Esquerda"         }, // 211
+	{ DBPET_JOY1X,          1, DBPDEV_Joystick, "Direita"        }, // 212
+	{ DBPET_JOY1DOWN,       0, DBPDEV_Joystick, "Botao 1"     }, // 213
+	{ DBPET_JOY1DOWN,       1, DBPDEV_Joystick, "Botao 2"     }, // 214
+	{ DBPET_JOY2DOWN,       0, DBPDEV_Joystick, "Botao 3"     }, // 215
+	{ DBPET_JOY2DOWN,       1, DBPDEV_Joystick, "Botao 4"     }, // 216
+	{ DBPET_JOYHATSETBIT,   8, DBPDEV_Joystick, "Hat cima"       }, // 217
+	{ DBPET_JOYHATSETBIT,   2, DBPDEV_Joystick, "Hat baixo"     }, // 218
+	{ DBPET_JOYHATSETBIT,   1, DBPDEV_Joystick, "Hat esquerda"     }, // 219
+	{ DBPET_JOYHATSETBIT,   4, DBPDEV_Joystick, "Hat direita"    }, // 220
+	{ DBPET_JOY2Y,         -1, DBPDEV_Joystick, "Joy 2 cima"     }, // 221
+	{ DBPET_JOY2Y,          1, DBPDEV_Joystick, "Joy 2 baixo"   }, // 222
+	{ DBPET_JOY2X,         -1, DBPDEV_Joystick, "Joy 2 esquerda"   }, // 223
+	{ DBPET_JOY2X,          1, DBPDEV_Joystick, "Joy 2 direita"  }, // 224
+	{ DBPET_ONSCREENKEYBOARD, 0, NULL, "Teclado na tela"    }, // 225
 };
 #define DBP_SPECIALMAPPING(key) DBP_SpecialMappings[(key)-DBP_SPECIALMAPPINGS_KEY]
 enum { DBP_SPECIALMAPPINGS_KEY = 200, DBP_SPECIALMAPPINGS_MAX = 200+(sizeof(DBP_SpecialMappings)/sizeof(DBP_SpecialMappings[0])) };
@@ -418,7 +418,7 @@ static void DBP_ReportCoreMemoryMaps()
 	mdesc_expandedmem->ptr   = MemBase + conventional_end;
 
 	#ifndef NDEBUG
-	log_cb(RETRO_LOG_INFO, "[DOSBOX STATUS] ReportCoreMemoryMaps - Program: %s - Booted OS: %d - Program Memory: %d KB\n", RunningProgram, (int)booted_os, (mdescs[0].len / 1024));
+	log_cb(RETRO_LOG_INFO, "[DOSBOX STATUS] ReportCoreMemoryMaps - Programa: %s - SO inicializado: %d - Program Memory: %d KB\n", RunningProgram, (int)booted_os, (mdescs[0].len / 1024));
 	#endif
 
 	struct retro_memory_map mmaps = { mdescs, (unsigned)(!booted_os ? 3 : 2) };
@@ -704,7 +704,7 @@ static std::string DBP_GetSaveFile(DBP_SaveFileType type, const char** out_filen
 	}
 	else if (type == SFT_NEWOSIMAGE)
 	{
-		res.append(!dbp_content_name.empty() ? dbp_content_name.c_str() : "Installed OS").append(".img");
+		res.append(!dbp_content_name.empty() ? dbp_content_name.c_str() : "SO instalado").append(".img");
 		size_t num = 1, baselen = res.size() - 4;
 		while (FILE* f = fopen_wrap(res.c_str(), "rb"))
 		{
@@ -1021,7 +1021,7 @@ struct DBP_PadMapping
 		padmap->Read(&dbp_custom_mapping[0], &padmap_length);
 		if (!version_length || version != 0 || !padmap_length)
 		{
-			retro_notify(0, RETRO_LOG_ERROR, "Corrupt gamepad mapping data in %c:\\%s", 'C', "PADMAP.DBP");
+			retro_notify(0, RETRO_LOG_ERROR, "Dados de mapeamento do gamepad corrompidos em %c:\\%s", 'C', "PADMAP.DBP");
 			DBP_ASSERT(0);
 			dbp_custom_mapping.clear();
 		}
@@ -1061,7 +1061,7 @@ struct DBP_PadMapping
 			DOS_File *padmap = nullptr;
 			if (!Drives['C'-'A'] || !Drives['C'-'A']->FileCreate(&padmap, (char*)"PADMAP.DBP", DOS_ATTR_ARCHIVE))
 			{
-				retro_notify(0, RETRO_LOG_ERROR, "Unable to write gamepad mapping data %c:\\%s", 'C', "PADMAP.DBP");
+				retro_notify(0, RETRO_LOG_ERROR, "Não é possível gravar dados de mapeamento do gamepad %c:\\%s", 'C', "PADMAP.DBP");
 				DBP_ASSERT(0);
 				return;
 			}
@@ -1102,7 +1102,7 @@ struct DBP_PadMapping
 
 	static const char* GetPresetName(EPreset preset)
 	{
-		static const char* presets[] = { "Generic Keyboard", "Mouse w/ Left Analog", "Mouse w/ Right Analog", "Gravis Gamepad (4 Buttons)", "First 2 Button Joystick", "Second 2 Button Joystick", "Thrustmaster Flight Stick", "Both DOS Joysticks", "Custom Mapping" };
+		static const char* presets[] = { "Teclado generico", "Mouse c/ alavanca esquerda", "Mouse c/ alavanca direita", "Gravis Gamepad (4 botoes)", "Primeiro joystick de 2 botoes", "Segundo joystick de 2 botoes", "Thrustmaster Flight Stick", "Ambos os joysticks do DOS", "Mapeamento personalizado" };
 		return (preset == PRESET_AUTOMAPPED ? dbp_auto_mapping_title : presets[preset - 2]);
 	}
 
@@ -1260,7 +1260,7 @@ private:
 		if (bind_osd) InsertBind({ 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L3, DBPET_ONSCREENKEYBOARD });
 
 		return p;
-		err: retro_notify(0, RETRO_LOG_ERROR, "Gamepad mapping data is invalid"); return mapping+DBP_PADMAP_MAXSIZE_TOTAL;
+		err: retro_notify(0, RETRO_LOG_ERROR, "Os dados de mapeamento do gamepad são inválidos"); return mapping+DBP_PADMAP_MAXSIZE_TOTAL;
 	}
 
 	static Bit16s GetAxisSpecialMappingMeta(Bit16s evt)
@@ -1495,7 +1495,7 @@ static void DBP_Shutdown()
 	DBP_ThreadControl(TCM_SHUTDOWN);
 	if (!dbp_crash_message.empty())
 	{
-		retro_notify(0, RETRO_LOG_ERROR, "DOS crashed: %s", dbp_crash_message.c_str());
+		retro_notify(0, RETRO_LOG_ERROR, "O DOS travou: %s", dbp_crash_message.c_str());
 		dbp_crash_message.clear();
 	}
 	DBP_ASSERT(control);
@@ -2159,7 +2159,7 @@ static void DBP_RefreshInputBinds(bool generate_bindings, bool set_controller_in
 		{
 			ports[port].num_types = 2;
 			ports[port].types = descs + port * 2;
-			descs[port * 2 + 0] = { "Disabled", (unsigned)RETRO_DEVICE_NONE };
+			descs[port * 2 + 0] = { "Desativado", (unsigned)RETRO_DEVICE_NONE };
 			descs[port * 2 + 1] = { DBP_PadMapping::GetPortPresetName(port), (unsigned)RETRO_DEVICE_JOYPAD };
 		}
 		ports[DBP_MAX_PORTS] = {0};
@@ -2263,10 +2263,10 @@ static void set_variables(bool force_midi_scan = false)
 		for (size_t f = 0; f != numfiles; f += 2)
 			if (dynstr[f].back() > '3')
 				def.values[i++] = { dynstr[f].c_str(), dynstr[f+1].c_str() };
-		def.values[i++] = { "disabled", "Disabled" };
-		def.values[i++] = { "frontend", "Frontend MIDI driver" };
+		def.values[i++] = { "disabled", "Desativado" };
+		def.values[i++] = { "frontend", "Driver MIDI de interface" };
 		if (dbp_system_cached)
-			def.values[i++] = { "scan", (!strcmp(retro_get_variable("dosbox_pure_midi", ""), "scan") ? "System directory scan finished" : "Scan System directory for soundfonts (open this menu again after)") };
+			def.values[i++] = { "scan", (!strcmp(retro_get_variable("dosbox_pure_midi", ""), "scan") ? "Verificação do diretório do sistema concluída" : "Verificar o diretório do sistema em busca de fontes de som (abrir esse menu novamente após)") };
 		def.values[i] = { 0, 0 };
 		def.default_value = def.values[0].value;
 		break;
@@ -2336,12 +2336,12 @@ static bool check_variables(bool is_startup = false)
 			bool reInitSection = (dbp_state != DBPSTATE_BOOT);
 			if (disallow_in_game && dbp_game_running)
 			{
-				retro_notify(0, RETRO_LOG_WARN, "Unable to change value while game is running");
+				retro_notify(0, RETRO_LOG_WARN, "Não é possível alterar o valor enquanto o jogo está em execução");
 				reInitSection = false;
 			}
 			if (need_restart && reInitSection && dbp_game_running)
 			{
-				retro_notify(2000, RETRO_LOG_INFO, "Setting will be applied after restart");
+				retro_notify(2000, RETRO_LOG_INFO, "A configuração será aplicada após a reinicialização");
 				reInitSection = false;
 			}
 			else if (need_restart && reInitSection)
@@ -2783,7 +2783,7 @@ static void init_dosbox_load_dos_yml(const std::string& yml, Section** ref_autoe
 		}
 		continue;
 		syntaxerror:
-		retro_notify(0, RETRO_LOG_ERROR, "Error in DOS.YML: %.*s", (int)(l.Next-l.Key), l.Key);
+		retro_notify(0, RETRO_LOG_ERROR, "Erro no DOS.YML: %.*s", (int)(l.Next-l.Key), l.Key);
 		continue;
 	}
 	if (l.cpu_cycles || l.cpu_year || l.cpu_hz)
@@ -2939,7 +2939,7 @@ static void init_dosbox(bool firsttime, bool forcemenu = false, void(*loadcfg)(c
 					if (dbp_auto_mapping_mode == 'f')
 						return;
 
-					static_title = "Mapping: ";
+					static_title = "Mapeamento: ";
 					static_title += map_title + 1;
 					dbp_auto_mapping_title = static_title.c_str();
 
@@ -2951,7 +2951,7 @@ static void init_dosbox(bool firsttime, bool forcemenu = false, void(*loadcfg)(c
 					dbp_auto_mapping_names = (char*)buf + mappings_bk.mappings_action_offset;
 
 					if (dbp_auto_mapping_mode == 'n' && !dbp_custom_mapping.size()) //notify
-						retro_notify(0, RETRO_LOG_INFO, "Detected Automatic Key %s", static_title.c_str());
+						retro_notify(0, RETRO_LOG_INFO, "Tecla automática detectada %s", static_title.c_str());
 					return;
 				}
 			}
@@ -3287,7 +3287,7 @@ bool retro_load_game(const struct retro_game_info *info) //#4
 	enum retro_pixel_format pixel_format = RETRO_PIXEL_FORMAT_XRGB8888;
 	if (!environ_cb(RETRO_ENVIRONMENT_SET_PIXEL_FORMAT, &pixel_format))
 	{
-		retro_notify(0, RETRO_LOG_ERROR, "Frontend does not support XRGB8888.\n");
+		retro_notify(0, RETRO_LOG_ERROR, "A interface não é compatível com XRGB8888.\n");
 		return false;
 	}
 
@@ -3459,7 +3459,7 @@ void retro_run(void)
 		DBP_ThreadControl(TCM_FINISH_FRAME);
 		DBP_ASSERT(dbp_state == DBPSTATE_FIRST_FRAME || (dbp_state == DBPSTATE_EXITED && dbp_biosreboot));
 		if (MIDI_Retro_HasOutputIssue())
-			retro_notify(0, RETRO_LOG_WARN, "The frontend MIDI output is not set up correctly");
+			retro_notify(0, RETRO_LOG_WARN, "A saída MIDI da interface não está configurada corretamente");
 		if (dbp_state == DBPSTATE_FIRST_FRAME)
 			dbp_state = DBPSTATE_RUNNING;
 		if (dbp_latency == DBP_LATENCY_VARIABLE)
@@ -3554,8 +3554,8 @@ void retro_run(void)
 				if (!input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, dbp_keymap_dos2retro[i])) continue;
 				warned_game_focus = true;
 				retro_notify(10000, RETRO_LOG_WARN,
-					"Detected keyboard and joypad being pressed at the same time.\n"
-					"To freely use the keyboard without hotkeys enable 'Game Focus' (Scroll Lock key by default) if available.");
+					"Teclado e joypad detectados sendo pressionados ao mesmo tempo.\n"
+					"Para usar livremente o teclado sem teclas de atalho, ative o 'Foco no Jogo' (tecla Scroll Lock por padrão), se disponível.");
 				break;
 			}
 		}
@@ -3707,7 +3707,7 @@ void retro_run(void)
 	{
 		extern const char* DBP_CPU_GetDecoderName();
 		if (dbp_perf == DBP_PERF_DETAILED)
-			retro_notify(-1500, RETRO_LOG_INFO, "Speed: %4.1f%%, DOS: %dx%d@%4.2ffps, Actual: %4.2ffps, Drawn: %dfps, Cycles: %u (%s)"
+			retro_notify(-1500, RETRO_LOG_INFO, "Velocidade: %4.1f%%, DOS: %dx%d@%4.2ffps, Atual: %4.2ffps, Desenhado: %dfps, Ciclos: %u (%s)"
 				#ifdef DBP_ENABLE_WAITSTATS
 				", Waits: p%u|f%u|z%u|c%u"
 				#endif
@@ -3717,7 +3717,7 @@ void retro_run(void)
 				#endif
 				);
 		else
-			retro_notify(-1500, RETRO_LOG_INFO, "Emulation Speed: %4.1f%%",
+			retro_notify(-1500, RETRO_LOG_INFO, "Velocidade de emulação: %4.1f%%",
 				((float)tpfTarget / (float)tpfActual * 100));
 	}
 
@@ -3725,7 +3725,7 @@ void retro_run(void)
 	double targetfps = DBP_GetFPS();
 	if (av_info.geometry.base_width != buf.width || av_info.geometry.base_height != buf.height || av_info.geometry.aspect_ratio != buf.ratio || av_info.timing.fps != targetfps)
 	{
-		log_cb(RETRO_LOG_INFO, "[DOSBOX] Resolution changed %ux%u @ %.3fHz AR: %.5f => %ux%u @ %.3fHz AR: %.5f\n",
+		log_cb(RETRO_LOG_INFO, "[DOSBOX] Resolução alterada %ux%u @ %.3fHz AR: %.5f => %ux%u @ %.3fHz AR: %.5f\n",
 			av_info.geometry.base_width, av_info.geometry.base_height, av_info.timing.fps, av_info.geometry.aspect_ratio,
 			buf.width, buf.height, av_info.timing.fps, buf.ratio);
 		bool newfps = (av_info.timing.fps != targetfps);
@@ -3764,42 +3764,42 @@ static bool retro_serialize_all(DBPArchive& ar, bool unlock_thread)
 		switch (ar.had_error)
 		{
 			case DBPArchive::ERR_LAYOUT:
-				retro_notify(0, RETRO_LOG_ERROR, "%s%s", "Load State Error: ", "Invalid file format");
+				retro_notify(0, RETRO_LOG_ERROR, "%s%s", "Erro de carregamento de estado: ", "Formato de arquivo inválido");
 				break;
 			case DBPArchive::ERR_VERSION:
-				retro_notify(0, RETRO_LOG_ERROR, "%sUnsupported version (%d)", "Load State Error: ", ar.version);
+				retro_notify(0, RETRO_LOG_ERROR, "%sVersão não suportada (%d)", "Erro de carregamento de estado: ", ar.version);
 				break;
 			case DBPArchive::ERR_DOSNOTRUNNING:
 				if (ar.mode == DBPArchive::MODE_LOAD)
-					retro_notify(0, RETRO_LOG_WARN, "Unable to load a save state while game the isn't running, start it first.");
+					retro_notify(0, RETRO_LOG_WARN, "Não é possível carregar um estado salvo enquanto o jogo não está em execução, inicie-o primeiro.");
 				else if (dbp_serializemode != DBPSERIALIZE_REWIND)
-					retro_notify(0, RETRO_LOG_ERROR, "%sUnable to %s not running.\nIf using rewind, make sure to modify the related core option.", (ar.mode == DBPArchive::MODE_LOAD ? "Load State Error: " : "Save State Error: "), (ar.mode == DBPArchive::MODE_LOAD ? "load state made while DOS was" : "save state while DOS is"));
+					retro_notify(0, RETRO_LOG_ERROR, "%sNão é possível executar %s.\nSe estiver usando o rebobinamento, certifique-se de modificar a opção de núcleo relacionada.", (ar.mode == DBPArchive::MODE_LOAD ? "Erro de carregamento de estado: " : "Erro ao salvar o estado: "), (ar.mode == DBPArchive::MODE_LOAD ? "carregamento de estado feito enquanto o DOS estava" : "salvamento de estado enquanto o DOS estiver"));
 				break;
 			case DBPArchive::ERR_GAMENOTRUNNING:
 				if (ar.mode == DBPArchive::MODE_LOAD)
-					retro_notify(0, RETRO_LOG_WARN, "Unable to load a save state while game the isn't running, start it first.");
+					retro_notify(0, RETRO_LOG_WARN, "Não é possível carregar um estado salvo enquanto o jogo não está em execução, inicie-o primeiro.");
 				else if (dbp_serializemode != DBPSERIALIZE_REWIND)
-					retro_notify(0, RETRO_LOG_ERROR, "%sUnable to %s not running.\nIf using rewind, make sure to modify the related core option.", (ar.mode == DBPArchive::MODE_LOAD ? "Load State Error: " : "Save State Error: "), (ar.mode == DBPArchive::MODE_LOAD ? "load state made while game was" : "save state while game is"));
+					retro_notify(0, RETRO_LOG_ERROR, "%sNão é possível executar %s.\nSe estiver usando o rebobinamento, certifique-se de modificar a opção de núcleo relacionada.", (ar.mode == DBPArchive::MODE_LOAD ? "Erro de carregamento de estado: " : "Erro ao salvar o estado: "), (ar.mode == DBPArchive::MODE_LOAD ? "carregamento do estado feito enquanto o jogo estava" : "salvamento do estado enquanto o jogo está"));
 				break;
 			case DBPArchive::ERR_WRONGMACHINECONFIG:
-				retro_notify(0, RETRO_LOG_ERROR, "%sWrong graphics chip configuration (%s instead of %s)", "Load State Error: ",
+				retro_notify(0, RETRO_LOG_ERROR, "%sConfiguração incorreta do chip gráfico (%s em vez de %s)", "Erro de carregamento de estado: ",
 					(machine <= MCH_VGA ? machine_names[machine] : "UNKNOWN"), (ar.error_info <= MCH_VGA ? machine_names[ar.error_info] : "UNKNOWN"));
 				break;
 			case DBPArchive::ERR_WRONGMEMORYCONFIG:
-				retro_notify(0, RETRO_LOG_ERROR, "%sWrong memory size configuration (%d MB instead of %d MB)", "Load State Error: ",
+				retro_notify(0, RETRO_LOG_ERROR, "%sConfiguração incorreta do tamanho da memória (%d MB em vez de %d MB)", "Erro de carregamento de estado: ",
 					(Bit8u)(MEM_TotalPages() / 256), (ar.error_info < 225 ? ar.error_info : (ar.error_info-223)*128));
 				break;
 			case DBPArchive::ERR_WRONGVGAMEMCONFIG:
-				retro_notify(0, RETRO_LOG_ERROR, "%sWrong SVGA mode configuration (%d KB VGA RAM instead of %D KB)", "Load State Error: ",
+				retro_notify(0, RETRO_LOG_ERROR, "%sConfiguração incorreta do modo SVGA (%d KB de RAM VGA em vez de %D KB)", "Erro de carregamento de estado: ",
 					(Bit8u)(vga.vmemsize / 1024), ar.error_info * 128);
 				break;
 		}
 	}
 	else if (ar.warnings && ar.mode == DBPArchive::MODE_LOAD)
 	{
-		if (ar.warnings & DBPArchive::WARN_WRONGDRIVES)  retro_notify(0, RETRO_LOG_WARN, "%s%s", "Serialize Warning: ", "Inconsistent file system state or wrong disks mounted");
-		if (ar.warnings & DBPArchive::WARN_WRONGDEVICES) retro_notify(0, RETRO_LOG_WARN, "%s%s", "Serialize Warning: ", "Inconsistent device handlers");
-		if (ar.warnings & DBPArchive::WARN_WRONGPROGRAM) retro_notify(0, RETRO_LOG_WARN, "%s%s", "Serialize Warning: ", "Loaded into different program type, risk of system crash");
+		if (ar.warnings & DBPArchive::WARN_WRONGDRIVES)  retro_notify(0, RETRO_LOG_WARN, "%s%s", "Aviso de serialização: ", "Estado inconsistente do sistema de arquivos ou discos errados montados");
+		if (ar.warnings & DBPArchive::WARN_WRONGDEVICES) retro_notify(0, RETRO_LOG_WARN, "%s%s", "Aviso de serialização: ", "Manipuladores de dispositivos inconsistentes");
+		if (ar.warnings & DBPArchive::WARN_WRONGPROGRAM) retro_notify(0, RETRO_LOG_WARN, "%s%s", "Aviso de serialização: ", "Carregado em um tipo de programa diferente, risco de falha do sistema");
 	}
 	return !ar.had_error;
 }
