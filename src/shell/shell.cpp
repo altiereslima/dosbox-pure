@@ -662,7 +662,7 @@ void SHELL_Init() {
 	MSG_Add("SHELL_CMD_RENAME_HELP_LONG","RENAME [unidade:][caminho][nome_de_pasta1 | arquivo1] [nome_de_pasta2 | arquivo2]\n"
 	        "REN [unidade:][caminho][nome_de_pasta1 | arquivo1] [nome_de_pasta2 | arquivo2]\n\n"
 	        "Note que vocˆ n„o pode especificar uma nova unidade ou caminho para o\n"
-			"arquivo de destino.\n\n"
+			"arquivo de destino.\n\n");
 	MSG_Add("SHELL_CMD_DELETE_HELP","Exclui um ou mais arquivos.\n");
 	MSG_Add("SHELL_CMD_COPY_HELP","Copia um ou mais arquivos para outro local.\n");
 	MSG_Add("SHELL_CMD_CALL_HELP","Chama um arquivo em lotes de outro.\n");
