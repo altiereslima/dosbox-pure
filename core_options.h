@@ -35,7 +35,7 @@ static retro_core_option_v2_definition option_defs[] =
 		"Feche e reabra o menu para atualizar esta página de opções.", NULL,
 		NULL,
 		{ { "false", "Off" }, { "true", "On" } },
-		"false"
+		"true"
 	},
 	// Emulation
 	{
@@ -78,7 +78,7 @@ static retro_core_option_v2_definition option_defs[] =
 	{
 		"dosbox_pure_conf",
 		"Carregamento do dosbox.conf", NULL,
-		"O DOSBox Pure deve ser configurado por meio das opções principais, mas opcionalmente suporta o carregamento de arquivos .conf herdados." "\n\n", NULL, //end of Emulation section
+		"O DOSBox Pure deve ser configurado por meio das opções principais, mas opcionalmente suporta o carregamento de arquivos .conf herdados." "\n\n", NULL, //Fim da seção Emulação
 		"Emulação",
 		{
 			{ "false", "Suporte a .conf desativado (padrão)" },
@@ -90,7 +90,7 @@ static retro_core_option_v2_definition option_defs[] =
 	{
 		"dosbox_pure_strict_mode",
 		"Usar o modo estrito", NULL,
-		"Desative a linha de comando, a execução de sistemas operacionais instalados e o uso de arquivos .BAT/.COM/.EXE/DOSZ.YML do jogo salvo.", NULL,
+		"Desativa a linha de comando, a execução de sistemas operacionais instalados e o uso de arquivos .BAT/.COM/.EXE/DOSZ.YML do jogo salvo.", NULL,
 		"Emulação",
 		{
 			{ "false", "Off" },
@@ -113,7 +113,7 @@ static retro_core_option_v2_definition option_defs[] =
 #endif
 			{ "-1", "Sempre mostrar menu na inicialização e após a saída do jogo, ignorar a configuração de início automático" },
 		},
-		"99"
+		"0"
 	},
 	{
 		"dosbox_pure_latency",
@@ -133,7 +133,7 @@ static retro_core_option_v2_definition option_defs[] =
 		"Avançado > Uso da CPU de baixa latência", NULL,
 		"No modo de baixa latência, ao emular o DOS o mais rápido possível, quanto tempo por quadro deve ser usado pela emulação." "\n"
 		"Se o vídeo estiver travando, diminua isso ou melhore o desempenho de renderização no frontend (por exemplo, desativando o vsync ou processamento de vídeo)." "\n"
-		"Use as estatísticas de desempenho para encontrar facilmente o máximo que ainda atinge a taxa de quadros alvo emulada." "\n\n", NULL, //end of Emulation > Advanced section
+		"Use as estatísticas de desempenho para encontrar facilmente o máximo que ainda atinge a taxa de quadros alvo emulada." "\n\n", NULL, //Fim da seção Emulação > Avançado
 		"Emulação",
 		{
 			//{ "0.2", "20%" }, { "0.21", "21%" }, { "0.22", "22%" }, { "0.23", "23%" }, { "0.24", "24%" }, { "0.25", "25%" }, { "0.26", "26%" }, { "0.27", "27%" }, { "0.28", "28%" }, { "0.29", "29%" },
@@ -268,7 +268,7 @@ static retro_core_option_v2_definition option_defs[] =
 			{ "sf",    "Suíça (Francês)" },
 			{ "tr",    "Turquia" },
 		},
-		"us"
+		"br"
 	},
 	{
 		"dosbox_pure_menu_transparency",
@@ -392,7 +392,7 @@ static retro_core_option_v2_definition option_defs[] =
 	},
 	{
 		"dosbox_pure_hercules",
-"Modo de Cor Hercules", NULL,
+"Modo de Cor para Hercules", NULL,
 "O esquema de cores para a emulação Hercules.", NULL,
 "Vídeo",
 		{
@@ -430,7 +430,7 @@ static retro_core_option_v2_definition option_defs[] =
 			{ "4", "4MB" },
 			{ "8", "8MB (nem sempre reconhecido)" },
 		},
-		"2"
+		"4"
 	},
 	{
 		"dosbox_pure_voodoo",
@@ -464,7 +464,7 @@ static retro_core_option_v2_definition option_defs[] =
 		"Quando ativada, a proporção de tela do núcleo é ajustada para o que um monitor CRT exibiria.", NULL,
 		"Vídeo",
 		{ { "false", "Desativado (padrão)" }, { "true", "On" } },
-		"false"
+		"true"
 	},
 	{
 		"dosbox_pure_overscan",
@@ -503,7 +503,7 @@ static retro_core_option_v2_definition option_defs[] =
 	{
 		"dosbox_pure_modem",
 		"Tipo de Modem", NULL,
-		"Tipo de modem emulado em COM1 para netplay. Com o modem dial-up, um lado precisa discar qualquer número para se conectar.", NULL,
+		"Tipo de modem emulado em COM1 para jogo em rede. Com o modem dial-up, um lado precisa discar qualquer número para se conectar.", NULL,
 		"Sistema",
 		{
 			{ "null", "Modem Nulo (Serial Direto)" },
@@ -555,7 +555,7 @@ static retro_core_option_v2_definition option_defs[] =
 	{
 		"dosbox_pure_bootos_ramdisk",
 		"Avançado > Modificações no Disco do SO (necessário reiniciar)", NULL,
-		"Ao executar um sistema operacional instalado, por padrão, as modificações no disco C: serão feitas na imagem do disco." "\n"
+		"Ao executar um sistema operacional instalado, as modificações na unidade C: serão feitas na imagem de disco por padrão." "\n"
 		"Definir para 'Descartar' permite que o conteúdo seja fechado a qualquer momento sem preocupações com corrupção do sistema de arquivos ou do registro." "\n"
 		"Ao usar 'Salvar Diferença por Conteúdo', a imagem do disco nunca deve ser modificada novamente, caso contrário, as diferenças existentes se tornarão inutilizáveis.", NULL,
 		"Sistema",
@@ -614,16 +614,16 @@ static retro_core_option_v2_definition option_defs[] =
 		"Áudio",
 		{
 			// Some common (and less common) port, irq, low and high dma settings (based on a very scientific web search)
-			{ "A220 I7 D1 H5",  "Port 0x220, IRQ 7, 8-Bit DMA 1, 16-bit DMA 5"  },
-			{ "A220 I5 D1 H5",  "Port 0x220, IRQ 5, 8-Bit DMA 1, 16-bit DMA 5"  },
-			{ "A240 I7 D1 H5",  "Port 0x240, IRQ 7, 8-Bit DMA 1, 16-bit DMA 5"  },
-			{ "A240 I7 D3 H7",  "Port 0x240, IRQ 7, 8-Bit DMA 3, 16-bit DMA 7"  },
-			{ "A240 I2 D3 H7",  "Port 0x240, IRQ 2, 8-Bit DMA 3, 16-bit DMA 7"  },
-			{ "A240 I5 D3 H5",  "Port 0x240, IRQ 5, 8-Bit DMA 3, 16-bit DMA 5"  },
-			{ "A240 I5 D1 H5",  "Port 0x240, IRQ 5, 8-Bit DMA 1, 16-bit DMA 5"  },
-			{ "A240 I10 D3 H7", "Port 0x240, IRQ 10, 8-Bit DMA 3, 16-bit DMA 7" },
-			{ "A280 I10 D0 H6", "Port 0x280, IRQ 10, 8-Bit DMA 0, 16-bit DMA 6" },
-			{ "A280 I5 D1 H5",  "Port 0x280, IRQ 5, 8-Bit DMA 1, 16-bit DMA 5"  },
+			{ "A220 I7 D1 H5",  "Porta 0x220, IRQ 7, 8-Bit DMA 1, 16-bit DMA 5"  },
+			{ "A220 I5 D1 H5",  "Porta 0x220, IRQ 5, 8-Bit DMA 1, 16-bit DMA 5"  },
+			{ "A240 I7 D1 H5",  "Porta 0x240, IRQ 7, 8-Bit DMA 1, 16-bit DMA 5"  },
+			{ "A240 I7 D3 H7",  "Porta 0x240, IRQ 7, 8-Bit DMA 3, 16-bit DMA 7"  },
+			{ "A240 I2 D3 H7",  "Porta 0x240, IRQ 2, 8-Bit DMA 3, 16-bit DMA 7"  },
+			{ "A240 I5 D3 H5",  "Porta 0x240, IRQ 5, 8-Bit DMA 3, 16-bit DMA 5"  },
+			{ "A240 I5 D1 H5",  "Porta 0x240, IRQ 5, 8-Bit DMA 1, 16-bit DMA 5"  },
+			{ "A240 I10 D3 H7", "Porta 0x240, IRQ 10, 8-Bit DMA 3, 16-bit DMA 7" },
+			{ "A280 I10 D0 H6", "Porta 0x280, IRQ 10, 8-Bit DMA 0, 16-bit DMA 6" },
+			{ "A280 I5 D1 H5",  "Porta 0x280, IRQ 5, 8-Bit DMA 1, 16-bit DMA 5"  },
 		},
 		"A220 I7 D1 H5"
 	},
@@ -680,7 +680,7 @@ static retro_core_option_v2_definition option_defs[] =
 			{ "default", "Padrão" },
 			{ "nuked", "Alta qualidade Nuked OPL3" },
 		},
-		"default"
+		"nuked"
 	},
 	{
 		"dosbox_pure_gus",
