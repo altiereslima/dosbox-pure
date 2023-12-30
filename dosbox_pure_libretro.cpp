@@ -1191,14 +1191,14 @@ struct DBP_PadMapping
 			if (dbp_port_mode[port] == MODE_MAPPER) { input_names.push_back("[Mapeador de Controle] "); input_names.back().append(GetPortPresetName(port)); }
 
 			retro_controller_description *types = descs + port * TYPES_COUNT, *type = types;
-			*(type++) = { "Disabled", (unsigned)RETRO_DEVICE_NONE };
-			*(type++) = { (dbp_port_mode[port] == MODE_MAPPER ? input_names.back().c_str() : "Usar Mapeador de Gamepad"), (unsigned)RETRO_DEVICE_JOYPAD };
+			*(type++) = { "Desativado", (unsigned)RETRO_DEVICE_NONE };
+			*(type++) = { (dbp_port_mode[port] == MODE_MAPPER ? input_names.back().c_str() : "Usar Mapeador de Controle"), (unsigned)RETRO_DEVICE_JOYPAD };
 			if (dbp_auto_mapping) *(type++) = { dbp_auto_mapping_title, (unsigned)RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_JOYPAD, 99) };
 			for (int i = PRESET_GENERICKEYBOARD; i != PRESET_CUSTOM; i++)
 				*(type++) = { GetPresetName((EPreset)i), (unsigned)RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_JOYPAD, i - PRESET_GENERICKEYBOARD) };
-			*(type++) = { "Personalizacoes de Teclado", (unsigned)RETRO_DEVICE_KEYBOARD };
-			*(type++) = { "Teclado Personalizado + Mouse no Analogico Esquerdo e B/A/X",  (unsigned)RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_KEYBOARD, 1) };
-			*(type++) = { "Teclado Personalizado + Mouse no Analogico Direito e L/R/X", (unsigned)RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_KEYBOARD, 2) };
+			*(type++) = { "Associações de Teclado Personalizadas", (unsigned)RETRO_DEVICE_KEYBOARD };
+			*(type++) = { "Teclado Personalizado + Mouse no Analógico Esquerdo e B/A/X",  (unsigned)RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_KEYBOARD, 1) };
+			*(type++) = { "Teclado Personalizado + Mouse no Analógico Direito e L/R/X", (unsigned)RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_KEYBOARD, 2) };
 
 			ports[port].num_types = (unsigned)(type - types);
 			ports[port].types = types;
