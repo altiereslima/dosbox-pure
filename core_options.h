@@ -35,7 +35,7 @@ static retro_core_option_v2_definition option_defs[] =
 		"Feche e reabra o menu para atualizar esta página de opções.", NULL,
 		NULL,
 		{ { "false", "Off" }, { "true", "On" } },
-		"true"
+		"false"
 	},
 	// Emulation
 	{
@@ -113,7 +113,7 @@ static retro_core_option_v2_definition option_defs[] =
 #endif
 			{ "-1", "Sempre mostrar menu na inicialização e após a saída do jogo, ignorar a configuração de início automático" },
 		},
-		"0"
+		"99"
 	},
 	{
 		"dosbox_pure_latency",
@@ -182,7 +182,7 @@ static retro_core_option_v2_definition option_defs[] =
 			{ "72/71", "Vírgula/Ponto" },
 			{ "79/82", "Page-Up/Page-Down" },
 			{ "78/81", "Início/Fim" },
-			{ "80/82", "Excluir/Page-Down" },
+			{ "80/82", "Delete/Page-Down" },
 			{ "64/65", "Hífen/Igual" },
 			{ "69/70", "Ponto e Vírgula/Aspas" },
 			{ "99/100", "Menos do Teclado Numérico/Mais do Teclado Numérico" },
@@ -392,13 +392,13 @@ static retro_core_option_v2_definition option_defs[] =
 	},
 	{
 		"dosbox_pure_hercules",
-"Modo de Cor para Hercules", NULL,
-"O esquema de cores para a emulação Hercules.", NULL,
-"Vídeo",
+		"Modo de Cor para Hercules", NULL,
+		"O esquema de cores para a emulação Hercules.", NULL,
+		"Vídeo",
 		{
-	{ "white", "Preto e branco (padrão)" },
-	{ "amber", "Preto e âmbar" },
-	{ "green", "Preto e verde" },
+			{ "white", "Preto e branco (padrão)" },
+			{ "amber", "Preto e âmbar" },
+			{ "green", "Preto e verde" },
 		},
 		"white"
 	},

@@ -58,10 +58,10 @@ static struct DBP_Net_Cleanup { ~DBP_Net_Cleanup() { delete dbp_net; } } _dbp_ne
 #define NET_WRITE_LE16(p,v) { ((Bit8u*)(p))[0] = (Bit8u)((Bit16u)(v) & 0xFF); ((Bit8u*)(p))[1] = (Bit8u)(((Bit16u)(v) >> 8) & 0xFF); }
 #define NET_WRITE_BE16(p,v) { ((Bit8u*)(p))[0] = (Bit8u)(((Bit16u)(v) >> 8) & 0xFF); ((Bit8u*)(p))[1] = (Bit8u)((Bit16u)(v) & 0xFF); }
 #else
-inline Bit16u NET_READ_LE16(const void* p) { return ((Bit16u)(((const Bit8u *)(p))[0]) | ((Bit16u)(((const Bit8u *)(p))[1]) << 8U)); }
-inline Bit16u NET_READ_BE16(const void* p) { return (((Bit16u)(((const Bit8u *)(p))[0]) << 8U) | (Bit16u)(((const Bit8u *)(p))[1])); }
-inline void NET_WRITE_LE16(void* p, Bit16u v) { ((Bit8u*)(p))[0] = (Bit8u)((Bit16u)(v) & 0xFF); ((Bit8u*)(p))[1] = (Bit8u)(((Bit16u)(v) >> 8) & 0xFF); }
-inline void NET_WRITE_BE16(void* p, Bit16u v) { ((Bit8u*)(p))[0] = (Bit8u)(((Bit16u)(v) >> 8) & 0xFF); ((Bit8u*)(p))[1] = (Bit8u)((Bit16u)(v) & 0xFF); }
+INLINE Bit16u NET_READ_LE16(const void* p) { return ((Bit16u)(((const Bit8u *)(p))[0]) | ((Bit16u)(((const Bit8u *)(p))[1]) << 8U)); }
+INLINE Bit16u NET_READ_BE16(const void* p) { return (((Bit16u)(((const Bit8u *)(p))[0]) << 8U) | (Bit16u)(((const Bit8u *)(p))[1])); }
+INLINE void NET_WRITE_LE16(void* p, Bit16u v) { ((Bit8u*)(p))[0] = (Bit8u)((Bit16u)(v) & 0xFF); ((Bit8u*)(p))[1] = (Bit8u)(((Bit16u)(v) >> 8) & 0xFF); }
+INLINE void NET_WRITE_BE16(void* p, Bit16u v) { ((Bit8u*)(p))[0] = (Bit8u)(((Bit16u)(v) >> 8) & 0xFF); ((Bit8u*)(p))[1] = (Bit8u)((Bit16u)(v) & 0xFF); }
 #endif
 
 static void DBP_Net_InitMac(uint16_t client_id = 0)

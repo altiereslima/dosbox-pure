@@ -1851,7 +1851,7 @@ void DOS_SetupPrograms(void) {
 	MSG_Add("PROGRAM_MOUNT_ERROR_2","%s n„o ‚ uma pasta\n");
 	MSG_Add("PROGRAM_MOUNT_ILL_TYPE","Tipo ilegal %s\n");
 	MSG_Add("PROGRAM_MOUNT_ALREADY_MOUNTED","Unidade %c j  montada com %s\n");
-    MSG_Add("PROGRAM_MOUNT_USAGE",
+	MSG_Add("PROGRAM_MOUNT_USAGE",
         "Monta pastas ou unidades do sistema anfitri„o como unidades do MS-DOS.\n"
         "Uso: \033[34;1m\033[32;1mMOUNT\033[0m \033[37;1munidade\033[0m \033[36;1mpasta_local\033[0m [op‡„o]\033[0m\n"
         " \033[37;1munidade\033[0m        Letra da unidade onde a pasta ou a unidade ser  montada.\n"
@@ -2019,15 +2019,7 @@ void DOS_SetupPrograms(void) {
         "que podem ser iniciadas s„o A, C e D. Para iniciar do disco r¡gido (C ou D), a\n"
         "imagem deve estar previamente montada usando o comando \033[34;1mIMGMOUNT\033[0m.\n\n"
         "A sintaxe deste comando ‚ uma das seguintes:\n\n"
-        "\033[34;1mBOOT [letra_da_unidade:]\033[0m\n"
         "\033[34;1mBOOT [diskimg1.img diskimg2.img] [-l letra_da_unidade]\033[0m\n\n"
-        "Nota: Um arquivo de imagem com dois pontos … esquerda (:) ser  inicializada com\n"
-		"somente leitura se a op‡„o \"proteger contra escrita com dois pontos iniciais\"\n"
-		"estiver ativada.\n\n"
-        "Exemplos:\n\n"
-        "\033[32;1mBOOT A:\033[0m       - inicia a partir da unidade A: se mont vel e inicializ vel.\n"
-        "\033[32;1mBOOT :DOS.IMG\033[0m - inicia a partir da imagem de disquete DOS.IMG\n"
-		"                em modo somente leitura.\n"
 		);
 	MSG_Add("PROGRAM_BOOT_UNABLE","N„o foi poss¡vel inicializar a partir da unidade %c");
 	MSG_Add("PROGRAM_BOOT_IMAGE_MOUNTED", "Imagem(ns) de disquete j  montada(s).\n");

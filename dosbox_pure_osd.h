@@ -127,7 +127,7 @@ struct DBP_BufferDrawing : DBP_Buffer
 	}
 
 	bool DrawButtonAt(Bit32u blend, int btny, int lh, int padu, int padd, int btnx, int btnr, bool on, const struct DBP_MenuMouse& m, const char* txt);
-	inline bool DrawButton(Bit32u blend, int btny, int lh, int i, int n, bool on, const struct DBP_MenuMouse& m, const char* txt)
+	INLINE bool DrawButton(Bit32u blend, int btny, int lh, int i, int n, bool on, const struct DBP_MenuMouse& m, const char* txt)
 		{ int w = width; return DrawButtonAt(blend, btny, lh, 4, 4, (!i ? 8 : (w*i/n + 2)), (i == (n-1) ? w - 8 : (w*(i+1)/n - 2)), on, m, txt); }
 };
 DBP_STATIC_ASSERT(sizeof(DBP_BufferDrawing) == sizeof(DBP_Buffer)); // drawing is just for function expansions, we're just casting one to the other
@@ -199,9 +199,10 @@ struct DBP_MenuMouse
 		}
 		else if (jx || kx || jy || ky)
 		{
-			if (!joykbd) { realmouse = false; return false; }
-			x += (jx + kx) * mspeed;
-			y += (jy + ky) * mspeed;
+			realmouse = false;
+			if (!joykbd) return false;
+			x += (jx + kx) * mspeed * buf.width / 320;
+			y += (jy + ky) * mspeed * buf.height / 240;
 		}
 		else return false;
 		if (x <            1) x = (float)1;
@@ -436,7 +437,7 @@ struct DBP_MenuState
 	}
 };
 
-static const Bit8u DBP_MapperJoypadNums[] = { RETRO_DEVICE_ID_JOYPAD_UP, RETRO_DEVICE_ID_JOYPAD_DOWN, RETRO_DEVICE_ID_JOYPAD_LEFT, RETRO_DEVICE_ID_JOYPAD_RIGHT, RETRO_DEVICE_ID_JOYPAD_A, RETRO_DEVICE_ID_JOYPAD_B, RETRO_DEVICE_ID_JOYPAD_X, RETRO_DEVICE_ID_JOYPAD_Y, RETRO_DEVICE_ID_JOYPAD_SELECT, RETRO_DEVICE_ID_JOYPAD_START, RETRO_DEVICE_ID_JOYPAD_L, RETRO_DEVICE_ID_JOYPAD_R, RETRO_DEVICE_ID_JOYPAD_L2, RETRO_DEVICE_ID_JOYPAD_R2, RETRO_DEVICE_ID_JOYPAD_L3, RETRO_DEVICE_ID_JOYPAD_R3 };
+static const Bit8u DBP_MapperJoypadNums[] = { RETRO_DEVICE_ID_JOYPAD_UP, RETRO_DEVICE_ID_JOYPAD_DOWN, RETRO_DEVICE_ID_JOYPAD_LEFT, RETRO_DEVICE_ID_JOYPAD_RIGHT, RETRO_DEVICE_ID_JOYPAD_B, RETRO_DEVICE_ID_JOYPAD_A, RETRO_DEVICE_ID_JOYPAD_Y, RETRO_DEVICE_ID_JOYPAD_X, RETRO_DEVICE_ID_JOYPAD_SELECT, RETRO_DEVICE_ID_JOYPAD_START, RETRO_DEVICE_ID_JOYPAD_L, RETRO_DEVICE_ID_JOYPAD_R, RETRO_DEVICE_ID_JOYPAD_L2, RETRO_DEVICE_ID_JOYPAD_R2, RETRO_DEVICE_ID_JOYPAD_L3, RETRO_DEVICE_ID_JOYPAD_R3 };
 static const char* DBP_MapperJoypadNames[] = { "Cima", "Baixo", "Esquerda", "Direita", "B", "A", "Y", "X", "SELECT", "START", "L", "R", "L2", "R2", "L3", "R3" };
 
 struct DBP_MapperMenuState : DBP_MenuState
@@ -462,51 +463,63 @@ struct DBP_MapperMenuState : DBP_MenuState
 	{
 		if (x_change)
 		{
-			for (int i = 0; i != DBP_MAX_PORTS; i++)
-				if (dbp_port_active[bind_port = (bind_port + DBP_MAX_PORTS + x_change) % DBP_MAX_PORTS])
-					break;
+			int maxport = 1;
+			while (maxport != DBP_MAX_PORTS && dbp_port_mode[maxport]) maxport++;
+			bind_port = (bind_port + maxport + x_change) % maxport;
 			main_sel = 0;
 		}
 
 		list.clear();
-		list.emplace_back(IT_NONE, 0, "Predefini‡„o: ");
-		list.emplace_back(IT_PRESET, 0, "  "); list.back().str += DBP_PadMapping::GetPortPresetName(bind_port);
-		list.emplace_back(IT_NONE, 2);
-
-		for (Bit8u i = 0; i != JOYPAD_MAX + 8; i++)
+		if (dbp_port_mode[bind_port] != DBP_PadMapping::MODE_MAPPER)
 		{
-			Bit8u a = (i>=JOYPAD_MAX), apart = (a ? (i-JOYPAD_MAX)%2 : 0);
-			const DBP_InputBind pad = BindFromPadNum(i);
-			const Bit32u padpdii = PORT_DEVICE_INDEX_ID(pad);
 			list.emplace_back(IT_NONE);
-			if (!a) list.back().str = DBP_MapperJoypadNames[i];
-			else  ((list.back().str = DBP_MapperJoypadNames[2+pad.index]) += " Alavanca ") += DBP_MapperJoypadNames[(i-JOYPAD_MAX)%4];
+			list.emplace_back(IT_NONE, 11, "    O Mapeador de Controle est  desativado");
+			list.emplace_back(IT_NONE, 11, "    para esta porta do controle");
+			list.emplace_back(IT_NONE);
+			list.emplace_back(IT_NONE, 11, "    Configure 'Usar Mapeador de Controle'");
+			list.emplace_back(IT_NONE, 11, "    no menu de Controles");
+		}
+		else
+		{
+			list.emplace_back(IT_NONE, 0, "Predefini‡„o: ");
+			list.emplace_back(IT_PRESET, 0, "  "); list.back().str += DBP_PadMapping::GetPortPresetName(bind_port);
+			list.emplace_back(IT_NONE, 2);
 
-			size_t numBefore = list.size();
-			for (const DBP_InputBind& b : dbp_input_binds)
+			for (Bit8u i = 0; i != JOYPAD_MAX + 8; i++)
 			{
-				if (PORT_DEVICE_INDEX_ID(b) != padpdii) continue;
-				
-				int key = -1;
-				if (b.evt == DBPET_KEYDOWN)
-					key = b.meta;
-				else if (b.evt == DBPET_AXISMAPPAIR)
-					key = DBP_MAPPAIR_GET(apart?1:-1, b.meta);
-				else for (const DBP_SpecialMapping& sm : DBP_SpecialMappings)
-					if (sm.evt == b.evt && sm.meta == (a ? (apart ? 1 : -1) : b.meta))
-						{ key = DBP_SPECIALMAPPINGS_KEY + (int)(&sm - DBP_SpecialMappings); break; }
-				if (key < 0) { DBP_ASSERT(false); continue; }
+				Bit8u a = (i>=JOYPAD_MAX), apart = (a ? (i-JOYPAD_MAX)%2 : 0);
+				const DBP_InputBind pad = BindFromPadNum(i);
+				const Bit32u padpdii = PORT_DEVICE_INDEX_ID(pad);
+				list.emplace_back(IT_NONE);
+				if (!a) list.back().str = DBP_MapperJoypadNames[i];
+				else  ((list.back().str = DBP_MapperJoypadNames[2+pad.index]) += " Alavanca ") += DBP_MapperJoypadNames[(i-JOYPAD_MAX)%4];
 
-				const char *desc_dev = DBP_GETKEYDEVNAME(key);
+				size_t numBefore = list.size();
+				for (const DBP_InputBind& b : dbp_input_binds)
+				{
+					if (PORT_DEVICE_INDEX_ID(b) != padpdii) continue;
+				
+					int key = -1;
+					if (b.evt == DBPET_KEYDOWN)
+						key = b.meta;
+					else if (b.evt == DBPET_AXISMAPPAIR)
+						key = DBP_MAPPAIR_GET(apart?1:-1, b.meta);
+					else for (const DBP_SpecialMapping& sm : DBP_SpecialMappings)
+						if (sm.evt == b.evt && sm.meta == (a ? (apart ? 1 : -1) : b.meta))
+							{ key = DBP_SPECIALMAPPINGS_KEY + (int)(&sm - DBP_SpecialMappings); break; }
+					if (key < 0) { DBP_ASSERT(false); continue; }
+
+					const char *desc_dev = DBP_GETKEYDEVNAME(key);
 				list.emplace_back(IT_EDIT, (Bit16s)(((&b - &dbp_input_binds[0])<<1)|apart), "  [Editar]");
-				(((list.back().str += (desc_dev ? " " : "")) += (desc_dev ? desc_dev : "")) += ' ') += DBP_GETKEYNAME(key);
-			}
+					(((list.back().str += (desc_dev ? " " : "")) += (desc_dev ? desc_dev : "")) += ' ') += DBP_GETKEYNAME(key);
+				}
 			if (list.size() - numBefore == 0) list.emplace_back(IT_ADD, i, "  [Criar associa‡„o]");
 
-			if (const char* action = DBP_PadMapping::GetBoundAutoMapButtonLabel(padpdii, a))
-			{
+				if (const char* action = DBP_PadMapping::GetBoundAutoMapButtonLabel(padpdii, a))
+				{
 				list.emplace_back(IT_NONE, 1, "    Fun‡„o: ");
-				list.back().str.append(action);
+					list.back().str.append(action);
+				}
 			}
 		}
 		if (!DBP_FullscreenOSD)
@@ -521,7 +534,8 @@ struct DBP_MapperMenuState : DBP_MenuState
 		bind_dev = 0;
 	}
 
-	bool is_presets() { return !edit && list[1].type != IT_PRESET; }
+	INLINE bool is_mapper_disabled_top() { return list[1].info == 11; } // see menu_top
+	INLINE bool is_presets_menu() { return list[0].info == 22; } // see menu_presets
 
 	void menu_presets(Bit16s info)
 	{
@@ -681,7 +695,7 @@ struct DBP_MapperMenuState : DBP_MenuState
 		{
 			menu_devices(ok_type);
 		}
-		else if (ok_type == IT_CANCEL && (edit || is_presets()))
+		else if (ok_type == IT_CANCEL && (edit || is_presets_menu()))
 		{
 			if (edit && edit->evt == _DBPET_MAX) dbp_input_binds.erase(dbp_input_binds.begin() + (edit - &dbp_input_binds[0]));
 			menu_top();
@@ -703,8 +717,10 @@ struct DBP_MapperMenuState : DBP_MenuState
 	void DrawMenu(DBP_BufferDrawing& buf, Bit32u blend, int lh, int w, int h, int ftr, bool mouseMoved, const DBP_MenuMouse& m)
 	{
 		UpdateHeld();
+		if ((dbp_port_mode[bind_port] == DBP_PadMapping::MODE_MAPPER) == is_mapper_disabled_top())
+			menu_top();
 
-		int hdr = lh*3, rows = (h - hdr - ftr) / lh-1, count = (int)list.size(), l = w/2 - 150, r = w/2 + 150, xtra = (lh == 8 ? 0 : 1), wide = !edit && !is_presets() && w > 500;
+		int hdr = lh*3, rows = (h - hdr - ftr) / lh-1, count = (int)list.size(), l = w/2 - 150, r = w/2 + 150, xtra = (lh == 8 ? 0 : 1), wide = !edit && !is_presets_menu() && w > 500;
 		if (l < 0) { l = 0, r = w; }
 		buf.DrawBox(l, hdr-7-lh*2, r-l, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
 		buf.PrintCenteredOutlined(lh, 0, w, hdr-lh*2-5, "Mapeador de controle", buf.COL_MENUTITLE);
@@ -755,7 +771,7 @@ struct DBP_MapperMenuState : DBP_MenuState
 			}
 		}
 
-		if (!edit && !is_presets())
+		if (!edit && !is_presets_menu())
 		{
 			int x_change = 0, x1 = l-(wide?50:0), x2 = r-25+(wide?50:0);
 			if (buf.DrawButtonAt(0x80000000, hdr-lh-6, lh, 3, 2, x1, x1+25, false, m, "\x1B") && m.left_up) x_change = -1;
@@ -1419,7 +1435,7 @@ static void DBP_PureMenuProgram(Program** make)
 {
 	struct Menu : Program
 	{
-		Bit32u opentime;
+		Bit32u opentime, pressedKey;
 		char msgbuf[100];
 		bool pressedAnyKey;
 
@@ -1433,13 +1449,17 @@ static void DBP_PureMenuProgram(Program** make)
 
 		static void InterceptInputAnyPress(DBP_Event_Type type, int val, int val2, void* self)
 		{
-			if (type == DBPET_KEYDOWN || type == DBPET_MOUSEDOWN || type == DBPET_JOY1DOWN || type == DBPET_JOY2DOWN)
-				if ((DBP_GetTicks() - ((Menu*)self)->opentime) > 300)
-					((Menu*)self)->pressedAnyKey = true;
+			bool down = (type == DBPET_KEYDOWN || type == DBPET_MOUSEDOWN || type == DBPET_JOY1DOWN || type == DBPET_JOY2DOWN);
+			bool up = (type == DBPET_KEYUP || type == DBPET_MOUSEUP || type == DBPET_JOY1UP || type == DBPET_JOY2UP);
+			if ((!down && !up) || (DBP_GetTicks() - ((Menu*)self)->opentime) < 300) return;
+			const Bit32u key = ((Bit32u)type + (down ? 1 : 0) + (((Bit32u)val + 1) << 8));
+			if (down) ((Menu*)self)->pressedKey = key;
+			else if (((Menu*)self)->pressedKey == key) ((Menu*)self)->pressedAnyKey = true;
 		}
 
 		bool WaitAnyKeyPress(Bit32u tick_limit = 0)
 		{
+			pressedKey = 0;
 			pressedAnyKey = false;
 			DBP_KEYBOARD_ReleaseKeys(); // any unintercepted CALLBACK_* can set a key down
 			dbp_intercept_data = this;
