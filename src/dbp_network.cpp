@@ -2793,7 +2793,7 @@ struct NetCallBacks
 		DBP_EnableNetwork();
 	}
 
-	static inline Bit16u client_id_from_mac(const Bit8u* mac)
+	static INLINE Bit16u client_id_from_mac(const Bit8u* mac)
 	{
 		// Consider unknown first octet to be a multicast of some sort
 		return (mac[0] == DBP_Net::FIRST_MAC_OCTET ? NET_READ_BE16(&mac[4]) : (Bit16u)RETRO_NETPACKET_BROADCAST);
@@ -2954,6 +2954,7 @@ void DBP_Network_SetCallbacks(retro_environment_t envcb)
 	};
 	envcb(RETRO_ENVIRONMENT_SET_NETPACKET_INTERFACE, (void*)&packet_callback);
 
+#if 0 // This was disabled due to a bug in RetroArch 1.16 (fixed for 1.17 in https://github.com/libretro/RetroArch/pull/16019)
 	// We provide backwards compatibility with the deprecated environment call 76
 	#define RETRO_ENVIRONMENT_SET_NETPACKET76_INTERFACE 76
 	typedef void (RETRO_CALLCONV *retro_netpacket76_send_t)(int flags, const void* buf, size_t len, uint16_t client_id, bool broadcast);
@@ -2975,4 +2976,5 @@ void DBP_Network_SetCallbacks(retro_environment_t envcb)
 	};
 	static const retro_netpacket76_callback packet76_callback = { NetCallBacks76::start76, NetCallBacks::receive, NetCallBacks::stop, NetCallBacks::poll };
 	envcb(RETRO_ENVIRONMENT_SET_NETPACKET76_INTERFACE, (void*)&packet76_callback);
+#endif
 }
