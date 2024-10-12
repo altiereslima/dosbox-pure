@@ -485,7 +485,7 @@ static retro_core_option_v2_definition option_defs[] =
 		"Desempenho 3dfx Voodoo", NULL,
 		"Opções para ajustar o comportamento da emulação 3dfx Voodoo." "\n"
 		"Mudar para OpenGL requer um reinício." "\n"
-		"Se o OpenGL estiver disponível, a aceleração 3D do lado do host é utilizada, o que pode tornar a renderização 3D muito mais rápida.", NULL,
+		"Se o OpenGL estiver disponível, a aceleração 3D do lado do anfitrião é utilizada, o que pode tornar a renderização 3D muito mais rápida.", NULL,
 		"Vídeo",
 		{
 			{ "1", "Multi Threaded de Software (padrão)" },
