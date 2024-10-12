@@ -533,7 +533,7 @@ struct DBP_Run
 				if (l.ValX <= l.Val) goto syntaxerror;
 				if (!((*l.Key == 'r') ? parseRun : parseOthers) || l.ProcessKey()) continue;
 				syntaxerror:
-				retro_notify(0, RETRO_LOG_ERROR, "Error in DOS.YML: %.*s", (int)(l.Next-l.Key), l.Key);
+				retro_notify(0, RETRO_LOG_ERROR, "Erro em DOS.YML: %.*s", (int)(l.Next-l.Key), l.Key);
 				continue;
 			}
 			if (l.cpu_cycles || l.cpu_year || l.cpu_hz)
