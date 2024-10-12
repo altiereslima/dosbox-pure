@@ -232,9 +232,9 @@ static retro_core_option_v2_definition option_defs[] =
 		"Define quais entradas controlam a roda de ação.", NULL,
 		"Entrada",
 		{
-			{ "14", "Alavanca Dir., D-Pad, Mouse (Padrão)" }, { "6",  "Alavanca Dir., D-Pad" }, { "10", "Alavanca Dir., Mouse" }, { "2",  "Alavanca Dir." },
+			{ "14", "Alavanca Direita, D-Pad, Mouse (Padrão)" }, { "6",  "Alavanca Direita, D-Pad" }, { "10", "Alavanca Direita, Mouse" }, { "2",  "Alavanca Direita" },
 			{ "15", "Ambas as Alavancas, D-Pad, Mouse" }, { "7",  "Ambas as Alavancas, D-Pad" }, { "11", "Ambas as Alavancas, Mouse" }, { "3",  "Ambas as Alavancas" },
-			{ "13", "Alavanca Esq., D-Pad, Mouse" }, { "5",  "Alavanca Esq., D-Pad" }, { "9",  "Alavanca Esq., Mouse" }, { "1",  "Alavanca Esq." },
+			{ "13", "Alavanca Esquerda, D-Pad, Mouse" }, { "5",  "Alavanca Esquerda, D-Pad" }, { "9",  "Alavanca Esquerda, Mouse" }, { "1",  "Alavanca Esquerda" },
 			{ "12", "D-Pad, Mouse" }, { "4",  "D-Pad" }, { "8",  "Mouse" },
 		},
 		"14"
