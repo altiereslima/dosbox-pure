@@ -34,7 +34,7 @@ static retro_core_option_v2_definition option_defs[] =
 		"Mostrar Opções Avançadas", NULL,
 		"Feche e reabra o menu para atualizar esta página de opções.", NULL,
 		NULL,
-		{ { "false", "Off" }, { "true", "On" } },
+		{ { "false", "Desativado" }, { "true", "Ativado" } },
 		"false"
 	},
 	// Emulation
@@ -44,8 +44,8 @@ static retro_core_option_v2_definition option_defs[] =
 		"Ative essa opção para forçar a saída a 60FPS. Use essa opção se tiver problemas de tremulação de tela ou de sincronização de vídeo.", NULL,
 		"Emulação",
 		{
-			{ "false", "Off" },
-			{ "true", "On" },
+			{ "false", "Ativado" },
+			{ "true", "Desativado" },
 		},
 		"false"
 	},
@@ -81,8 +81,8 @@ static retro_core_option_v2_definition option_defs[] =
 		"Desabilita a linha de comando, executando sistemas operacionais instalados e utilizando arquivos .BAT/.COM/.EXE/DOS.YML a partir do jogo salvo.", NULL,
 		"Emulação",
 		{
-			{ "false", "Off" },
-			{ "true", "On" },
+			{ "false", "Ativado" },
+			{ "true", "Desativado" },
 		},
 		"false"
 	},
@@ -92,11 +92,11 @@ static retro_core_option_v2_definition option_defs[] =
 		"O DOSBox Pure deve ser configurado via opções principais, mas opcionalmente suporta o carregamento de arquivos .conf legados.", NULL,
 		"Emulação",
 		{
-			{ "false", "Suporte a conf desabilitado (padrão)" },
+			{ "false", "Suporte a conf desabilitado" },
 			{ "inside", "Tentar 'dosbox.conf' no conteúdo carregado (ZIP ou pasta)" },
-			{ "outside", "Tentar '.conf' com o mesmo nome do conteúdo carregado (ao lado do ZIP ou pasta)" },
+			{ "outside", "Tentar '.conf' com o mesmo nome do conteúdo carregado, ao lado do ZIP ou pasta. (padrão)" },
 		},
-		"false"
+		"outside"
 	},
 	{
 		"dosbox_pure_menu_time",
@@ -155,7 +155,7 @@ static retro_core_option_v2_definition option_defs[] =
 		"Ativar Teclado na Tela", NULL,
 		"Ative a funcionalidade de Teclado na Tela, que pode ser ativada com o botão L3 no controle.", NULL,
 		"Entrada",
-		{ { "true", "On" }, { "false", "Off" } },
+		{ { "true", "Ativado" }, { "false", "Desativado" } },
 		"true"
 	},
 	{
@@ -232,9 +232,9 @@ static retro_core_option_v2_definition option_defs[] =
 		"Define quais entradas controlam a roda de ação.", NULL,
 		"Entrada",
 		{
-			{ "14", "Alavanca Direita, D-Pad, Mouse (Padrão)" }, { "6",  "Alavanca Direita, D-Pad" }, { "10", "Alavanca Direita, Mouse" }, { "2",  "Alavanca Direita" },
+			{ "14", "Alavanca Dir., D-Pad, Mouse (Padrão)" }, { "6",  "Alavanca Dir., D-Pad" }, { "10", "Alavanca Dir., Mouse" }, { "2",  "Alavanca Dir." },
 			{ "15", "Ambas as Alavancas, D-Pad, Mouse" }, { "7",  "Ambas as Alavancas, D-Pad" }, { "11", "Ambas as Alavancas, Mouse" }, { "3",  "Ambas as Alavancas" },
-			{ "13", "Alavanca Esquerda, D-Pad, Mouse" }, { "5",  "Alavanca Esquerda, D-Pad" }, { "9",  "Alavanca Esquerda, Mouse" }, { "1",  "Alavanca Esquerda" },
+			{ "13", "Alavanca Esq., D-Pad, Mouse" }, { "5",  "Alavanca Esq., D-Pad" }, { "9",  "Alavanca Esq., Mouse" }, { "1",  "Alavanca Esq." },
 			{ "12", "D-Pad, Mouse" }, { "4",  "D-Pad" }, { "8",  "Mouse" },
 		},
 		"14"
@@ -245,7 +245,7 @@ static retro_core_option_v2_definition option_defs[] =
 		"O DOSBox Pure pode aplicar automaticamente um esquema de mapeamento de controle de gamepad quando detecta um jogo." "\n"
 		"Esses mapeamentos de botões são fornecidos pelo Projeto Keyb2Joypad (de Jemy Murphy e bigjim).", NULL,
 		"Entrada",
-		{ { "true", "Ativado (padrão)" }, { "notify", "Ativar com notificação na detecção de jogo" }, { "false", "Off" } },
+		{ { "true", "Ativado (padrão)" }, { "notify", "Ativar com notificação na detecção de jogo" }, { "false", "Desativado" } },
 		"true"
 	},
 	{
@@ -254,10 +254,10 @@ static retro_core_option_v2_definition option_defs[] =
 		"Selecione o layout do teclado (não afetará o Teclado na Tela).", NULL,
 		"Entrada",
 		{
-			{ "us",    "EUA (padrão)" },
+			{ "us",    "EUA" },
 			{ "uk",    "Reino Unido" },
 			{ "be",    "Bélgica" },
-			{ "br",    "Brasil" },
+			{ "br",    "Brasil (padrão)" },
 			{ "hr",    "Croácia" },
 			{ "cz243", "República Tcheca" },
 			{ "dk",    "Dinamarca" },
@@ -308,7 +308,7 @@ static retro_core_option_v2_definition option_defs[] =
 		"Avançado > Habilitar Intervalos Cronometrados do Joystick", NULL,
 		"Habilitar intervalos cronometrados para os eixos do joystick. Experimente esta opção se o seu joystick apresentar desvio." "\n\n", NULL, //end of Input > Advanced section
 		"Entrada",
-		{ { "true", "Ativado (padrão)" }, { "false", "Off" } },
+		{ { "true", "Ativado (padrão)" }, { "false", "Desativado" } },
 		"true"
 	},
 
@@ -464,7 +464,7 @@ static retro_core_option_v2_definition option_defs[] =
 			{ "4", "4MB" },
 			{ "8", "8MB (nem sempre reconhecido)" },
 		},
-		"4"
+		"2"
 	},
 	{
 		"dosbox_pure_voodoo",
@@ -523,8 +523,8 @@ static retro_core_option_v2_definition option_defs[] =
 		"Correção da Proporção de Tela", NULL,
 		"Quando ativada, a proporção de tela do núcleo é ajustada para o que um monitor CRT exibiria.", NULL,
 		"Vídeo",
-		{ { "false", "Desativado (padrão)" }, { "true", "On" } },
-		"false"
+		{ { "false", "Desativado" }, { "true", "Ativado (padrão)" } },
+		"true"
 	},
 	{
 		"dosbox_pure_overscan",
@@ -748,7 +748,7 @@ static retro_core_option_v2_definition option_defs[] =
 		"Habilitar emulação do Gravis Ultrasound. As configurações estão fixadas em porta 0x240, IRQ 5, DMA 3." "\n"
 		"Se a variável ULTRADIR precisar ser diferente do padrão 'C:\\ULTRASND' você precisará inserir 'SET ULTRADIR=...' na linha de comando ou em um arquivo em lote." "\n\n", NULL, // fim da seção de Áudio > Avançado
 		"Áudio",
-		{ { "false", "Desativado (padrão)" }, { "true", "On" } },
+		{ { "false", "Desativado (padrão)" }, { "true", "Ativado" } },
 		"false"
 	},
 	{
@@ -764,7 +764,7 @@ static retro_core_option_v2_definition option_defs[] =
 		"Avançado > Trocar canais estéreo", NULL,
 		"Trocar o canal de áudio esquerdo e direito." "\n\n", NULL, //end of Audio > Advanced section
 		"Áudio",
-		{ { "false", "Desativado (padrão)" }, { "true", "On" } },
+		{ { "false", "Desativado (padrão)" }, { "true", "Ativado" } },
 		"false"
 	},
 
