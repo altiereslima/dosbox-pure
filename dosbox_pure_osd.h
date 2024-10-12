@@ -508,7 +508,7 @@ struct DBP_MapperMenuState : DBP_MenuState
 		if (key < 0) { DBP_ASSERT(false); return; }
 
 		const char *desc_dev = DBP_GETKEYDEVNAME(key);
-		list.emplace_back(IT_EDIT, item_info, "  [Edit]");
+		list.emplace_back(IT_EDIT, item_info, "  [Editar]");
 		(((list.back().str += (desc_dev ? " " : "")) += (desc_dev ? desc_dev : "")) += ' ') += DBP_GETKEYNAME(key);
 
 		if (boundActionWheel && key == DBP_SPECIALMAPPINGS_ACTIONWHEEL) *boundActionWheel = true;
@@ -554,17 +554,17 @@ struct DBP_MapperMenuState : DBP_MenuState
 				for (const DBP_InputBind& b : dbp_input_binds)
 					if (PORT_DEVICE_INDEX_ID(b) == padpdii)
 						Add(b, (Bit16s)(((&b - &dbp_input_binds[0])<<1)|apart), apart, &boundActionWheel);
-				if (list.size() - numBefore == 0) list.emplace_back(IT_ADD, i, "  [Create Binding]");
+				if (list.size() - numBefore == 0) list.emplace_back(IT_ADD, i, "  [Criar associa‡„o]");
 
 				if (const char* action = DBP_PadMapping::GetBoundAutoMapButtonLabel(padpdii, a))
 				{
-					list.emplace_back(IT_NONE, 1, "    Function: ");
+					list.emplace_back(IT_NONE, 1, "    Fun‡”es: ");
 					list.back().str.append(action);
 				}
 			}
 
 			list.emplace_back(IT_NONE, 2);
-			list.emplace_back(IT_NONE, 0, "Op‡”es de Roda: ");
+			list.emplace_back(IT_NONE, 0, "Op‡”es da roda: ");
 			for (const DBP_WheelItem& it : dbp_wheelitems)
 			{
 				if (it.port != bind_port) continue;
@@ -582,7 +582,7 @@ struct DBP_MapperMenuState : DBP_MenuState
 				list.emplace_back(IT_NONE, 0);
 				haveWheelOptions = true;
 			}
-			list.emplace_back(IT_ADD, -1, "  Adicionar Op‡„o");
+			list.emplace_back(IT_ADD, -1, "  Adicionar op‡„o");
 			if (haveWheelOptions != boundActionWheel)
 			{
 				list.emplace_back(IT_NONE, 0, "Aviso:");
@@ -654,7 +654,7 @@ struct DBP_MapperMenuState : DBP_MenuState
 		else if (ok_type == IT_ADD)
 		{
 			edit_mode = EDIT_ADDITIONAL;
-			(list[1].str = " >") += "  [Additional Binding]";
+			(list[1].str = " >") += "  [Associa‡„o adicional]";
 		}
 		list.resize(2);
 		list.emplace_back(IT_NONE);
@@ -667,7 +667,7 @@ struct DBP_MapperMenuState : DBP_MenuState
 		if (edit_mode == EDIT_EXISTING)
 		{
 			list.emplace_back(IT_NONE);
-			list.emplace_back(IT_DEL, 0, "  [Remove Binding]");
+			list.emplace_back(IT_DEL, 0, "  [Remover associa‡„o]");
 			int count = 0;
 			if (edit_info >= 0) // editing bind
 			{
@@ -1150,7 +1150,7 @@ struct DBP_PureMenuState : DBP_MenuState
 				buf.DrawBox(w-68, bot, 60, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
 				buf.DrawBox(w-217, bot, 150, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
 				buf.DrawBox(w-312, bot, 96, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
-				buf.PrintCenteredOutlined(lh, w-68, 60, bot+2, "\x7 Iniciar", buf.COL_BTNTEXT);
+				buf.PrintCenteredOutlined(lh, w-68, 60, bot+2, "\x7 Executar", buf.COL_BTNTEXT);
 				buf.PrintCenteredOutlined(lh, w-217, 150, bot+2, "\x1A\x1B Auto-in¡cio", buf.COL_BTNTEXT);
 				buf.PrintCenteredOutlined(lh, w-312, 96, bot+2, "\x18\x19 Rolar", buf.COL_BTNTEXT);
 			}
@@ -1249,7 +1249,7 @@ struct DBP_PureMenuState : DBP_MenuState
 
 			if (DBP_FullscreenOSD && !dbp_strict_mode) list.emplace_back(IT_CLOSEOSD, 0, "Ir para a Linha de Comando");
 			else if (dbp_game_running && !dbp_strict_mode) list.emplace_back(IT_COMMANDLINE, 0, "Ir para a Linha de Comando");
-			if (!DBP_FullscreenOSD) list.emplace_back(IT_CLOSEOSD, 0, "Fechar Menu");
+			if (!DBP_FullscreenOSD) list.emplace_back(IT_CLOSEOSD, 0, "Fechar menu");
 			if (list.back().type == IT_NONE) list.pop_back();
 		}
 		else if (mode == IT_BOOTIMG)
@@ -1296,7 +1296,7 @@ struct DBP_PureMenuState : DBP_MenuState
 			list.emplace_back(IT_NONE);
 			for (const std::string& im : dbp_osimages)
 				{ list.emplace_back(IT_BOOTOS, (Bit16s)(&im - &dbp_osimages[0])); list.back().str.assign(im.c_str(), im.size()-4); }
-			if (dbp_system_cached) { list.emplace_back(IT_NONE); list.emplace_back(IT_SYSTEMREFRESH, 0, "[ Atualizar Lista ]"); }
+			if (dbp_system_cached) { list.emplace_back(IT_NONE); list.emplace_back(IT_SYSTEMREFRESH, 0, "[ Atualizar lista ]"); }
 			char ramdisk = retro_get_variable("dosbox_pure_bootos_ramdisk", "false")[0];
 			if (ramdisk == 't')
 			{
@@ -1794,7 +1794,7 @@ static void DBP_PureMenuProgram(Program** make)
 	{
 		virtual void Run() override
 		{
-			enum { M_NORMAL, M_BOOT, M_FINISH } m = (cmd->FindExist("-BOOT") ? M_BOOT : cmd->FindExist("-FINISH") ? M_FINISH : M_NORMAL);
+			enum { M_NORMAL, M_BOOT, M_FINISH } m = (cmd->FindExist("-INICIALIZAR") ? M_BOOT : cmd->FindExist("-FINALIZAR") ? M_FINISH : M_NORMAL);
 
 			if (m == M_BOOT && dbp_menu_time >= 0 && DBP_Run::startup.mode != DBP_Run::RUN_NONE && DBP_Run::Run(DBP_Run::startup.mode, DBP_Run::startup.info, DBP_Run::startup.exec))
 				return;
