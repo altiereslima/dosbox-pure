@@ -18,12 +18,12 @@
 
 static retro_core_option_v2_category option_cats[] =
 {
-	{ "Emulation",   "EmulaÃ§Ã£o",   "ConfiguraÃ§Ãµes especÃ­ficas do nÃºcleo (latÃªncia, estados de salvamento, menu de inÃ­cio)." },
-	{ "Input",       "Entrada",       "ConfiguraÃ§Ãµes de teclado, mouse e joystick." },
+	{ "Emulation",   "Emulação",   "Configurações específicas do núcleo (latência, estados de salvamento, menu de início)." },
+	{ "Input",       "Entrada",       "Configurações de teclado, mouse e joystick." },
 	{ "Performance", "Desempenho", "Ajuste o desempenho da CPU emulada." },
-	{ "Video",       "VÃ­deo",       "ConfiguraÃ§Ãµes para a placa grÃ¡fica emulada e proporÃ§Ã£o de aspecto." },
-	{ "System",      "Sistema",      "Outras configuraÃ§Ãµes do sistema para a RAM e CPU emuladas." },
-	{ "Audio",       "Ãudio",       "ConfiguraÃ§Ãµes de MIDI, SoundBlaster e outras configuraÃ§Ãµes de Ã¡udio." },
+	{ "Video",       "Vídeo",       "Configurações para a placa gráfica emulada e proporção de aspecto." },
+	{ "System",      "Sistema",      "Outras configurações do sistema para a RAM e CPU emuladas." },
+	{ "Audio",       "Áudio",       "Configurações de MIDI, SoundBlaster e outras configurações de áudio." },
 	{ NULL, NULL, NULL }
 };
 
@@ -31,8 +31,8 @@ static retro_core_option_v2_definition option_defs[] =
 {
 	{
 		"dosbox_pure_advanced",
-		"Mostrar OpÃ§Ãµes AvanÃ§adas", NULL,
-		"Feche e reabra o menu para atualizar esta pÃ¡gina de opÃ§Ãµes.", NULL,
+		"Mostrar Opções Avançadas", NULL,
+		"Feche e reabra o menu para atualizar esta página de opções.", NULL,
 		NULL,
 		{ { "false", "Off" }, { "true", "On" } },
 		"false"
@@ -40,9 +40,9 @@ static retro_core_option_v2_definition option_defs[] =
 	// Emulation
 	{
 		"dosbox_pure_force60fps",
-		"ForÃ§ar saÃ­da de 60 FPS", NULL,
-		"Ative essa opÃ§Ã£o para forÃ§ar a saÃ­da a 60FPS. Use essa opÃ§Ã£o se tiver problemas de tremulaÃ§Ã£o de tela ou de sincronizaÃ§Ã£o de vÃ­deo.", NULL,
-		"Emulation",
+		"Forçar saída de 60 FPS", NULL,
+		"Ative essa opção para forçar a saída a 60FPS. Use essa opção se tiver problemas de tremulação de tela ou de sincronização de vídeo.", NULL,
+		"Emulação",
 		{
 			{ "false", "Off" },
 			{ "true", "On" },
@@ -51,23 +51,23 @@ static retro_core_option_v2_definition option_defs[] =
 	},
 	{
 		"dosbox_pure_perfstats",
-		"Mostrar estatÃ­sticas de desempenho", NULL,
-		"Ative essa opÃ§Ã£o para mostrar estatÃ­sticas sobre desempenho e taxa de quadros e verificar se a emulaÃ§Ã£o Ã© executada em velocidade mÃ¡xima.", NULL,
-		"Emulation",
+		"Mostrar estatísticas de desempenho", NULL,
+		"Ative essa opção para mostrar estatísticas sobre desempenho e taxa de quadros e verificar se a emulação é executada em velocidade máxima.", NULL,
+		"Emulação",
 		{
 			{ "none",     "Desativada" },
 			{ "simple",   "Simples" },
-			{ "detailed", "InformaÃ§Ãµes detalhadas" },
+			{ "detailed", "Informações detalhadas" },
 		},
 		"none"
 	},
 	{
 		"dosbox_pure_savestate",
 		"Suporte para salvar estados", NULL,
-		"Certifique-se de testÃ¡-lo em cada jogo antes de usÃ¡-lo. Jogos complexos do DOS do final da era podem ter problemas." "\n"
-		"Lembre-se de que os estados salvos com configuraÃ§Ãµes diferentes de vÃ­deo, CPU ou memÃ³ria nÃ£o podem ser carregados." "\n"
+		"Certifique-se de testá-lo em cada jogo antes de usá-lo. Jogos complexos do DOS do final da era podem ter problemas." "\n"
+		"Lembre-se de que os estados salvos com configurações diferentes de vídeo, CPU ou memória não podem ser carregados." "\n"
 		"O suporte ao rebobinamento tem um alto custo de desempenho e precisa de pelo menos 40 MB de buffer de rebobinamento.", NULL,
-		"EmulaÃ§Ã£o",
+		"Emulação",
 		{
 			{ "on",       "Ativar estados de salvamento" },
 			{ "rewind",   "Ativar estados de salvamento com rebobinagem" },
@@ -76,22 +76,10 @@ static retro_core_option_v2_definition option_defs[] =
 		"on"
 	},
 	{
-		"dosbox_pure_conf",
-		"Carregamento do dosbox.conf", NULL,
-		"O DOSBox Pure deve ser configurado por meio das opÃ§Ãµes principais, mas opcionalmente suporta o carregamento de arquivos .conf herdados." "\n\n", NULL, //Fim da seÃ§Ã£o EmulaÃ§Ã£o
-		"EmulaÃ§Ã£o",
-		{
-			{ "false", "Suporte a .conf desativado (padrÃ£o)" },
-			{ "inside", "Tente usar o 'dosbox.conf' no conteÃºdo carregado (ZIP ou pasta)" },
-			{ "outside", "Tente '.conf' com o mesmo nome do conteÃºdo carregado (prÃ³ximo ao ZIP ou Ã  pasta)" },
-		},
-		"false"
-	},
-	{
 		"dosbox_pure_strict_mode",
-		"Usar o modo estrito", NULL,
-		"Desativa a linha de comando, a execuÃ§Ã£o de sistemas operacionais instalados e o uso de arquivos .BAT/.COM/.EXE/DOSZ.YML do jogo salvo.", NULL,
-		"EmulaÃ§Ã£o",
+		"Avançado > Usar Modo Estrito", NULL,
+		"Desabilita a linha de comando, executando sistemas operacionais instalados e utilizando arquivos .BAT/.COM/.EXE/DOS.YML a partir do jogo salvo.", NULL,
+		"Emulação",
 		{
 			{ "false", "Off" },
 			{ "true", "On" },
@@ -99,42 +87,54 @@ static retro_core_option_v2_definition option_defs[] =
 		"false"
 	},
 	{
-		"dosbox_pure_menu_time",
-		"AvanÃ§ado > Menu Iniciar", NULL,
-		"Definir o comportamento do menu Iniciar antes e depois de iniciar um jogo." "\n"
-		"VocÃª tambÃ©m pode forÃ§ar a abertura mantendo pressionada a tecla Shift ou L2/R2 ao selecionar 'Reiniciar'.", NULL,
-		"EmulaÃ§Ã£o",
+		"dosbox_pure_conf",
+		"Avançado > Carregamento de dosbox.conf", NULL,
+		"O DOSBox Pure deve ser configurado via opções principais, mas opcionalmente suporta o carregamento de arquivos .conf legados.", NULL,
+		"Emulação",
 		{
-			{ "99", "Mostrar no inÃ­cio, mostrar novamente apÃ³s a saÃ­da do jogo (padrÃ£o)" },
+			{ "false", "Suporte a conf desabilitado (padrão)" },
+			{ "inside", "Tentar 'dosbox.conf' no conteúdo carregado (ZIP ou pasta)" },
+			{ "outside", "Tentar '.conf' com o mesmo nome do conteúdo carregado (ao lado do ZIP ou pasta)" },
+		},
+		"false"
+	},
+	{
+		"dosbox_pure_menu_time",
+		"Avançado > Menu Iniciar", NULL,
+		"Definir o comportamento do menu Iniciar antes e depois de iniciar um jogo." "\n"
+		"Você também pode forçar a abertura mantendo pressionada a tecla Shift ou L2/R2 ao selecionar 'Reiniciar'.", NULL,
+		"Emulação",
+		{
+			{ "99", "Mostrar no início, mostrar novamente após a saída do jogo (padrão)" },
 #ifndef STATIC_LINKING
-			{ "5", "Mostrar no inÃ­cio, desligar o nÃºcleo 5 segundos apÃ³s a saÃ­da do jogo iniciado automaticamente" },
-			{ "3", "Mostrar no inÃ­cio, desligar o nÃºcleo 3 segundos apÃ³s a saÃ­da do jogo iniciado automaticamente" },
-			{ "0", "Mostrar no inÃ­cio, desligar o nÃºcleo imediatamente apÃ³s a saÃ­da do jogo iniciado automaticamente" },
+			{ "5", "Mostrar no início, desligar o núcleo 5 segundos após a saída do jogo iniciado automaticamente" },
+			{ "3", "Mostrar no início, desligar o núcleo 3 segundos após a saída do jogo iniciado automaticamente" },
+			{ "0", "Mostrar no início, desligar o núcleo imediatamente após a saída do jogo iniciado automaticamente" },
 #endif
-			{ "-1", "Sempre mostrar menu na inicializaÃ§Ã£o e apÃ³s a saÃ­da do jogo, ignorar a configuraÃ§Ã£o de inÃ­cio automÃ¡tico" },
+			{ "-1", "Sempre mostrar menu na inicialização e após a saída do jogo, ignorar a configuração de início automático" },
 		},
 		"99"
 	},
 	{
 		"dosbox_pure_latency",
-		"AvanÃ§ado > LatÃªncia de Entrada", NULL,
-		"Por padrÃ£o, o nÃºcleo opera em modo de alto desempenho com boa latÃªncia de entrada." "\n"
-		"HÃ¡ um modo especial disponÃ­vel que minimiza ainda mais a latÃªncia de entrada, exigindo ajustes manuais.", NULL,
-		"EmulaÃ§Ã£o",
+		"Avançado > Latência de Entrada", NULL,
+		"Por padrão, o núcleo opera em modo de alto desempenho com boa latência de entrada." "\n"
+		"Há um modo especial disponível que minimiza ainda mais a latência de entrada, exigindo ajustes manuais.", NULL,
+		"Emulação",
 		{
-			{ "default", "PadrÃ£o" },
-			{ "low", "LatÃªncia mais baixa - Consulte a configuraÃ§Ã£o de uso da CPU abaixo!" },
-			{ "variable", "LatÃªncia irregular - Pode melhorar o desempenho em dispositivos de baixo desempenho" },
+			{ "default", "Padrão" },
+			{ "low", "Latência mais baixa - Consulte a configuração de uso da CPU abaixo!" },
+			{ "variable", "Latência irregular - Pode melhorar o desempenho em dispositivos de baixo desempenho" },
 		},
 		"default"
 	},
 	{
 		"dosbox_pure_auto_target",
-		"AvanÃ§ado > Uso da CPU de baixa latÃªncia", NULL,
-		"No modo de baixa latÃªncia, ao emular o DOS o mais rÃ¡pido possÃ­vel, quanto tempo por quadro deve ser usado pela emulaÃ§Ã£o." "\n"
-		"Se o vÃ­deo estiver travando, diminua isso ou melhore o desempenho de renderizaÃ§Ã£o no frontend (por exemplo, desativando o vsync ou processamento de vÃ­deo)." "\n"
-		"Use as estatÃ­sticas de desempenho para encontrar facilmente o mÃ¡ximo que ainda atinge a taxa de quadros alvo emulada." "\n\n", NULL, //Fim da seÃ§Ã£o EmulaÃ§Ã£o > AvanÃ§ado
-		"EmulaÃ§Ã£o",
+		"Avançado > Uso da CPU de baixa latência", NULL,
+		"No modo de baixa latência, ao emular o DOS o mais rápido possível, quanto tempo por quadro deve ser usado pela emulação." "\n"
+		"Se o vídeo estiver travando, diminua isso ou melhore o desempenho de renderização no frontend (por exemplo, desativando o vsync ou processamento de vídeo)." "\n"
+		"Use as estatísticas de desempenho para encontrar facilmente o máximo que ainda atinge a taxa de quadros alvo emulada." "\n\n", NULL, //Fim da seção Emulação > Avançado
+		"Emulação",
 		{
 			//{ "0.2", "20%" }, { "0.21", "21%" }, { "0.22", "22%" }, { "0.23", "23%" }, { "0.24", "24%" }, { "0.25", "25%" }, { "0.26", "26%" }, { "0.27", "27%" }, { "0.28", "28%" }, { "0.29", "29%" },
 			//{ "0.3", "30%" }, { "0.31", "31%" }, { "0.32", "32%" }, { "0.33", "33%" }, { "0.34", "34%" }, { "0.35", "35%" }, { "0.36", "36%" }, { "0.37", "37%" }, { "0.38", "38%" }, { "0.39", "39%" },
@@ -153,7 +153,7 @@ static retro_core_option_v2_definition option_defs[] =
 	{
 		"dosbox_pure_on_screen_keyboard",
 		"Ativar Teclado na Tela", NULL,
-		"Ative a funcionalidade de Teclado na Tela, que pode ser ativada com o botÃ£o L3 no controle.", NULL,
+		"Ative a funcionalidade de Teclado na Tela, que pode ser ativada com o botão L3 no controle.", NULL,
 		"Entrada",
 		{ { "true", "On" }, { "false", "Off" } },
 		"true"
@@ -161,13 +161,13 @@ static retro_core_option_v2_definition option_defs[] =
 	{
 		"dosbox_pure_mouse_input",
 		"Modo de Entrada do Mouse", NULL,
-		"VocÃª pode desativar o tratamento de entrada de um mouse ou uma tela sensÃ­vel ao toque (o mouse emulado atravÃ©s do joystick ainda funcionarÃ¡)." "\n"
-		"No modo de touchpad, use o arrastar para mover, toque para clicar, toque com dois dedos para clicar com o botÃ£o direito e pressione e segure para arrastar", NULL,
+		"Você pode desativar o tratamento de entrada de um mouse ou uma tela sensível ao toque (o mouse emulado através do joystick ainda funcionará)." "\n"
+		"No modo de touchpad, use o arrastar para mover, toque para clicar, toque com dois dedos para clicar com o botão direito e pressione e segure para arrastar", NULL,
 		"Entrada",
 		{
-		{ "true", "Mouse virtual (padrÃ£o)" },
-		{ "direct", "Mouse controlado diretamente (nÃ£o suportado por todos os jogos)" },
-		{ "pad", "Modo touchpad (consulte a descriÃ§Ã£o, melhor para telas sensÃ­veis ao toque)" },
+		{ "true", "Mouse virtual (padrão)" },
+		{ "direct", "Mouse controlado diretamente (não suportado por todos os jogos)" },
+		{ "pad", "Modo touchpad (consulte a descrição, melhor para telas sensíveis ao toque)" },
 		{ "false", "Desativado (ignorar entradas do mouse)" },
 		},
 		"true"
@@ -175,18 +175,18 @@ static retro_core_option_v2_definition option_defs[] =
 	{
 		"dosbox_pure_mouse_wheel",
 		"Vincular Roda do Mouse a Tecla", NULL,
-		"Vincule a roda do mouse para cima e para baixo a duas teclas do teclado para poder usÃ¡-la em jogos de DOS.", NULL,
+		"Vincule a roda do mouse para cima e para baixo a duas teclas do teclado para poder usá-la em jogos de DOS.", NULL,
 		"Entrada",
 		{
 			{ "67/68", "Colchete Esquerdo/Colchete Direito" },
-			{ "72/71", "VÃ­rgula/Ponto" },
+			{ "72/71", "Vírgula/Ponto" },
 			{ "79/82", "Page-Up/Page-Down" },
-			{ "78/81", "InÃ­cio/Fim" },
+			{ "78/81", "Início/Fim" },
 			{ "80/82", "Delete/Page-Down" },
-			{ "64/65", "HÃ­fen/Igual" },
-			{ "69/70", "Ponto e VÃ­rgula/Aspas" },
-			{ "99/100", "Menos do Teclado NumÃ©rico/Mais do Teclado NumÃ©rico" },
-			{ "97/98", "Dividir do Teclado NumÃ©rico/Multiplicar do Teclado NumÃ©rico" },
+			{ "64/65", "Hífen/Igual" },
+			{ "69/70", "Ponto e Vírgula/Aspas" },
+			{ "99/100", "Menos do Teclado Numérico/Mais do Teclado Numérico" },
+			{ "97/98", "Dividir do Teclado Numérico/Multiplicar do Teclado Numérico" },
 			{ "84/85", "Cima/Baixo" },
 			{ "83/86", "Esquerda/Direita" },
 			{ "11/13", "Q/E" },
@@ -212,8 +212,8 @@ static retro_core_option_v2_definition option_defs[] =
 	},
 	{
 		"dosbox_pure_mouse_speed_factor_x",
-		"AvanÃ§ado > Sensibilidade do Mouse Horizontal.", NULL,
-		"Experimente com este valor se o mouse estiver muito rÃ¡pido/lento ao se mover para a esquerda/direita.", NULL,
+		"Avançado > Sensibilidade do Mouse Horizontal.", NULL,
+		"Experimente com este valor se o mouse estiver muito rápido/lento ao se mover para a esquerda/direita.", NULL,
 		"Entrada",
 		{
 			{ "0.2",  "20%" }, { "0.25",  "25%" }, { "0.3",  "30%" }, { "0.35",  "35%" }, { "0.4",  "40%" }, { "0.45",  "45%" },
@@ -227,53 +227,66 @@ static retro_core_option_v2_definition option_defs[] =
 		"1.0"
 	},
 	{
-		"dosbox_pure_auto_mapping",
-		"AvanÃ§ado > Mapeamentos AutomÃ¡ticos de Gamepad", NULL,
-		"O DOSBox Pure pode aplicar automaticamente um esquema de mapeamento de controle de gamepad quando detecta um jogo." "\n"
-		"Esses mapeamentos de botÃµes sÃ£o fornecidos pelo Projeto Keyb2Joypad (de Jemy Murphy e bigjim).", NULL,
+		"dosbox_pure_actionwheel_inputs",
+		"Avançado > Entradas da Roda de Ação", NULL,
+		"Define quais entradas controlam a roda de ação.", NULL,
 		"Entrada",
-		{ { "true", "Ativado (padrÃ£o)" }, { "notify", "Ativar com notificaÃ§Ã£o na detecÃ§Ã£o de jogo" }, { "false", "Off" } },
+		{
+			{ "14", "Alavanca Direita, D-Pad, Mouse (Padrão)" }, { "6",  "Alavanca Direita, D-Pad" }, { "10", "Alavanca Direita, Mouse" }, { "2",  "Alavanca Direita" },
+			{ "15", "Ambas as Alavancas, D-Pad, Mouse" }, { "7",  "Ambas as Alavancas, D-Pad" }, { "11", "Ambas as Alavancas, Mouse" }, { "3",  "Ambas as Alavancas" },
+			{ "13", "Alavanca Esquerda, D-Pad, Mouse" }, { "5",  "Alavanca Esquerda, D-Pad" }, { "9",  "Alavanca Esquerda, Mouse" }, { "1",  "Alavanca Esquerda" },
+			{ "12", "D-Pad, Mouse" }, { "4",  "D-Pad" }, { "8",  "Mouse" },
+		},
+		"14"
+	},
+	{
+		"dosbox_pure_auto_mapping",
+		"Avançado > Mapeamentos Automáticos de Gamepad", NULL,
+		"O DOSBox Pure pode aplicar automaticamente um esquema de mapeamento de controle de gamepad quando detecta um jogo." "\n"
+		"Esses mapeamentos de botões são fornecidos pelo Projeto Keyb2Joypad (de Jemy Murphy e bigjim).", NULL,
+		"Entrada",
+		{ { "true", "Ativado (padrão)" }, { "notify", "Ativar com notificação na detecção de jogo" }, { "false", "Off" } },
 		"true"
 	},
 	{
 		"dosbox_pure_keyboard_layout",
-		"AvanÃ§ado > Layout do Teclado", NULL,
-		"Selecione o layout do teclado (nÃ£o afetarÃ¡ o Teclado na Tela).", NULL,
+		"Avançado > Layout do Teclado", NULL,
+		"Selecione o layout do teclado (não afetará o Teclado na Tela).", NULL,
 		"Entrada",
 		{
-			{ "us",    "EUA (padrÃ£o)" },
+			{ "us",    "EUA (padrão)" },
 			{ "uk",    "Reino Unido" },
-			{ "be",    "BÃ©lgica" },
+			{ "be",    "Bélgica" },
 			{ "br",    "Brasil" },
-			{ "hr",    "CroÃ¡cia" },
-			{ "cz243", "RepÃºblica Tcheca" },
+			{ "hr",    "Croácia" },
+			{ "cz243", "República Tcheca" },
 			{ "dk",    "Dinamarca" },
-			{ "su",    "FinlÃ¢ndia" },
-			{ "fr",    "FranÃ§a" },
+			{ "su",    "Finlândia" },
+			{ "fr",    "França" },
 			{ "gr",    "Alemanha" },
-			{ "gk",    "GrÃ©cia" },
+			{ "gk",    "Grécia" },
 			{ "hu",    "Hungria" },
-			{ "is161", "IslÃ¢ndia" },
-			{ "it",    "ItÃ¡lia" },
+			{ "is161", "Islândia" },
+			{ "it",    "Itália" },
 			{ "nl",    "Holanda" },
 			{ "no",    "Noruega" },
-			{ "pl",    "PolÃ´nia" },
+			{ "pl",    "Polônia" },
 			{ "po",    "Portugal" },
-			{ "ru",    "RÃºssia" },
-			{ "sk",    "EslovÃ¡quia" },
-			{ "si",    "EslovÃªnia" },
+			{ "ru",    "Rússia" },
+			{ "sk",    "Eslováquia" },
+			{ "si",    "Eslovênia" },
 			{ "sp",    "Espanha" },
-			{ "sv",    "SuÃ©cia" },
-			{ "sg",    "SuÃ­Ã§a (AlemÃ£o)" },
-			{ "sf",    "SuÃ­Ã§a (FrancÃªs)" },
+			{ "sv",    "Suécia" },
+			{ "sg",    "Suíça (Alemão)" },
+			{ "sf",    "Suíça (Francês)" },
 			{ "tr",    "Turquia" },
 		},
 		"br"
 	},
 	{
 		"dosbox_pure_menu_transparency",
-		"AvanÃ§ado > TransparÃªncia do Menu", NULL,
-		"Defina o nÃ­vel de transparÃªncia do Teclado na Tela e do Mapeador de Controle.", NULL,
+		"Avançado > Transparência do Menu", NULL,
+		"Defina o nível de transparência do Teclado na Tela e do Mapeador de Controle.", NULL,
 		"Entrada",
 		{
 			{ "10", "10%" }, { "20", "20%" }, { "30", "30%" }, { "40", "40%" }, { "50", "50%" }, { "60", "60%" }, { "70", "70%" }, { "80", "80%" }, { "90", "90%" }, { "100", "100%" },
@@ -282,8 +295,8 @@ static retro_core_option_v2_definition option_defs[] =
 	},
 	{
 		"dosbox_pure_joystick_analog_deadzone",
-		"AvanÃ§ado > Zona Morta do AnalÃ³gica do Joystick", NULL,
-		"Defina a zona morta das alavancas analÃ³gicas do joystick. Pode ser usada para eliminar desvios causados por hardware de joystick mal calibrado.", NULL,
+		"Avançado > Zona Morta do Analógica do Joystick", NULL,
+		"Defina a zona morta das alavancas analógicas do joystick. Pode ser usada para eliminar desvios causados por hardware de joystick mal calibrado.", NULL,
 		"Entrada",
 		{
 			{ "0",  "0%" }, { "5",  "5%" }, { "10", "10%" }, { "15", "15%" }, { "20", "20%" }, { "25", "25%" }, { "30", "30%" }, { "35", "35%" }, { "40", "40%" },
@@ -292,10 +305,10 @@ static retro_core_option_v2_definition option_defs[] =
 	},
 	{
 		"dosbox_pure_joystick_timed",
-		"AvanÃ§ado > Habilitar Intervalos Cronometrados do Joystick", NULL,
-		"Habilitar intervalos cronometrados para os eixos do joystick. Experimente esta opÃ§Ã£o se o seu joystick apresentar desvio." "\n\n", NULL, //end of Input > Advanced section
+		"Avançado > Habilitar Intervalos Cronometrados do Joystick", NULL,
+		"Habilitar intervalos cronometrados para os eixos do joystick. Experimente esta opção se o seu joystick apresentar desvio." "\n\n", NULL, //end of Input > Advanced section
 		"Entrada",
-		{ { "true", "Ativado (padrÃ£o)" }, { "false", "Off" } },
+		{ { "true", "Ativado (padrão)" }, { "false", "Off" } },
 		"true"
 	},
 
@@ -303,11 +316,11 @@ static retro_core_option_v2_definition option_defs[] =
 	{
 		"dosbox_pure_cycles",
 		"Desempenho Emulado", NULL,
-		"O desempenho bruto que o DOSBox tentarÃ¡ emular." "\n\n", NULL, //end of Performance section
+		"O desempenho bruto que o DOSBox tentará emular." "\n\n", NULL, //end of Performance section
 		"Desempenho",
 		{
-			{ "auto",    "AUTO - O DOSBox tentarÃ¡ detectar as necessidades de desempenho (padrÃ£o)" },
-			{ "max",     "MAX - Emular o maior nÃºmero de instruÃ§Ãµes possÃ­vel" },
+			{ "auto",    "AUTO - O DOSBox tentará detectar as necessidades de desempenho (padrão)" },
+			{ "max",     "MAX - Emular o maior número de instruções possível" },
 			{ "315",     "8086/8088, 4,77 MHz a partir de 1980 (315 cps)" },
 			{ "1320",    "286, 6 MHz a partir de 1982 (1320 cps)" },
 			{ "2750",    "286, 12,5 MHz a partir de 1985 (2750 cps)" },
@@ -323,9 +336,30 @@ static retro_core_option_v2_definition option_defs[] =
 		"auto"
 	},
 	{
+		"dosbox_pure_cycles_max",
+		"Detalhado > Desempenho Emulado Máximo", NULL,
+		"Com a velocidade de CPU dinâmica (AUTO ou MÁX acima), o nível máximo de desempenho emulado.", NULL,
+		"Desempenho",
+		{
+			{ "none",    "Ilimitado" },
+			{ "315",     "8086/8088, 4.77 MHz de 1980 (315 cps)" },
+			{ "1320",    "286, 6 MHz de 1982 (1320 cps)" },
+			{ "2750",    "286, 12.5 MHz de 1985 (2750 cps)" },
+			{ "4720",    "386, 20 MHz de 1987 (4720 cps)" },
+			{ "7800",    "386DX, 33 MHz de 1989 (7800 cps)" },
+			{ "13400",   "486DX, 33 MHz de 1990 (13400 cps)" },
+			{ "26800",   "486DX2, 66 MHz de 1992 (26800 cps)" },
+			{ "77000",   "Pentium, 100 MHz de 1995 (77000 cps)" },
+			{ "200000",  "Pentium II, 300 MHz de 1997 (200000 cps)" },
+			{ "500000",  "Pentium III, 600 MHz de 1999 (500000 cps)" },
+			{ "1000000", "AMD Athlon, 1.2 GHz de 2000 (1000000 cps)" },
+		},
+		"auto"
+	},
+	{
 		"dosbox_pure_cycles_scale",
 		"Detalhado > Escala de Desempenho", NULL,
-		"Ajuste fino do desempenho emulado para necessidades especÃ­ficas." "\n\n", NULL, //end of Performance > Detailed section
+		"Ajuste fino do desempenho emulado para necessidades específicas.", NULL,
 		"Desempenho",
 		{
 			{ "0.2",  "20%" }, { "0.25",  "25%" }, { "0.3",  "30%" }, { "0.35",  "35%" }, { "0.4",  "40%" }, { "0.45",  "45%" },
@@ -341,8 +375,8 @@ static retro_core_option_v2_definition option_defs[] =
 	{
 		"dosbox_pure_cycle_limit",
 		"Detalhado > Limitar Uso da CPU", NULL,
-		"Quanto tempo por quadro deve ser usado pela emulaÃ§Ã£o ao emular o DOS o mais rÃ¡pido possÃ­vel." "\n"
-		"Diminua isso se o seu dispositivo esquentar enquanto usa este nÃºcleo." "\n\n", NULL, //end of Performance > Detailed section
+		"Quanto tempo por quadro deve ser usado pela emulação ao emular o DOS o mais rápido possível." "\n"
+		"Diminua isso se o seu dispositivo esquentar enquanto usa este núcleo." "\n\n", NULL, //end of Performance > Detailed section
 		"Desempenho",
 		{
 			//{ "0.2", "20%" }, { "0.21", "21%" }, { "0.22", "22%" }, { "0.23", "23%" }, { "0.24", "24%" }, { "0.25", "25%" }, { "0.26", "26%" }, { "0.27", "27%" }, { "0.28", "28%" }, { "0.29", "29%" },
@@ -361,11 +395,11 @@ static retro_core_option_v2_definition option_defs[] =
 	// Video
 	{
 		"dosbox_pure_machine",
-		"Chip GrÃ¡fico Emulado (necessÃ¡rio reiniciar)", NULL,
-		"O tipo de chip grÃ¡fico que o DOSBox emularÃ¡.", NULL,
-		"VÃ­deo",
+		"Chip Gráfico Emulado (necessário reiniciar)", NULL,
+		"O tipo de chip gráfico que o DOSBox emulará.", NULL,
+		"Vídeo",
 		{
-			{ "svga",     "SVGA (Super Video Graphics Array) (padrÃ£o)" },
+			{ "svga",     "SVGA (Super Video Graphics Array) (padrão)" },
 			{ "vga",      "VGA (Video Graphics Array)" },
 			{ "ega",      "EGA (Enhanced Graphics Adapter)" },
 			{ "cga",      "CGA (Color Graphics Adapter)" },
@@ -378,13 +412,13 @@ static retro_core_option_v2_definition option_defs[] =
 	{
 		"dosbox_pure_cga",
 		"CGA Mode", NULL,
-		"A variaÃ§Ã£o de CGA que estÃ¡ sendo emulada.", NULL,
-		"VÃ­deo",
+		"A variação de CGA que está sendo emulada.", NULL,
+		"Vídeo",
 		{
-			{ "early_auto", "Modelo antigo, modo composto automÃ¡tico (padrÃ£o)" },
+			{ "early_auto", "Modelo antigo, modo composto automático (padrão)" },
 			{ "early_on",   "Modelo antigo, modo composto ligado" },
 			{ "early_off",  "Modelo antigo, modo composto desligado" },
-			{ "late_auto", "Modelo recente, modo composto automÃ¡tico" },
+			{ "late_auto", "Modelo recente, modo composto automático" },
 			{ "late_on",   "Modelo recente, modo composto ligado" },
 			{ "late_off",  "Modelo recente, modo composto desligado" },
 		},
@@ -393,23 +427,23 @@ static retro_core_option_v2_definition option_defs[] =
 	{
 		"dosbox_pure_hercules",
 		"Modo de Cor para Hercules", NULL,
-		"O esquema de cores para a emulaÃ§Ã£o Hercules.", NULL,
-		"VÃ­deo",
+		"O esquema de cores para a emulação Hercules.", NULL,
+		"Vídeo",
 		{
-			{ "white", "Preto e branco (padrÃ£o)" },
-			{ "amber", "Preto e Ã¢mbar" },
+			{ "white", "Preto e branco (padrão)" },
+			{ "amber", "Preto e âmbar" },
 			{ "green", "Preto e verde" },
 		},
 		"white"
 	},
 	{
 		"dosbox_pure_svga",
-		"Modo SVGA (necessÃ¡rio reiniciar)", NULL,
-		"A variaÃ§Ã£o SVGA que estÃ¡ sendo emulada. Tente mudar isso se encontrar problemas grÃ¡ficos.", NULL,
-		"VÃ­deo",
+		"Modo SVGA (necessário reiniciar)", NULL,
+		"A variação SVGA que está sendo emulada. Tente mudar isso se encontrar problemas gráficos.", NULL,
+		"Vídeo",
 		{
-			{ "svga_s3",       "S3 Trio64 (padrÃ£o)" },
-			{ "vesa_nolfb",    "S3 Trio64 sem hack de buffer de linha (reduz cintilaÃ§Ã£o em alguns jogos)" },
+			{ "svga_s3",       "S3 Trio64 (padrão)" },
+			{ "vesa_nolfb",    "S3 Trio64 sem hack de buffer de linha (reduz cintilação em alguns jogos)" },
 			{ "vesa_oldvbe",   "S3 Trio64 VESA 1.3" },
 			{ "svga_et3000",   "Tseng Labs ET3000" },
 			{ "svga_et4000",   "Tseng Labs ET4000" },
@@ -419,13 +453,13 @@ static retro_core_option_v2_definition option_defs[] =
 	},
 	{
 		"dosbox_pure_svgamem",
-		"MemÃ³ria SVGA (necessÃ¡ria reinicializaÃ§Ã£o)", NULL,
-		"A quantidade de memÃ³ria disponÃ­vel para a placa SVGA emulada.", NULL,
-		"VÃ­deo",
+		"Memória SVGA (necessária reinicialização)", NULL,
+		"A quantidade de memória disponível para a placa SVGA emulada.", NULL,
+		"Vídeo",
 		{
 			{ "0",  "512KB" },
 			{ "1", "1MB" },
-			{ "2", "2MB (padrÃ£o)" },
+			{ "2", "2MB (padrão)" },
 			{ "3", "3MB" },
 			{ "4", "4MB" },
 			{ "8", "8MB (nem sempre reconhecido)" },
@@ -434,59 +468,85 @@ static retro_core_option_v2_definition option_defs[] =
 	},
 	{
 		"dosbox_pure_voodoo",
-		"EmulaÃ§Ã£o 3dfx Voodoo", NULL,
-		"Ativa certos jogos com suporte para o acelerador 3D Voodoo." "\n"
-		"Emulador 3dfx Voodoo Graphics SST-1/2 por Aaron Giles e a equipe do MAME (licenÃ§a: BSD de 3 clÃ¡usulas)", NULL,
-		"VÃ­deo",
+		"Emulação 3dfx Voodoo", NULL,
+		"Habilita certos jogos com suporte para o acelerador 3D Voodoo." "\n"
+		"Emulador 3dfx Voodoo Graphics SST-1/2 por Aaron Giles e a equipe do MAME (licença: BSD-3-Clause)", NULL,
+		"Vídeo",
 		{
-			{ "12mb", "Ativado - 12MB de memÃ³ria (padrÃ£o)" },
-			{ "4mb", "Ativado - 4MB de memÃ³ria" },
-			{ "off", "Desativado" },
+			{ "8mb", "Habilitado - 8MB de memória (padrão)" },
+			{ "12mb", "Habilitado - 12MB de memória, Textura Dual" },
+			{ "4mb", "Habilitado - 4MB de memória, Somente Baixa Resolução" },
+			{ "off", "Desabilitado" },
 		},
-		"12mb",
+		"8mb",
 	},
 	{
 		"dosbox_pure_voodoo_perf",
-			"ConfiguraÃ§Ãµes de Desempenho 3dfx Voodoo", NULL,
-			"OpÃ§Ãµes para ajustar o comportamento da emulaÃ§Ã£o 3dfx Voodoo.", NULL,
-			"VÃ­deo",
+		"Desempenho 3dfx Voodoo", NULL,
+		"Opções para ajustar o comportamento da emulação 3dfx Voodoo." "\n"
+		"Mudar para OpenGL requer um reinício." "\n"
+		"Se o OpenGL estiver disponível, a aceleração 3D do lado do host é utilizada, o que pode tornar a renderização 3D muito mais rápida.", NULL,
+		"Vídeo",
 		{
-			{ "1", "Multi-threading (padrÃ£o)" },
-			{ "3", "Multi-threading, baixa qualidade" },
-			{ "2", "Baixa qualidade" },
-			{ "0", "Nenhum" },
+			{ "1", "Multi Threaded de Software (padrão)" },
+			{ "4", "Hardware OpenGL" },
+			{ "3", "Multi Threaded de Software, baixa qualidade" },
+			{ "2", "Single Threaded de Software, baixa qualidade" },
+			{ "0", "Single Threaded de Software" },
 		},
 		"1",
 	},
 	{
+		"dosbox_pure_voodoo_scale",
+		"3dfx Voodoo OpenGL Scaling", NULL,
+		"Aumentar a resolução nativa da imagem renderizada.", NULL,
+		"Vídeo",
+		{
+			{ "1", "1x" }, { "2", "2x" }, { "3", "3x" }, { "4", "4x" }, { "5", "5x" }, { "6", "6x" }, { "7", "7x" }, { "8", "8x" },
+		},
+		"1",
+	},
+	{
+		"dosbox_pure_voodoo_gamma",
+		"Correção de Gama 3dfx Voodoo", NULL,
+		"Mudar o brilho da saída renderizada 3dfx.", NULL,
+		"Vídeo",
+		{
+			{ "-10", "-10" }, { "-9", "-9" }, { "-8", "-8" }, { "-7", "-7" }, { "-6", "-6" }, { "-5", "-5" }, { "-4", "-4" }, { "-3", "-3" }, { "-2", "-2" }, { "-1", "-1" },
+			{ "0", "Nenhum" },
+			{ "1", "+1" }, { "2", "+2" }, { "3", "+3" }, { "4", "+4" }, { "5", "+5" }, { "6", "+6" }, { "7", "+7" }, { "8", "+8" }, { "9", "+9" }, { "10", "+10" },
+		},
+		"-2",
+	},
+	{
 		"dosbox_pure_aspect_correction",
-		"CorreÃ§Ã£o da ProporÃ§Ã£o de Tela", NULL,
-		"Quando ativada, a proporÃ§Ã£o de tela do nÃºcleo Ã© ajustada para o que um monitor CRT exibiria.", NULL,
-		"VÃ­deo",
-		{ { "false", "Desativado (padrÃ£o)" }, { "true", "On" } },
-		"true"
+		"Correção da Proporção de Tela", NULL,
+		"Quando ativada, a proporção de tela do núcleo é ajustada para o que um monitor CRT exibiria.", NULL,
+		"Vídeo",
+		{ { "false", "Desativado (padrão)" }, { "true", "On" } },
+		"false"
 	},
 	{
 		"dosbox_pure_overscan",
 		"Tamanho da Borda do Overscan", NULL,
-		"Quando habilitado, mostra uma borda ao redor da tela. Alguns jogos usam a cor da borda para transmitir informaÃ§Ãµes." "\n\n", NULL, // fim da seÃ§Ã£o de VÃ­deo
-		"VÃ­deo",
-		{ { "0", "Desativado (padrÃ£o)" }, { "1", "Pequeno" }, { "2", "MÃ©dio" }, { "3", "Grande" } },
+		"Quando habilitado, mostra uma borda ao redor da tela. Alguns jogos usam a cor da borda para transmitir informações." "\n\n", NULL, // fim da seção de Vídeo
+		"Vídeo",
+		{ { "0", "Desativado (padrão)" }, { "1", "Pequeno" }, { "2", "Médio" }, { "3", "Grande" } },
 		"0"
 	},
 
 	// System
 	{
 		"dosbox_pure_memory_size",
-		"Tamanho da MemÃ³ria (necessÃ¡rio reiniciar)", NULL,
-		"A quantidade de memÃ³ria (alta) que a mÃ¡quina emulada possui. VocÃª tambÃ©m pode desativar a memÃ³ria estendida (EMS/XMS)." "\n"
-		"NÃ£o Ã© recomendado usar mais do que o padrÃ£o devido Ã  incompatibilidade com certos jogos e aplicativos.", NULL,
+		"Tamanho da Memória (necessário reiniciar)", NULL,
+		"A quantidade de memória (alta) que a máquina emulada possui. Você também pode desativar a memória estendida (EMS/XMS)." "\n"
+		"Não é recomendado usar mais do que o padrão devido à incompatibilidade com certos jogos e aplicativos.", NULL,
 		"Sistema",
 		{
-			{ "none", "Desativar memÃ³ria estendida (sem EMS/XMS)" },
+			{ "none", "Desativar memória estendida (sem EMS/XMS)" },
 			{ "4",  "4 MB" },
 			{ "8",  "8 MB" },
-			{ "16", "16 MB (padrÃ£o)" },
+			{ "16", "16 MB (padrão)" },
 			{ "24", "24 MB" },
 			{ "32", "32 MB" },
 			{ "48", "48 MB" },
@@ -503,45 +563,45 @@ static retro_core_option_v2_definition option_defs[] =
 	{
 		"dosbox_pure_modem",
 		"Tipo de Modem", NULL,
-		"Tipo de modem emulado em COM1 para jogo em rede. Com o modem dial-up, um lado precisa discar qualquer nÃºmero para se conectar.", NULL,
+		"Tipo de modem emulado em COM1 para jogo em rede. Com o modem dial-up, um lado precisa discar qualquer número para se conectar.", NULL,
 		"Sistema",
 		{
 			{ "null", "Modem Nulo (Serial Direto)" },
-			{ "dial", "Modem Dial-Up (PadrÃ£o Hayes)" },
+			{ "dial", "Modem Dial-Up (Padrão Hayes)" },
 		},
 		"null"
 	},
 	{
 		"dosbox_pure_cpu_type",
-		"Tipo de CPU (necessÃ¡rio reiniciar)", NULL,
-		"Tipo de CPU emulado. 'Auto' Ã© a opÃ§Ã£o mais rÃ¡pida." "\n"
-			"Jogos que requerem seleÃ§Ã£o especÃ­fica de tipo de CPU:" "\n"
-			"386 (prÃ©-busca): X-Men: Madness in The Murderworld, Terminator 1, Contra, Fifa International Soccer 1994" "\n"
+		"Tipo de CPU (necessário reiniciar)", NULL,
+		"Tipo de CPU emulado. 'Auto' é a opção mais rápida." "\n"
+			"Jogos que requerem seleção específica de tipo de CPU:" "\n"
+			"386 (pré-busca): X-Men: Madness in The Murderworld, Terminator 1, Contra, Fifa International Soccer 1994" "\n"
 			"486 (lento): Betrayal in Antara" "\n"
 			"Pentium (lento): Fifa International Soccer 1994, jogos do Windows 95/Windows 3.x" "\n\n", NULL, //end of System section
 		"Sistema",
 		{
-			{ "auto", "AutomÃ¡tico - Conjunto de recursos misto com mÃ¡xima performance e compatibilidade" },
-			{ "386", "386 - Conjunto de instruÃ§Ãµes 386 com acesso rÃ¡pido Ã  memÃ³ria" },
-			{ "386_slow", "386 (lento) - Conjunto de instruÃ§Ãµes 386 com verificaÃ§Ãµes de privilÃ©gio de memÃ³ria" },
-			{ "386_prefetch", "386 (prÃ©-busca) - Com emulaÃ§Ã£o de fila de prÃ©-busca (apenas nos nÃºcleos 'auto' e 'normal')" },
-			{ "486_slow", "486 (lento) - Conjunto de instruÃ§Ãµes 486 com verificaÃ§Ãµes de privilÃ©gio de memÃ³ria" },
-			{ "pentium_slow", "Pentium (lento) - Conjunto de instruÃ§Ãµes 586 com verificaÃ§Ãµes de privilÃ©gio de memÃ³ria" },
+			{ "auto", "Automático - Conjunto de recursos misto com máxima performance e compatibilidade" },
+			{ "386", "386 - Conjunto de instruções 386 com acesso rápido à memória" },
+			{ "386_slow", "386 (lento) - Conjunto de instruções 386 com verificações de privilégio de memória" },
+			{ "386_prefetch", "386 (pré-busca) - Com emulação de fila de pré-busca (apenas nos núcleos 'auto' e 'normal')" },
+			{ "486_slow", "486 (lento) - Conjunto de instruções 486 com verificações de privilégio de memória" },
+			{ "pentium_slow", "Pentium (lento) - Conjunto de instruções 586 com verificações de privilégio de memória" },
 		},
 		"auto"
 	},
 	{
 		"dosbox_pure_cpu_core",
-		"AvanÃ§ado > NÃºcleo da CPU", NULL,
-		"MÃ©todo de emulaÃ§Ã£o (nÃºcleo da CPU do DOSBox) usado.", NULL,
+		"Avançado > Núcleo da CPU", NULL,
+		"Método de emulação (núcleo da CPU do DOSBox) usado.", NULL,
 		"Sistema",
 		{
 			#if defined(C_DYNAMIC_X86)
-			{ "auto", "AutomÃ¡tico - Jogos em modo real usam normal, jogos em modo protegido usam dinÃ¢mico" },
-			{ "dynamic", "DinÃ¢mico - RecompilaÃ§Ã£o dinÃ¢mica (rÃ¡pida, usando a implementaÃ§Ã£o dynamic_x86)" },
+			{ "auto", "Automático - Jogos em modo real usam normal, jogos em modo protegido usam dinâmico" },
+			{ "dynamic", "Dinâmico - Recompilação dinâmica (rápida, usando a implementação dynamic_x86)" },
 			#elif defined(C_DYNREC)
-			{ "auto", "AutomÃ¡tico - Jogos em modo real usam normal, jogos em modo protegido usam dinÃ¢mico" },
-			{ "dynamic", "DinÃ¢mico - RecompilaÃ§Ã£o dinÃ¢mica (rÃ¡pida, usando a implementaÃ§Ã£o dynrec)" },
+			{ "auto", "Automático - Jogos em modo real usam normal, jogos em modo protegido usam dinâmico" },
+			{ "dynamic", "Dinâmico - Recompilação dinâmica (rápida, usando a implementação dynrec)" },
 			#endif
 			{ "normal", "Normal (interpretador)" },
 			{ "simple", "Simples (interpretador otimizado para jogos antigos em modo real)" },
@@ -554,44 +614,44 @@ static retro_core_option_v2_definition option_defs[] =
 	},
 	{
 		"dosbox_pure_bootos_ramdisk",
-		"AvanÃ§ado > ModificaÃ§Ãµes no Disco do SO (necessÃ¡rio reiniciar)", NULL,
-		"Ao executar um sistema operacional instalado, as modificaÃ§Ãµes na unidade C: serÃ£o feitas na imagem de disco por padrÃ£o." "\n"
-		"Definir para 'Descartar' permite que o conteÃºdo seja fechado a qualquer momento sem preocupaÃ§Ãµes com corrupÃ§Ã£o do sistema de arquivos ou do registro." "\n"
-		"Ao usar 'Salvar DiferenÃ§a por ConteÃºdo', a imagem do disco nunca deve ser modificada novamente, caso contrÃ¡rio, as diferenÃ§as existentes se tornarÃ£o inutilizÃ¡veis.", NULL,
+		"Avançado > Modificações no Disco do SO (necessário reiniciar)", NULL,
+		"Ao executar um sistema operacional instalado, as modificações na unidade C: serão feitas na imagem de disco por padrão." "\n"
+		"Definir para 'Descartar' permite que o conteúdo seja fechado a qualquer momento sem preocupações com corrupção do sistema de arquivos ou do registro." "\n"
+		"Ao usar 'Salvar Diferença por Conteúdo', a imagem do disco nunca deve ser modificada novamente, caso contrário, as diferenças existentes se tornarão inutilizáveis.", NULL,
 		"Sistema",
 		{
-			{ "false", "Manter (padrÃ£o)" },
+			{ "false", "Manter (padrão)" },
 			{ "true", "Descartar" },
-			{ "diff", "Salvar DiferenÃ§a por ConteÃºdo" },
+			{ "diff", "Salvar Diferença por Conteúdo" },
 		},
 		"false"
 	},
 	{
 		"dosbox_pure_bootos_dfreespace",
-		"AvanÃ§ado > EspaÃ§o Livre em D: no SO (necessÃ¡rio reiniciar)", NULL,
-		"Controla a quantidade de espaÃ§o livre disponÃ­vel na unidade D: ao executar um sistema operacional instalado." "\n"
-		"Se o tamanho total da unidade D: (dados + espaÃ§o livre) exceder 2 GB, nÃ£o poderÃ¡ ser usado nas versÃµes anteriores do Windows 95." "\n"
-		"ATENÃ‡ÃƒO: Os arquivos de salvamento criados estÃ£o vinculados a essa configuraÃ§Ã£o, portanto, alterÃ¡-la ocultarÃ¡ todas as alteraÃ§Ãµes existentes na unidade D:.", NULL,
+		"Avançado > Espaço Livre em D: no SO (necessário reiniciar)", NULL,
+		"Controla a quantidade de espaço livre disponível na unidade D: ao executar um sistema operacional instalado." "\n"
+		"Se o tamanho total da unidade D: (dados + espaço livre) exceder 2 GB, não poderá ser usado nas versões anteriores do Windows 95." "\n"
+		"ATENÇÃO: Os arquivos de salvamento criados estão vinculados a essa configuração, portanto, alterá-la ocultará todas as alterações existentes na unidade D:.", NULL,
 		"Sistema",
-		{ { "1024", "1GB (padrÃ£o)" }, { "2048", "2GB" }, { "4096", "4GB" }, { "8192", "8GB" } },
+		{ { "1024", "1GB (padrão)" }, { "2048", "2GB" }, { "4096", "4GB" }, { "8192", "8GB" } },
 		"1024"
 	},
 	{
 		"dosbox_pure_bootos_forcenormal",
-		"AvanÃ§ado > ForÃ§ar NÃºcleo Normal no SO", NULL,
-		"O nÃºcleo normal pode ser mais estÃ¡vel ao executar um sistema operacional instalado." "\n"
+		"Avançado > Forçar Núcleo Normal no SO", NULL,
+		"O núcleo normal pode ser mais estável ao executar um sistema operacional instalado." "\n"
 		"Isso pode ser ligado e desligado para contornar travamentos." "\n\n", NULL, //end of System > Advanced section
 		"Sistema",
-		{ { "false", "Desativado (padrÃ£o)" }, { "true", "On" } },
+		{ { "false", "Desativado (padrão)" }, { "true", "On" } },
 		"false"
 	},
 
 	// Audio
 	{
 		"dosbox_pure_audiorate",
-		"Taxa de Amostragem de Ãudio (necessÃ¡rio reiniciar)", NULL,
-		"Isso deve corresponder Ã  configuraÃ§Ã£o de taxa de saÃ­da de Ã¡udio do frontend (Hz).", NULL,
-		"Ãudio",
+		"Taxa de Amostragem de Áudio (necessário reiniciar)", NULL,
+		"Isso deve corresponder à configuração de taxa de saída de áudio do frontend (Hz).", NULL,
+		"Áudio",
 		{
 			{ "48000", NULL },
 			{ "44100", NULL },
@@ -609,9 +669,9 @@ static retro_core_option_v2_definition option_defs[] =
 	},
 	{
 		"dosbox_pure_sblaster_conf",
-		"ConfiguraÃ§Ãµes do SoundBlaster", NULL,
-		"Defina o endereÃ§o, interrupÃ§Ã£o, DMA de 8 bits baixos e DMA de 16 bits altos.", NULL,
-		"Ãudio",
+		"Configurações do SoundBlaster", NULL,
+		"Defina o endereço, interrupção, DMA de 8 bits baixos e DMA de 16 bits altos.", NULL,
+		"Áudio",
 		{
 			// Some common (and less common) port, irq, low and high dma settings (based on a very scientific web search)
 			{ "A220 I7 D1 H5",  "Porta 0x220, IRQ 7, 8-Bit DMA 1, 16-bit DMA 5"  },
@@ -629,23 +689,23 @@ static retro_core_option_v2_definition option_defs[] =
 	},
 	{
 		"dosbox_pure_midi",
-		"SaÃ­da MIDI", NULL,
-		"Selecione o arquivo SoundFont .SF2, arquivo .ROM ou interface usada para saÃ­da MIDI." "\n"
-		"Para adicionar SoundFonts ou arquivos ROM, copie-os para o diretÃ³rio 'system' do frontend." "\n"
+		"Saída MIDI", NULL,
+		"Selecione o arquivo SoundFont .SF2, arquivo .ROM ou interface usada para saída MIDI." "\n"
+		"Para adicionar SoundFonts ou arquivos ROM, copie-os para o diretório 'system' do frontend." "\n"
 		"Para usar o driver MIDI do frontend, certifique-se de que ele esteja configurado corretamente." "\n\n", NULL, //end of Audio section
-		"Ãudio",
+		"Áudio",
 		{
 			// dynamically filled in retro_init
 		},
-		"none"
+		"disabled"
 	},
 	{
 		"dosbox_pure_sblaster_type",
-		"AvanÃ§ado > Tipo de SoundBlaster", NULL,
+		"Avançado > Tipo de SoundBlaster", NULL,
 		"Tipo de placa SoundBlaster emulada.", NULL,
-		"Ãudio",
+		"Áudio",
 		{
-			{ "sb16", "SoundBlaster 16 (padrÃ£o)" },
+			{ "sb16", "SoundBlaster 16 (padrão)" },
 			{ "sbpro2", "SoundBlaster Pro 2" },
 			{ "sbpro1", "SoundBlaster Pro" },
 			{ "sb2", "SoundBlaster 2.0" },
@@ -657,14 +717,14 @@ static retro_core_option_v2_definition option_defs[] =
 	},
 	{
 		"dosbox_pure_sblaster_adlib_mode",
-		"AvanÃ§ado > Modo Adlib/FM do SoundBlaster", NULL,
-		"O modo de sÃ­ntese FM emulado pelo SoundBlaster. Todos os modos sÃ£o compatÃ­veis com o Adlib, exceto o CMS.", NULL,
-		"Ãudio",
+		"Avançado > Modo Adlib/FM do SoundBlaster", NULL,
+		"O modo de síntese FM emulado pelo SoundBlaster. Todos os modos são compatíveis com o Adlib, exceto o CMS.", NULL,
+		"Áudio",
 		{
-			{ "auto",     "AutomÃ¡tico (selecionar com base no tipo de SoundBlaster) (padrÃ£o)" },
+			{ "auto",     "Automático (selecionar com base no tipo de SoundBlaster) (padrão)" },
 			{ "cms",      "CMS (Creative Music System / GameBlaster)" },
 			{ "opl2",     "OPL-2 (AdLib / OPL-2 / Yamaha 3812)" },
-			{ "dualopl2", "Dual OPL-2 (Dual OPL-2 usado pelo SoundBlaster Pro 1.0 para som estÃ©reo)" },
+			{ "dualopl2", "Dual OPL-2 (Dual OPL-2 usado pelo SoundBlaster Pro 1.0 para som estéreo)" },
 			{ "opl3",     "OPL-3 (AdLib / OPL-3 / Yamaha YMF262)" },
 			{ "opl3gold", "OPL-3 Gold (AdLib Gold / OPL-3 / Yamaha YMF262)" },
 			{ "none",     "Desativado" },
@@ -673,30 +733,38 @@ static retro_core_option_v2_definition option_defs[] =
 	},
 	{
 		"dosbox_pure_sblaster_adlib_emu",
-		"AvanÃ§ado > Provedor de Adlib SoundBlaster", NULL,
-		"Provedor para a emulaÃ§Ã£o do Adlib. O padrÃ£o possui boa qualidade e baixos requisitos de desempenho.", NULL,
-"		Ãudio",
+		"Avançado > Provedor de Adlib SoundBlaster", NULL,
+		"Provedor para a emulação do Adlib. O padrão possui boa qualidade e baixos requisitos de desempenho.", NULL,
+"		Áudio",
 		{
-			{ "default", "PadrÃ£o" },
+			{ "default", "Padrão" },
 			{ "nuked", "Alta qualidade Nuked OPL3" },
 		},
-		"nuked"
+		"default"
 	},
 	{
 		"dosbox_pure_gus",
-		"AvanÃ§ado > Habilitar EmulaÃ§Ã£o do Gravis Ultrasound (necessÃ¡rio reiniciar)", NULL,
-		"Habilitar emulaÃ§Ã£o do Gravis Ultrasound. As configuraÃ§Ãµes estÃ£o fixadas em porta 0x240, IRQ 5, DMA 3." "\n"
-		"Se a variÃ¡vel ULTRADIR precisar ser diferente do padrÃ£o 'C:\\ULTRASND' vocÃª precisarÃ¡ inserir 'SET ULTRADIR=...' na linha de comando ou em um arquivo em lote." "\n\n", NULL, // fim da seÃ§Ã£o de Ãudio > AvanÃ§ado
-		"Ãudio",
-		{ { "false", "Desativado (padrÃ£o)" }, { "true", "On" } },
+		"Avançado > Habilitar Emulação do Gravis Ultrasound (necessário reiniciar)", NULL,
+		"Habilitar emulação do Gravis Ultrasound. As configurações estão fixadas em porta 0x240, IRQ 5, DMA 3." "\n"
+		"Se a variável ULTRADIR precisar ser diferente do padrão 'C:\\ULTRASND' você precisará inserir 'SET ULTRADIR=...' na linha de comando ou em um arquivo em lote." "\n\n", NULL, // fim da seção de Áudio > Avançado
+		"Áudio",
+		{ { "false", "Desativado (padrão)" }, { "true", "On" } },
 		"false"
 	},
 	{
+		"dosbox_pure_tandysound",
+		"Avançado > Habilitar Dispositivo de Som Tandy (reinício necessário)", NULL,
+		"Habilita a emulação do Dispositivo de Som Tandy mesmo quando executando sem a emulação do Adaptador Gráfico Tandy.", NULL,
+		"Áudio",
+		{ { "auto", "Desativado (padrão)" }, { "on", "Ativado" } },
+		"auto"
+	},
+	{
 		"dosbox_pure_swapstereo",
-		"AvanÃ§ado > Trocar canais estÃ©reo", NULL,
-		"Trocar o canal de Ã¡udio esquerdo e direito." "\n\n", NULL, //end of Audio > Advanced section
-		"Ãudio",
-		{ { "false", "Desativado (padrÃ£o)" }, { "true", "On" } },
+		"Avançado > Trocar canais estéreo", NULL,
+		"Trocar o canal de áudio esquerdo e direito." "\n\n", NULL, //end of Audio > Advanced section
+		"Áudio",
+		{ { "false", "Desativado (padrão)" }, { "true", "On" } },
 		"false"
 	},
 

@@ -23,8 +23,8 @@
 #include "video.h"
 
 #ifdef C_DBP_LIBRETRO
-#define SCALER_MAXWIDTH       1280 
-#define SCALER_MAXHEIGHT      1024
+#define SCALER_MAXWIDTH       1600
+#define SCALER_MAXHEIGHT      1200
 #define SCALER_MAX_MUL_HEIGHT 1
 #define SCALER_MAX_MUL_WIDTH  1
 #else
@@ -131,10 +131,12 @@ typedef struct {
 
 /* Simple scalers */
 extern ScalerSimpleBlock_t ScaleNormal1x;
+#ifdef C_DBP_ENABLE_SCALERS
 extern ScalerSimpleBlock_t ScaleNormalDw;
 extern ScalerSimpleBlock_t ScaleNormalDh;
 extern ScalerSimpleBlock_t ScaleNormal2x;
 extern ScalerSimpleBlock_t ScaleNormal3x;
+#endif
 #if RENDER_USE_ADVANCED_SCALERS>0
 extern ScalerSimpleBlock_t ScaleTV2x;
 extern ScalerSimpleBlock_t ScaleTV3x;

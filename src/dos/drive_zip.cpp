@@ -1336,7 +1336,7 @@ struct Zip_DeflateUnpacker : ZIP_Unpacker
 				DBP_STATIC_ASSERT(sizeof(SeekCursor) < 0xFFFF); // for DOS_File max read/write length
 				df->AddRef();
 				Bit8u* compbuf = new Bit8u[sizeof(SeekCursor)];
-				Bit16u hdrin[4], hdrtest[4] = { (Bit16u)0x5344, (Bit16u)sizeof(SeekCursor), (Bit16u)(f.comp_size>>16), (Bit16u)f.comp_size }, sz;
+				Bit16u hdrin[7], hdrtest[7] = { (Bit16u)0x5345, (Bit16u)sizeof(SeekCursor), (Bit16u)(f.comp_size>>16), (Bit16u)f.comp_size, (Bit16u)(f.data_ofs>>32), (Bit16u)(f.data_ofs>>16), (Bit16u)f.data_ofs }, sz;
 				bool valid = (df->Read((Bit8u*)hdrin, &(sz = (Bit16u)sizeof(hdrin))) && !memcmp(hdrin, hdrtest, sizeof(hdrin)));
 				for (Bit16u idx_complen[2]; valid; seek_cache->cache_count++)
 				{
@@ -1494,7 +1494,7 @@ struct Zip_DeflateUnpacker : ZIP_Unpacker
 								df->AddRef();
 								sdefl* compressor = new sdefl;
 								Bit8u* compbuf = new Bit8u[SEEK_CURSOR_MAX_DEFL];
-								Bit16u hdr[4] = { (Bit16u)0x5344, (Bit16u)sizeof(SeekCursor), (Bit16u)(f.comp_size>>16), (Bit16u)f.comp_size }, idx_complen[2], sz;
+								Bit16u hdr[7] = { (Bit16u)0x5345, (Bit16u)sizeof(SeekCursor), (Bit16u)(f.comp_size>>16), (Bit16u)f.comp_size, (Bit16u)(f.data_ofs>>32), (Bit16u)(f.data_ofs>>16), (Bit16u)f.data_ofs }, idx_complen[2], sz;
 								df->Write((Bit8u*)hdr, &(sz = (Bit16u)sizeof(hdr)));
 								for (idx_complen[0] = 0; idx_complen[0] < cursor_count; idx_complen[0] += SEEK_CACHE_CURSOR_STEPS)
 								{
@@ -1644,6 +1644,17 @@ struct Zip_Directory: Zip_Entry
 			else delete e->AsFile();
 		}
 	}
+
+	bool IncrementName(char* p_dos)
+	{
+		const char* p_dos_dot = strchr(p_dos, '.');
+		Bit32u baseLen = (p_dos_dot ? (Bit32u)(p_dos_dot - p_dos) : (Bit32u)strlen(p_dos)), j = (baseLen > 8 ? 4 : baseLen / 2);
+		if      (baseLen >= 1 && p_dos[j  ] && p_dos[j  ] < '~') p_dos[j  ]++;
+		else if (baseLen >= 3 && p_dos[j+1] && p_dos[j+1] < '~') p_dos[j+1]++;
+		else if (baseLen >= 5 && p_dos[j+2] && p_dos[j+2] < '~') p_dos[j+2]++;
+		else { DBP_ASSERT(false); return false; }
+		return true;
+	}
 };
 
 struct Zip_Search
@@ -1664,7 +1675,6 @@ struct zipDriveImpl
 	// Various ZIP archive enums. To completely avoid cross platform compiler alignment and platform endian issues, miniz.c doesn't use structs for any of this stuff.
 	enum
 	{
-		MZ_METHOD_DEFLATED = 8,
 		// ZIP archive identifiers and record sizes
 		MZ_ZIP_END_OF_CENTRAL_DIR_HEADER_SIG = 0x06054b50, MZ_ZIP_CENTRAL_DIR_HEADER_SIG = 0x02014b50, MZ_ZIP_LOCAL_DIR_HEADER_SIG = 0x04034b50,
 		MZ_ZIP_LOCAL_DIR_HEADER_SIZE = 30, MZ_ZIP_CENTRAL_DIR_HEADER_SIZE = 46, MZ_ZIP_END_OF_CENTRAL_DIR_HEADER_SIZE = 22,
@@ -1686,7 +1696,7 @@ struct zipDriveImpl
 		MZ_ZIP_LDH_FILENAME_LEN_OFS = 26, MZ_ZIP_LDH_EXTRA_LEN_OFS = 28,
 	};
 
-	zipDriveImpl(DOS_File* _zip, bool enable_crc_check, bool enter_solo_root_dir) : root(DOS_ATTR_VOLUME|DOS_ATTR_DIRECTORY, "", 0xFFFF, 0xFFFF, 0), archive(_zip, enable_crc_check), total_decomp_size(0)
+	zipDriveImpl(DOS_File* _zip, bool enable_crc_check, bool enter_solo_root_dir, std::string** out_parent = NULL, bool* out_multi_parent = NULL, zipDriveImpl* child_impl = NULL) : root(DOS_ATTR_VOLUME|DOS_ATTR_DIRECTORY, "", 0xFFFF, 0xFFFF, 0), archive(_zip, enable_crc_check), total_decomp_size(0)
 	{
 		// Basic sanity checks - reject files which are too small.
 		if (archive.size < MZ_ZIP_END_OF_CENTRAL_DIR_HEADER_SIZE)
@@ -1762,6 +1772,7 @@ struct zipDriveImpl
 
 		// Now create an index into the central directory file records, do some basic sanity checking on each record, and check for zip64 entries (which are not yet supported).
 		p = cdir_start;
+		ValueHashMap<void*> lfnDirs;
 		for (Bit32u i = 0, total_header_size; i < total_files && p >= cdir_start && p < cdir_end && MZ_READ_LE32(p) == MZ_ZIP_CENTRAL_DIR_HEADER_SIG; i++, p += total_header_size)
 		{
 			Bit32u bit_flag         = MZ_READ_LE16(p + MZ_ZIP_CDH_BIT_FLAG_OFS);
@@ -1829,35 +1840,46 @@ struct zipDriveImpl
 				if (n != nEnd && *n != '/' && *n != '\\') continue;
 				if (n == nDir) { nDir++; continue; }
 
+				if (nDir == name && (n - nDir) > 7 && decomp_size == 0 && !strncasecmp(n - 7, ".parent", 7) && out_parent && !enter_solo_root_dir)
+				{
+					if (!*out_parent) *out_parent = new std::string(nDir, (size_t)(n - nDir - 7));
+					else *out_multi_parent = true; 
+					break;
+				}
+
 				// Create a 8.3 filename from a 4 char prefix and a suffix if filename is too long
-				Bit32u dos_len = DBP_Make8dot3FileName(p_dos, (Bit32u)(dos_path + DOS_PATHLENGTH - p_dos), nDir, (Bit32u)(n - nDir));
+				bool diff8dot3;
+				Bit32u dos_len = DBP_Make8dot3FileName(p_dos, (Bit32u)(dos_path + DOS_PATHLENGTH - p_dos), nDir, (Bit32u)(n - nDir), diff8dot3);
 				p_dos[dos_len] = '\0';
+
+				// If we are the parent of a child zip, make sure that overwriting only happens when the long file names match
+				for (Zip_Entry* child_entry; child_impl && (child_entry = child_impl->Get(dos_path)) != NULL && (n - name) < CROSS_LEN * 2;)
+				{
+					Bit32u nlen = (Bit32u)(n - name), readlen = MZ_ZIP_LOCAL_DIR_HEADER_SIZE + nlen + 1; char ldh[MZ_ZIP_LOCAL_DIR_HEADER_SIZE + CROSS_LEN * 2], *ldhn = ldh + MZ_ZIP_LOCAL_DIR_HEADER_SIZE;
+					bool diff_long_name = child_impl->archive.Read((child_entry->IsFile() ? child_entry->AsFile()->data_ofs : child_entry->AsDirectory()->ofs), ldh, readlen) != readlen
+						|| memcmp(name, ldhn, nlen) || (Bit32u)MZ_READ_LE16(ldh + MZ_ZIP_LDH_FILENAME_LEN_OFS) < nlen || (MZ_READ_LE16(ldh + MZ_ZIP_LDH_FILENAME_LEN_OFS) != nlen && ldhn[nlen] != '/' && ldhn[nlen] != '\\');
+					if (!diff_long_name) break;
+					if (!parent->IncrementName(p_dos)) goto skip_zip_entry;
+				}
 
 				if (n == nEnd && !is_dir)
 				{
-					Zip_File* zfile;
-					while (parent->entries.Get(p_dos))
-					{
-						// A file or directory already exists with the same name try changing some characters until it's unique
-						const char* p_dos_dot = strchr(p_dos, '.');
-						Bit32u baseLen = (p_dos_dot ? (Bit32u)(p_dos_dot - p_dos) : dos_len), j = (baseLen > 8 ? 4 : baseLen / 2);
-						if      (baseLen >= 1 && p_dos[j  ] && p_dos[j  ] < '~') p_dos[j  ]++;
-						else if (baseLen >= 3 && p_dos[j+1] && p_dos[j+1] < '~') p_dos[j+1]++;
-						else if (baseLen >= 5 && p_dos[j+2] && p_dos[j+2] < '~') p_dos[j+2]++;
-						else goto skip_zip_entry;
-					}
-					zfile = new Zip_File(DOS_ATTR_ARCHIVE, p_dos, file_date, file_time, local_header_ofs, (Bit32u)decomp_size, (Bit32u)comp_size, crc, (Bit8u)bit_flag, (Bit8u)method);
-					parent->entries.Put(p_dos, zfile);
-					skip_zip_entry:
+					while (parent->entries.Get(p_dos)) { if (!parent->IncrementName(p_dos)) goto skip_zip_entry; }
+					parent->entries.Put(p_dos, new Zip_File(DOS_ATTR_ARCHIVE, p_dos, file_date, file_time, local_header_ofs, (Bit32u)decomp_size, (Bit32u)comp_size, crc, (Bit8u)bit_flag, (Bit8u)method));
 					break;
 				}
-				Zip_Directory* zdir = directories.Get(dos_path);
+
+				// When 8dot3 was shortened, use the full (long) name as key for directory lookup (not needed for files because a file only exists once in a ZIP)
+				Bit32u lfnHash          = (!diff8dot3 ? 0 : BaseStringToPointerHashMap::Hash(name, (Bit32u)(n - name)));
+				Zip_Directory **lfnzdir = (!diff8dot3 ? NULL : (Zip_Directory**)lfnDirs.Get(lfnHash));
+				Zip_Directory *zdir     = (!diff8dot3 ? directories.Get(dos_path) : (lfnzdir ? *lfnzdir : NULL));
 				if (!zdir)
 				{
-					if (parent->entries.Get(p_dos)) break; // Skip if directory (or a file) already exists with the same name
+					while (parent->entries.Get(p_dos)) { if (!parent->IncrementName(p_dos)) goto skip_zip_entry; }
 					zdir = new Zip_Directory(DOS_ATTR_DIRECTORY, p_dos, file_date, file_time, local_header_ofs);
 					parent->entries.Put(p_dos, zdir);
 					directories.Put(dos_path, zdir);
+					if (diff8dot3) lfnDirs.Put(lfnHash, zdir);
 				}
 				if (n + 1 >= nEnd) break;
 				parent = zdir;
@@ -1865,6 +1887,7 @@ struct zipDriveImpl
 				*(p_dos++) = '\\';
 				nDir = n + 1;
 			}
+			skip_zip_entry:;
 		}
 		free(m_central_dir);
 		if (root.time == 0xFFFF) root.time = root.date = 0;
@@ -1894,7 +1917,73 @@ struct zipDriveImpl
 	}
 };
 
-zipDrive::zipDrive(DOS_File* zip, bool enable_crc_check, bool enter_solo_root_dir) : impl(new zipDriveImpl(zip, enable_crc_check, enter_solo_root_dir))
+DOS_Drive* zipDrive::MountWithDependencies(const char* path, std::string*& error_msg, bool enable_crc_check, bool enter_solo_root_dir, const char* dosc_path)
+{
+	struct Local
+	{
+		struct ZFILE { const char* path; const ZFILE* child; zipDriveImpl* child_impl; };
+		static DOS_Drive* Open(const ZFILE& z, std::string*& error_msg, bool enable_crc_check, bool enter_solo_root_dir, const char* dosc_path = NULL)
+		{
+			const char* path = z.path;
+			FILE* zip_file_h = fopen_wrap(path, "rb");
+			if (!zip_file_h)
+				return NULL;
+
+			bool multi_parent = false;
+			std::string* parent = NULL;
+			DOS_Drive* parent_drive = NULL;
+			zipDriveImpl* impl = new zipDriveImpl(new rawFile(zip_file_h, false), enable_crc_check, enter_solo_root_dir, &parent, &multi_parent, z.child_impl);
+
+			if (parent)
+			{
+				const char *lastfslash = strrchr(path, '/'), *lastbslash = strrchr(path, '\\'), *lastslash = (lastbslash > lastfslash ? lastbslash : lastfslash);
+				std::string parentpath(path, (size_t)(lastslash ? (lastslash + 1) - path : 0));
+				parentpath += *parent;
+				if (!multi_parent)
+				{
+					const ZFILE* recurse = z.child;
+					while (recurse && strcmp(recurse->path, parentpath.c_str())) recurse = recurse->child;
+					if (recurse) (error_msg = new std::string("DOSZ file has recursive parents: "))->append(lastslash ? (lastslash + 1) : path);
+					else parent_drive = Open({parentpath.c_str(), &z, impl}, error_msg, enable_crc_check, enter_solo_root_dir);
+					if (!parent_drive && !error_msg) (error_msg = new std::string("DOSZ parent does not exist: "))->append(*parent);
+				}
+				else (error_msg = new std::string("DOSZ file has multiple parents: "))->append(lastslash ? (lastslash + 1) : path);
+				delete parent;
+				if (!parent_drive)
+				{
+					delete impl;
+					return NULL;
+				}
+			}
+
+			zipDrive* zip_drive = new zipDrive();
+			zip_drive->impl = impl;
+			zip_drive->label.SetLabel("ZIP", false, true);
+
+			DOS_Drive* drive = zip_drive;
+			size_t len = strlen(path);
+			if (len > 5 && (path[len - 1] == 'Z' || path[len - 1] == 'z'))
+			{
+				// Load .DOSC patch file overlay for .DOSZ
+				FILE* c_file_h = NULL;
+				if (dosc_path)
+					c_file_h = fopen_wrap(dosc_path, "rb");
+				else
+				{
+					std::string doscpath(path);
+					doscpath.back() = (path[len - 1] == 'Z' ? 'C' : 'c');
+					c_file_h = fopen_wrap(doscpath.c_str(), "rb");
+				}
+				if (c_file_h)
+					drive = new patchDrive(*drive, true, new rawFile(c_file_h, false), enable_crc_check);
+			}
+			return (!parent_drive ? drive : new unionDrive(*parent_drive, *drive, true, true));
+		}
+	};
+	return Local::Open({path, NULL, NULL}, error_msg, enable_crc_check, enter_solo_root_dir, dosc_path);
+}
+
+zipDrive::zipDrive(DOS_File* zip, bool enable_crc_check) : impl(new zipDriveImpl(zip, enable_crc_check, false))
 {
 	label.SetLabel("ZIP", false, true);
 }

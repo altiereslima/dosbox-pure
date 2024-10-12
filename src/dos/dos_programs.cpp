@@ -710,9 +710,9 @@ private:
 		strcpy(test,"ems=false");
 		dos_sec->HandleInputline(test);
 #ifdef C_DBP_LIBRETRO
-		dos_sec->GetProp("umb")->OnChangedByConfigProgram();
-		dos_sec->GetProp("xms")->OnChangedByConfigProgram();
-		dos_sec->GetProp("ems")->OnChangedByConfigProgram();
+		dos_sec->GetProp("umb")->MarkFixed();
+		dos_sec->GetProp("xms")->MarkFixed();
+		dos_sec->GetProp("ems")->MarkFixed();
 #endif
 		dos_sec->ExecuteInit(false);
      }
@@ -1852,30 +1852,10 @@ void DOS_SetupPrograms(void) {
 	MSG_Add("PROGRAM_MOUNT_ILL_TYPE","Tipo ilegal %s\n");
 	MSG_Add("PROGRAM_MOUNT_ALREADY_MOUNTED","Unidade %c j  montada com %s\n");
 	MSG_Add("PROGRAM_MOUNT_USAGE",
-        "Monta pastas ou unidades do sistema anfitri„o como unidades do MS-DOS.\n"
-        "Uso: \033[34;1m\033[32;1mMOUNT\033[0m \033[37;1munidade\033[0m \033[36;1mpasta_local\033[0m [op‡„o]\033[0m\n"
-        " \033[37;1munidade\033[0m        Letra da unidade onde a pasta ou a unidade ser  montada.\n"
-        " \033[36;1mpasta_local\033[0m    Pasta local ou unidade do sistema anfitri„o a ser montado.\n"
-        " [option]       Op‡„o(”es) para montagem. S„o aceitas as seguintes op‡”es:\n"
-        " -t             Indica o comportamento do tipo de unidade montada.\n"
-        "                Unidades suportadas: dir, floppy, cdrom, overlay\n"
-		" (Note que overlay redireciona as escritas da unidade montada para outra pasta)\n"
-        " -label [nome]  Define o r¢tulo do volume de um disco (mai£sculas).\n"
-        " -nl            Usa a pr¢xima unidade dispon¡vel se a unidade estiver montada.\n"
-        " -ro            Monta a unidade no modo somente leitura.\n"
-        " -pr            Indica o caminho relativo para a localiza‡„o do arquivo conf.\n"
-        " -cd            Gera uma lista de valores do CD local da \"unidade\".\n"
-        " -usecd [drive #] Para emula‡„o direta do hardware, como reproduzir  udio.\n"
-        " -ioctl         Usa acesso ao hardware de baixo n¡vel (com op‡„o -usecd).\n"
-        " -aspi          Usa a camada ASPI instalada (com op‡„o -usecd).\n"
-        " -freesize [tamanho] Especifica o espa‡o livre do disco em MB (KB p/ disquetes)\n"
-        " -nocachedir    Habilita atualiza‡„o em tempo real e n„o usa cache na unidade.\n"
-        " -z drive       Move a unidade virtual Z: para outra letra diferente.\n"
-        " -o             Informa a unidade como: local, remota.\n"
-        " -q             Modo silencioso (sem mensagens na tela).\n"
-        " -u             Desmontar a unidade.\n"
-        " \033[32;1m-examples      Mostra alguns exemplos de uso.\033[0m\n"
-        "Digite MOUNT sem parƒmetros para mostrar uma lista de unidades montadas.");
+		"Uso \033[34;1mMOUNT Letra-da-Unidade Diret¢rio-Local\033[0m\n"
+		"Por exemplo: MOUNT c %s\n"
+		"Isto faz com que o diret¢rio %s funcione como a unidade C: dentro do DOSBox.\n"
+		"O diret¢rio precisa existir.\n");
 	MSG_Add("PROGRAM_MOUNT_UMOUNT_NOT_MOUNTED","Unidade %c n„o montada.\n");
 	MSG_Add("PROGRAM_MOUNT_UMOUNT_SUCCESS","A unidade %c foi desmontada com sucesso.\n");
 	MSG_Add("PROGRAM_MOUNT_UMOUNT_NO_VIRTUAL","As unidades virtuais n„o podem ser desmontadas.\n");

@@ -667,6 +667,11 @@ void SHELL_Init() {
 	MSG_Add("SHELL_CMD_COPY_HELP","Copia um ou mais arquivos para outro local.\n");
 	MSG_Add("SHELL_CMD_CALL_HELP","Chama um arquivo em lotes de outro.\n");
 	MSG_Add("SHELL_CMD_SUBST_HELP","Associa um caminho a uma letra de unidade.\n");
+#ifdef C_DBP_LIBRETRO //DBP: Added a fully featured implementation of SUBST that supports any source drive
+	MSG_Add("SHELL_CMD_SUBST_HELP_LONG", 
+	        "  X: [Y:]PATH  -  Assign PATH from Y: to drive X:.\n"
+	        "  X: /D  -  Delete substituted drive X:.\n");
+#endif
 	MSG_Add("SHELL_CMD_LOADHIGH_HELP","Carrega um programa com mais mem¢ria (requer xms=true,umb=true).\n");
 	MSG_Add("SHELL_CMD_CHOICE_HELP","Espera o apertar de uma tecla e define o valor de ERRORLEVEL.\n");
 	MSG_Add("SHELL_CMD_CHOICE_HELP_LONG","CHOICE [/C:escolhas] [/N] [/S] texto\n"
