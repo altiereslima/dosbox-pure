@@ -1150,7 +1150,7 @@ struct DBP_PureMenuState : DBP_MenuState
 				buf.DrawBox(w-68, bot, 60, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
 				buf.DrawBox(w-217, bot, 150, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
 				buf.DrawBox(w-312, bot, 96, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
-				buf.PrintCenteredOutlined(lh, w-68, 60, bot+2, "\x7 Executar", buf.COL_BTNTEXT);
+				buf.PrintCenteredOutlined(lh, w-68, 60, bot+2, "\x7 Iniciar", buf.COL_BTNTEXT);
 				buf.PrintCenteredOutlined(lh, w-217, 150, bot+2, "\x1A\x1B Auto-in¡cio", buf.COL_BTNTEXT);
 				buf.PrintCenteredOutlined(lh, w-312, 96, bot+2, "\x18\x19 Rolar", buf.COL_BTNTEXT);
 			}
