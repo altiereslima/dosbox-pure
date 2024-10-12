@@ -1117,7 +1117,7 @@ struct DBP_PureMenuState : DBP_MenuState
 				if (i != se) continue;
 				buf.Print(lh, lblx - buf.CW*(2      ), y, "*", buf.COL_WHITE);
 				buf.Print(lh, lblx + buf.CW*(len + 1), y, "*", buf.COL_WHITE);
-				if (autoboot_show) buf.Print(lh, lblx + buf.CW*(len + 1), y, "* [CONFIGURAR IN‹CIO AUTOM†TICO]", buf.COL_WHITE);
+				if (autoboot_show) buf.Print(lh, lblx + buf.CW*(len + 1), y, "* [AUTO INICIAR]", buf.COL_WHITE);
 			}
 			else buf.Print(lh, (w - buf.CW*strlen) / 2, y, item.str.c_str(), (item.type != IT_NONE ? (i == se ? buf.COL_HIGHLIGHT : buf.COL_NORMAL) : (item.info == INFO_HEADER ? buf.COL_HEADER : (item.info == INFO_WARN ? buf.COL_WARN : (item.info == INFO_DIM ? buf.COL_DIM : buf.COL_NORMAL)))));
 		}
@@ -1126,8 +1126,8 @@ struct DBP_PureMenuState : DBP_MenuState
 		{
 			char skiptext[38];
 			if (!autoboot_show) skiptext[0] = '\0';
-			else if (DBP_Run::autoboot.skip == -1) snprintf(skiptext, sizeof(skiptext), "Pular a exibi‡„o do console de texto");
-			else if (DBP_Run::autoboot.skip) snprintf(skiptext, sizeof(skiptext), "Pular a exibi‡„o dos primeiros %d quadros", DBP_Run::autoboot.skip);
+			else if (DBP_Run::autoboot.skip == -1) snprintf(skiptext, sizeof(skiptext), "N„o exibir console de texto");
+			else if (DBP_Run::autoboot.skip) snprintf(skiptext, sizeof(skiptext), "N„o exibir os primeiros %d quadros", DBP_Run::autoboot.skip);
 			else snprintf(skiptext, sizeof(skiptext), "SHIFT/L2/R2 + Reiniciar para voltar");
 
 			if (w > 639)
@@ -1151,8 +1151,8 @@ struct DBP_PureMenuState : DBP_MenuState
 				buf.DrawBox(w-217, bot, 150, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
 				buf.DrawBox(w-312, bot, 96, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
 				buf.PrintCenteredOutlined(lh, w-68, 60, bot+2, "\x7 Executar", buf.COL_BTNTEXT);
-				buf.PrintCenteredOutlined(lh, w-217, 150, bot+2, "\x1A\x1B Configurar In¡cio Autom tico", buf.COL_BTNTEXT);
-				buf.PrintCenteredOutlined(lh, w-312, 96, bot+2, "\x18\x19 Rolagem", buf.COL_BTNTEXT);
+				buf.PrintCenteredOutlined(lh, w-217, 150, bot+2, "\x1A\x1B Auto-in¡cio", buf.COL_BTNTEXT);
+				buf.PrintCenteredOutlined(lh, w-312, 96, bot+2, "\x18\x19 Rolar", buf.COL_BTNTEXT);
 			}
 
 			if (m.y >= bot && m.y <= bot+lh+3)
@@ -1166,8 +1166,8 @@ struct DBP_PureMenuState : DBP_MenuState
 		{
 			int halfw = w/2, boxw = (w < 640 ? halfw-16 : halfw/2+8);
 			buf.DrawBox(halfw-boxw, h/2-lh*3, boxw*2, lh*6+8, buf.BGCOL_HEADER | 0xFF000000, buf.COL_LINEBOX);
-			buf.PrintCenteredOutlined(lh, 0, w, h/2-lh*2, (w < 320 ? "Reiniciar DOS para" : "Vocˆ tem certeza de que deseja reiniciar o DOS"), buf.COL_BTNTEXT);
-			buf.PrintCenteredOutlined(lh, 0, w, h/2-lh+2, (w < 320 ? "iniciar isso?" : "para iniciar o aplicativo selecionado?"), buf.COL_BTNTEXT);
+			buf.PrintCenteredOutlined(lh, 0, w, h/2-lh*2, (w < 320 ? "Deseja reiniciar o DOS" : "Deseja reiniciar o DOS para"), buf.COL_BTNTEXT);
+			buf.PrintCenteredOutlined(lh, 0, w, h/2-lh+2, (w < 320 ? "iniciar isso?" : "iniciar o programa selecionado?"), buf.COL_BTNTEXT);
 			if (m.realmouse) popupsel = 0;
 			if (buf.DrawButton(0x80000000, h/2+lh*1, lh, 1, 4, 0, !m.realmouse && popupsel == 1, m, "OK"))     popupsel = 1;
 			if (buf.DrawButton(0x80000000, h/2+lh*1, lh, 2, 4, 0, !m.realmouse && popupsel == 2, m, "CANCELAR")) popupsel = 2;
@@ -1218,16 +1218,16 @@ struct DBP_PureMenuState : DBP_MenuState
 			}
 
 			bool bootinstall = ((Drives['D'-'A'] && dynamic_cast<isoDrive*>(Drives['D'-'A']) && ((isoDrive*)(Drives['D'-'A']))->CheckBootDiskImage()) || (hd_count == 1 && cd_count == 1));
-			if (bootimg)                                  AddFSRow(IT_BOOTIMG,       0, "[ Boot from Disk Image ]",                  (!boot_rows++));
-			if (!dbp_strict_mode && dbp_osimages.size())  AddFSRow(IT_BOOTOSLIST,    0, "[ Run Installed Operating System ]",        (!boot_rows++));
-			if (!dbp_strict_mode && dbp_shellzips.size()) AddFSRow(IT_SHELLLIST,     0, "[ Run System Shell ]",                      (!boot_rows++));
-			if (!dbp_strict_mode && bootinstall)          AddFSRow(IT_INSTALLOSSIZE, 0, "[ Boot and Install New Operating System ]", (!boot_rows++));
+			if (bootimg)                                  AddFSRow(IT_BOOTIMG,       0, "[ Inicializar a partir de Imagem de Disco ]",                  (!boot_rows++));
+			if (!dbp_strict_mode && dbp_osimages.size())  AddFSRow(IT_BOOTOSLIST,    0, "[ Executar Sistema Operacional Instalado ]",        (!boot_rows++));
+			if (!dbp_strict_mode && dbp_shellzips.size()) AddFSRow(IT_SHELLLIST,     0, "[ Executar Shell do Sistema ]",                      (!boot_rows++));
+			if (!dbp_strict_mode && bootinstall)          AddFSRow(IT_INSTALLOSSIZE, 0, "[ Inicializar e Instalar Novo Sistema Operacional ]", (!boot_rows++));
 
 			if (patchDrive::variants.Len())
 			{
-				AddFSRow(IT_NONE, INFO_WARN, "Active Configuration: ", true);
-				list.back().str.append(!DBP_Run::patch.enabled_variant ? "Default" : patchDrive::variants.GetStorage()[DBP_Run::patch.enabled_variant - 1].c_str());
-				AddFSRow(IT_VARIANTLIST, 0, "[ Select Game Configuration ]");
+				AddFSRow(IT_NONE, INFO_WARN, "Configura‡„o ativa: ", true);
+				list.back().str.append(!DBP_Run::patch.enabled_variant ? "Padr„o" : patchDrive::variants.GetStorage()[DBP_Run::patch.enabled_variant - 1].c_str());
+				AddFSRow(IT_VARIANTLIST, 0, "[ Selecionar configura‡„o do jogo ]");
 			}
 
 			if (fs_rows) { list.emplace_back(IT_NONE); fs_rows++; }
@@ -1340,7 +1340,7 @@ struct DBP_PureMenuState : DBP_MenuState
 				for (DBP_Image& image : dbp_images) list.emplace_back(IT_MOUNT, (Bit16s)(&image - &dbp_images[0]), DBP_Image_Label(image));
 				list.emplace_back(IT_NONE);
 			}
-			list.emplace_back(IT_NONE, INFO_HEADER, "Select Game Configuration");
+			list.emplace_back(IT_NONE, INFO_HEADER, "Selecionar configura‡„o do jogo");
 			list.emplace_back(IT_NONE);
 			for (sec = 0, secbegin = secend = (int)list.size();; secbegin = secend, sec++)
 			{
