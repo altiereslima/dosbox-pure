@@ -165,8 +165,8 @@ static const struct DBP_SpecialMapping { int16_t evt, meta; const char *dev, *na
 	{ DBPET_MOUSESETSPEED, -1, DBPDEV_Mouse,    "Desacelerar"    }, // 208
 	{ DBPET_JOY1Y,         -1, DBPDEV_Joystick, "Cima"           }, // 209
 	{ DBPET_JOY1Y,          1, DBPDEV_Joystick, "Baixo"         }, // 210
-	{ DBPET_JOY1X,         -1, DBPDEV_Joystick, "Esquerda"         }, // 211
-	{ DBPET_JOY1X,          1, DBPDEV_Joystick, "Direita"        }, // 212
+	{ DBPET_JOY1X,         -1, DBPDEV_Joystick, "Esq."         }, // 211
+	{ DBPET_JOY1X,          1, DBPDEV_Joystick, "Dir."        }, // 212
 	{ DBPET_JOY1DOWN,       0, DBPDEV_Joystick, "Botao 1"     }, // 213
 	{ DBPET_JOY1DOWN,       1, DBPDEV_Joystick, "Botao 2"     }, // 214
 	{ DBPET_JOY2DOWN,       0, DBPDEV_Joystick, "Botao 3"     }, // 215
