@@ -655,7 +655,7 @@ void BIOS_SetupKeyboard(void) {
 
 	/* Allocate/setup a callback for int 0x16 and for standard IRQ 1 handler */
 	call_int16=CALLBACK_Allocate();	
-	CALLBACK_Setup(call_int16,&INT16_Handler,CB_INT16,"Keyboard");
+	CALLBACK_Setup(call_int16,&INT16_Handler,CB_INT16,"Teclado");
 	RealSetVec(0x16,CALLBACK_RealPointer(call_int16));
 
 	call_irq1=CALLBACK_Allocate();	
