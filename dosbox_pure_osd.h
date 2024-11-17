@@ -595,8 +595,8 @@ struct DBP_MapperMenuState : DBP_MenuState
 			if (haveWheelOptions != boundActionWheel)
 			{
 				list.emplace_back(IT_NONE, 0, "Aviso:");
-				list.emplace_back(IT_NONE, -1, "  A roda est  inacess¡vel porque nenhum");
-				list.emplace_back(IT_NONE, -1, (haveWheelOptions ? "  bot„o foi vinculado … Roda de A‡„o" : "  op‡”es foram definidas aqui"));
+				list.emplace_back(IT_NONE, -1, "  A roda est  inacess¡vel porque");
+				list.emplace_back(IT_NONE, -1, (haveWheelOptions ? "  nenhum bot„o foi vinculado … ela" : "  nenhuma op‡„o foi definida"));
 			}
 			list.emplace_back(IT_NONE, 0);
 		}
