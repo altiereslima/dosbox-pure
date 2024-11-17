@@ -206,6 +206,14 @@ struct DBP_MenuMouse
 			case DBPET_JOY1Y: case DBPET_JOY2Y: case DBPET_JOYMY: jy = DBP_GET_JOY_ANALOG_VALUE(val); break;
 			case DBPET_MOUSESETSPEED: mspeed = (val > 0 ? 4 : 1); break;
 			case DBPET_MOUSERESETSPEED: mspeed = 2; break;
+            case DBPET_JOY1DOWN: case DBPET_JOY2DOWN:
+                if (val == RETRO_DEVICE_ID_JOYPAD_R2) mspeed = 4; // Increase speed when R2 is pressed
+                if (val == RETRO_DEVICE_ID_JOYPAD_L2) mspeed = 1; // Decrease speed when L2 is pressed
+                break;
+            case DBPET_JOY1UP: case DBPET_JOY2UP:
+                if (val == RETRO_DEVICE_ID_JOYPAD_R2) mspeed = 2; // Reset speed when R2 is released
+                if (val == RETRO_DEVICE_ID_JOYPAD_L2) mspeed = 2; // Reset speed when L2 is released
+                break;
 		}
 	}
 
