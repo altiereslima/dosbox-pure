@@ -206,14 +206,6 @@ struct DBP_MenuMouse
 			case DBPET_JOY1Y: case DBPET_JOY2Y: case DBPET_JOYMY: jy = DBP_GET_JOY_ANALOG_VALUE(val); break;
 			case DBPET_MOUSESETSPEED: mspeed = (val > 0 ? 4 : 1); break;
 			case DBPET_MOUSERESETSPEED: mspeed = 2; break;
-            case DBPET_JOY1DOWN: case DBPET_JOY2DOWN:
-                if (val == RETRO_DEVICE_ID_JOYPAD_R2) mspeed = 4; // Increase speed when R2 is pressed
-                if (val == RETRO_DEVICE_ID_JOYPAD_L2) mspeed = 1; // Decrease speed when L2 is pressed
-                break;
-            case DBPET_JOY1UP: case DBPET_JOY2UP:
-                if (val == RETRO_DEVICE_ID_JOYPAD_R2) mspeed = 2; // Reset speed when R2 is released
-                if (val == RETRO_DEVICE_ID_JOYPAD_L2) mspeed = 2; // Reset speed when L2 is released
-                break;
 		}
 	}
 
@@ -533,15 +525,23 @@ struct DBP_MapperMenuState : DBP_MenuState
 			main_sel = 0;
 		}
 
-		list.clear();
-		if (DBP_PadMapping::CalcPortMode(bind_port) != DBP_PadMapping::MODE_MAPPER)
-		{
-			list.emplace_back(IT_NONE);
-			list.emplace_back(IT_NONE, 11, "    O Mapeador est  desativado");
-			list.emplace_back(IT_NONE, 11, "    para esta porta do controle");
-			list.emplace_back(IT_NONE);
-			list.emplace_back(IT_NONE, 11, "    Configure 'Usar Mapeador de");
-			list.emplace_back(IT_NONE, 11, "    Controle' no menu de Controles");
+        list.clear();
+        if (DBP_PadMapping::CalcPortMode(bind_port) != DBP_PadMapping::MODE_MAPPER)
+        {
+            // Force enable the mapper for port 1
+            if (bind_port == 0) // Port 1 is index 0
+            {
+                DBP_PadMapping::SetPortMode(bind_port, DBP_PadMapping::MODE_MAPPER);
+            }
+            else
+            {
+                list.emplace_back(IT_NONE);
+                list.emplace_back(IT_NONE, 11, "    O Mapeador est  desativado");
+                list.emplace_back(IT_NONE, 11, "    para esta porta do controle");
+                list.emplace_back(IT_NONE);
+                list.emplace_back(IT_NONE, 11, "    Configure 'Usar Mapeador de");
+                list.emplace_back(IT_NONE, 11, "    Controle' no menu de Controles");
+            }
 		}
 		else
 		{
