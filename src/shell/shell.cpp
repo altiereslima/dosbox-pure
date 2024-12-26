@@ -569,170 +569,120 @@ static char const * const init_line="/INIT AUTOEXEC.BAT";
 
 void SHELL_Init() {
 	/* Add messages */
-	MSG_Add("SHELL_ILLEGAL_PATH","Illegal Path.\n");
-	MSG_Add("SHELL_CMD_HELP","If you want a list of all supported commands type \033[33;1mhelp /all\033[0m .\nA short list of the most often used commands:\n");
-	MSG_Add("SHELL_CMD_ECHO_ON","ECHO is on.\n");
-	MSG_Add("SHELL_CMD_ECHO_OFF","ECHO is off.\n");
-	MSG_Add("SHELL_ILLEGAL_SWITCH","Illegal switch: %s.\n");
-	MSG_Add("SHELL_MISSING_PARAMETER","Required parameter missing.\n");
-	MSG_Add("SHELL_CMD_CHDIR_ERROR","Unable to change to: %s.\n");
-	MSG_Add("SHELL_CMD_CHDIR_HINT","Hint: To change to different drive type \033[31m%c:\033[0m\n");
-	MSG_Add("SHELL_CMD_CHDIR_HINT_2","directoryname is longer than 8 characters and/or contains spaces.\nTry \033[31mcd %s\033[0m\n");
-	MSG_Add("SHELL_CMD_CHDIR_HINT_3","You are still on drive Z:, change to a mounted drive with \033[31mC:\033[0m.\n");
-	MSG_Add("SHELL_CMD_DATE_HELP","Displays or changes the internal date.\n");
-	MSG_Add("SHELL_CMD_DATE_ERROR","The specified date is not correct.\n");
-	MSG_Add("SHELL_CMD_DATE_DAYS","3SunMonTueWedThuFriSat"); // "2SoMoDiMiDoFrSa"
-	MSG_Add("SHELL_CMD_DATE_NOW","Current date: ");
-	MSG_Add("SHELL_CMD_DATE_SETHLP","Type 'date MM-DD-YYYY' to change.\n");
+	MSG_Add("SHELL_ILLEGAL_PATH","Caminho n„o encontrado.\n");
+	MSG_Add("SHELL_CMD_HELP","Se quiser uma lista de todos os comandos internos suportados digite \033[33;1mhelp /all\033[0m.\nVocˆ tamb‚m pode encontrar comandos externos e programas na unidade Z:\nUma breve lista dos comandos mais usados:\n");
+	MSG_Add("SHELL_CMD_ECHO_ON","ECHO est  ativado.\n");
+	MSG_Add("SHELL_CMD_ECHO_OFF","ECHO est  desativado.\n");
+	MSG_Add("SHELL_ILLEGAL_SWITCH","Parƒmetro inv lido - %s.\n");
+	MSG_Add("SHELL_MISSING_PARAMETER","Um parƒmetro obrigat¢rio est  faltando.\n");
+	MSG_Add("SHELL_CMD_CHDIR_ERROR","Pasta inv lida - %s.\n");
+	MSG_Add("SHELL_CMD_CHDIR_HINT","Dica: Para mudar para um tipo de unidade diferente \033[31m%c:\033[0m\n");
+	MSG_Add("SHELL_CMD_CHDIR_HINT_2","nome_de_pasta contem espa‡os sem aspas.\nTente \033[31mcd %s\033[0m ou adicione corretamente as aspas.\n");
+	MSG_Add("SHELL_CMD_CHDIR_HINT_3","Vocˆ ainda est  no drive Z:, e a pasta especificada n„o pode ser encontrada.\nPara acessar uma unidade montada, mude para a unidade com uma sintaxe como \033[31mC:\033[0m.\n");
+	MSG_Add("SHELL_CMD_DATE_HELP","Exibe ou define a data.\n");
+	MSG_Add("SHELL_CMD_DATE_ERROR","A data especificada n„o ‚ correta.\n");
+	MSG_Add("SHELL_CMD_DATE_DAYS","3DomSegTerQuaQuiSexSab"); // "2SoMoDiMiDoFrSa"
+	MSG_Add("SHELL_CMD_DATE_NOW","Data atual: ");
+	MSG_Add("SHELL_CMD_DATE_SETHLP","Digite a nova data.\n");
 	MSG_Add("SHELL_CMD_DATE_FORMAT","M/D/Y");
-	MSG_Add("SHELL_CMD_DATE_HELP_LONG","DATE [[/T] [/H] [/S] | MM-DD-YYYY]\n"\
-									"  MM-DD-YYYY: new date to set\n"\
-									"  /S:         Permanently use host time and date as DOS time\n"\
-                                    "  /F:         Switch back to DOSBox internal time (opposite of /S)\n"\
-									"  /T:         Only display date\n"\
-									"  /H:         Synchronize with host\n");
-	MSG_Add("SHELL_CMD_TIME_HELP","Displays the internal time.\n");
-	MSG_Add("SHELL_CMD_TIME_NOW","Current time: ");
+	MSG_Add("SHELL_CMD_DATE_HELP_LONG","DATE [[/T] [/H] [/S] | data]\n"\
+									"  data: Nova data a ser definida\n"\
+									"  /S:         Usa a data e hora do sistema anfitri„o no DOS\n"\
+                                    "  /F:         Retorna para a data e hora interna do MS-Dos\n"\
+									"  /T:         Exibe apenas a data, sem solicitar uma nova\n"\
+									"  /H:         Sincronizar com o anfitri„o\n");
+	MSG_Add("SHELL_CMD_TIME_HELP","Exibe ou ajusta a hora do sistema.\n");
+	MSG_Add("SHELL_CMD_TIME_NOW","Hora atual: ");
 	MSG_Add("SHELL_CMD_TIME_HELP_LONG","TIME [/T] [/H]\n"\
-									"  /T:         Display simple time\n"\
-									"  /H:         Synchronize with host\n");
-	MSG_Add("SHELL_CMD_MKDIR_ERROR","Unable to make: %s.\n");
-	MSG_Add("SHELL_CMD_RMDIR_ERROR","Unable to remove: %s.\n");
-	MSG_Add("SHELL_CMD_DEL_ERROR","Unable to delete: %s.\n");
-	MSG_Add("SHELL_SYNTAXERROR","The syntax of the command is incorrect.\n");
-	MSG_Add("SHELL_CMD_SET_NOT_SET","Environment variable %s not defined.\n");
-	MSG_Add("SHELL_CMD_SET_OUT_OF_SPACE","Not enough environment space left.\n");
-	MSG_Add("SHELL_CMD_IF_EXIST_MISSING_FILENAME","IF EXIST: Missing filename.\n");
-	MSG_Add("SHELL_CMD_IF_ERRORLEVEL_MISSING_NUMBER","IF ERRORLEVEL: Missing number.\n");
-	MSG_Add("SHELL_CMD_IF_ERRORLEVEL_INVALID_NUMBER","IF ERRORLEVEL: Invalid number.\n");
-	MSG_Add("SHELL_CMD_GOTO_MISSING_LABEL","No label supplied to GOTO command.\n");
-	MSG_Add("SHELL_CMD_GOTO_LABEL_NOT_FOUND","GOTO: Label %s not found.\n");
-	MSG_Add("SHELL_CMD_FILE_NOT_FOUND","File %s not found.\n");
-	MSG_Add("SHELL_CMD_FILE_EXISTS","File %s already exists.\n");
-	MSG_Add("SHELL_CMD_DIR_INTRO","Directory of %s.\n");
-	MSG_Add("SHELL_CMD_DIR_BYTES_USED","%5d File(s) %17s Bytes.\n");
-	MSG_Add("SHELL_CMD_DIR_BYTES_FREE","%5d Dir(s)  %17s Bytes free.\n");
+									"  /T:         Exibe apenas a hora, sem solicitar uma nova\n"\
+									"  /H:         Sincronizar com o anfitri„o\n");
+	MSG_Add("SHELL_CMD_MKDIR_ERROR","N„o ‚ poss¡vel criar a pasta - %s\n");
+	MSG_Add("SHELL_CMD_RMDIR_ERROR","Caminho inv lida, n„o ‚ uma pasta ou n„o est  vazia - %s.\n");
+	MSG_Add("SHELL_CMD_DEL_ERROR","N„o ‚ poss¡vel excluir - %s.\n");
+	MSG_Add("SHELL_SYNTAXERROR","Erro de sintaxe.\n");
+	MSG_Add("SHELL_CMD_SET_NOT_SET","Vari vel de ambiente %s n„o definida.\n");
+	MSG_Add("SHELL_CMD_SET_OUT_OF_SPACE","N„o h  espa‡o suficiente no ambiente.\n");
+	MSG_Add("SHELL_CMD_IF_EXIST_MISSING_FILENAME","IF EXIST: Arquivo inexistente.\n");
+	MSG_Add("SHELL_CMD_IF_ERRORLEVEL_MISSING_NUMBER","IF ERRORLEVEL: Falta n£mero.\n");
+	MSG_Add("SHELL_CMD_IF_ERRORLEVEL_INVALID_NUMBER","IF ERRORLEVEL: N£mero inv lido.\n");
+	MSG_Add("SHELL_CMD_GOTO_MISSING_LABEL","Nenhum r¢tulo fornecido ao comando GOTO.\n");
+	MSG_Add("SHELL_CMD_GOTO_LABEL_NOT_FOUND","GOTO: R¢tulo %s n„o encontrado.\n");
+	MSG_Add("SHELL_CMD_FILE_NOT_FOUND","Arquivo n„o encontrado - %s.\n");
+	MSG_Add("SHELL_CMD_FILE_EXISTS","O arquivo %s j  existe.\n");
+	MSG_Add("SHELL_CMD_DIR_INTRO","Pasta de %s.\n");
+	MSG_Add("SHELL_CMD_DIR_BYTES_USED","%5d arquivo(s) %17s bytes.\n");
+	MSG_Add("SHELL_CMD_DIR_BYTES_FREE","%5d pasta(s)  %17s bytes dispon¡veis.\n");
 #ifdef C_DBP_ENABLE_INTROPROGRAM
-	MSG_Add("SHELL_EXECUTE_DRIVE_NOT_FOUND","Drive %c does not exist!\nYou must \033[31mmount\033[0m it first. Type \033[1;33mintro\033[0m or \033[1;33mintro mount\033[0m for more information.\n");
+	MSG_Add("SHELL_EXECUTE_DRIVE_NOT_FOUND","Unidade %c n„o existe!\nVocˆ deve \033[31mmont -la\033[0m antes. Digite \033[1;33mintro\033[0m ou \033[1;33mintro mount\033[0m para mais informa‡„o.\n");
 #else
-	MSG_Add("SHELL_EXECUTE_DRIVE_NOT_FOUND","Drive %c does not exist!\nYou must \033[31mmount\033[0m it first.\n");
+	MSG_Add("SHELL_EXECUTE_DRIVE_NOT_FOUND","Unidade %c n„o existe!\nVocˆ deve \033[31mmont -la\033[0m antes. Digite \033[1;33mintro\033[0m ou \033[1;33mintro mount\033[0m para mais informa‡„o.\n");
 #endif
-	MSG_Add("SHELL_EXECUTE_ILLEGAL_COMMAND","Illegal command: %s.\n");
-	MSG_Add("SHELL_CMD_PAUSE","Press any key to continue.\n");
-	MSG_Add("SHELL_CMD_PAUSE_HELP","Waits for 1 keystroke to continue.\n");
-	MSG_Add("SHELL_CMD_COPY_FAILURE","Copy failure : %s.\n");
-	MSG_Add("SHELL_CMD_COPY_SUCCESS","   %d File(s) copied.\n");
-	MSG_Add("SHELL_CMD_SUBST_NO_REMOVE","Unable to remove, drive not in use.\n");
-	MSG_Add("SHELL_CMD_SUBST_FAILURE","SUBST failed. You either made an error in your commandline or the target drive is already used.\nIt's only possible to use SUBST on Local drives");
+	MSG_Add("SHELL_EXECUTE_ILLEGAL_COMMAND","Comando ou nome de arquivo inv lido - %s.\n");
+	MSG_Add("SHELL_CMD_PAUSE","Pressione qualquer tecla para continuar. . .\n");
+	MSG_Add("SHELL_CMD_PAUSE_HELP","Suspende o processamento de um arquivo em lotes e exibe uma mensagem.\n");
+	MSG_Add("SHELL_CMD_COPY_FAILURE","Erro ao copiar: %s.\n");
+	MSG_Add("SHELL_CMD_COPY_SUCCESS","   %d arquivo(s) copiado(s).\n");
+	MSG_Add("SHELL_CMD_SUBST_NO_REMOVE","N„o foi poss¡vel remover, a unidade n„o est  em uso.\n");
+	MSG_Add("SHELL_CMD_SUBST_FAILURE","SUBST: Existe um erro na sua linha de comando");
 
-	MSG_Add("SHELL_STARTUP_BEGIN",
-		"\033[44;1m\xC9\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD"
-		"\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD"
-		"\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n"
-#ifdef C_DBP_LIBRETRO
-		"\xBA \033[32mWelcome to DOSBox Pure\033[37m                                             \xBA\n"
-#else
-		"\xBA \033[32mWelcome to DOSBox %-8s\033[37m                                         \xBA\n"
-#endif
-		"\xBA                                                                    \xBA\n"
-//		"\xBA DOSBox runs real and protected mode games.                         \xBA\n"
-#ifdef C_DBP_ENABLE_INTROPROGRAM
-		"\xBA For a short introduction for new users type: \033[33mINTRO\033[37m                 \xBA\n"
-#endif
-		"\xBA For supported shell commands type: \033[33mHELP\033[37m                            \xBA\n"
-		"\xBA                                                                    \xBA\n"
-#ifdef C_DBP_LIBRETRO
-		"\xBA To adjust options use the frontend options menu.                   \xBA\n"
-#else
-		"\xBA To adjust the emulated CPU speed, use \033[31mctrl-F11\033[37m and \033[31mctrl-F12\033[37m.       \xBA\n"
-		"\xBA To activate the keymapper \033[31mctrl-F1\033[37m.                                 \xBA\n"
-		"\xBA For more information read the \033[36mREADME\033[37m file in the DOSBox directory. \xBA\n"
-#endif
-		"\xBA                                                                    \xBA\n"
-	);
-	MSG_Add("SHELL_STARTUP_CGA","\xBA DOSBox supports Composite CGA mode.                                \xBA\n"
-#ifdef C_DBP_LIBRETRO
-	        "\xBA Use \033[31moptions menu\033[37m to set composite output and CGA model            .\xBA\n"
-#else
-	        "\xBA Use \033[31mF12\033[37m to set composite output ON, OFF, or AUTO (default).        \xBA\n"
-	        "\xBA \033[31m(Alt-)F11\033[37m changes hue; \033[31mctrl-alt-F11\033[37m selects early/late CGA model.  \xBA\n"
-#endif
-	        "\xBA                                                                    \xBA\n"
-	);
-#ifdef C_DBP_LIBRETRO
-	MSG_Add("SHELL_STARTUP_HERC","\xBA Use \033[31moptions menu\033[37m to select hercules palette.                       \xBA\n"
-#else
-	MSG_Add("SHELL_STARTUP_HERC","\xBA Use \033[31mF11\033[37m to cycle through white, amber, and green monochrome color. \xBA\n"
-#endif
-	        "\xBA                                                                    \xBA\n"
-	);
-#if C_DEBUG
-	MSG_Add("SHELL_STARTUP_DEBUG",
-	        "\xBA Press \033[31malt-Pause\033[37m to enter the debugger or start the exe with \033[33mDEBUG\033[37m. \xBA\n"
-	        "\xBA                                                                    \xBA\n"
-	);
-#endif
-	MSG_Add("SHELL_STARTUP_END",
-	        "\xBA \033[32mHAVE FUN!\033[37m                                                          \xBA\n"
-	        "\xBA \033[32mThe DOSBox Team \033[33mhttp://www.dosbox.com\033[37m                              \xBA\n"
-	        "\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD"
-	        "\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD"
-	        "\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\033[0m\n"
-	        //"\n" //Breaks the startup message if you type a mount and a drive change.
-	);
-	MSG_Add("SHELL_STARTUP_SUB","\n\n\033[32;1mDOSBox %s Command Shell\033[0m\n\n");
-	MSG_Add("SHELL_CMD_CHDIR_HELP","Displays/changes the current directory.\n");
-	MSG_Add("SHELL_CMD_CHDIR_HELP_LONG","CHDIR [drive:][path]\n"
+	MSG_Add("SHELL_STARTUP_BEGIN", "");
+	MSG_Add("SHELL_STARTUP_END", "");
+
+	MSG_Add("SHELL_STARTUP_SUB","");
+	MSG_Add("SHELL_CMD_CHDIR_HELP","Exibe o nome da pasta ou altera a pasta atual.\n");
+	MSG_Add("SHELL_CMD_CHDIR_HELP_LONG","CHDIR [unidade:][caminho]\n"
 	        "CHDIR [..]\n"
-	        "CD [drive:][path]\n"
+	        "CD [unidade:][caminho]\n"
 	        "CD [..]\n\n"
-	        "  ..   Specifies that you want to change to the parent directory.\n\n"
-	        "Type CD drive: to display the current directory in the specified drive.\n"
-	        "Type CD without parameters to display the current drive and directory.\n");
-	MSG_Add("SHELL_CMD_CLS_HELP","Clear screen.\n");
-	MSG_Add("SHELL_CMD_DIR_HELP","Directory View.\n");
-	MSG_Add("SHELL_CMD_ECHO_HELP","Display messages and enable/disable command echoing.\n");
-	MSG_Add("SHELL_CMD_EXIT_HELP","Exit from the shell.\n");
-	MSG_Add("SHELL_CMD_HELP_HELP","Show help.\n");
-	MSG_Add("SHELL_CMD_MKDIR_HELP","Make Directory.\n");
-	MSG_Add("SHELL_CMD_MKDIR_HELP_LONG","MKDIR [drive:][path]\n"
-	        "MD [drive:][path]\n");
-	MSG_Add("SHELL_CMD_RMDIR_HELP","Remove Directory.\n");
-	MSG_Add("SHELL_CMD_RMDIR_HELP_LONG","RMDIR [drive:][path]\n"
-	        "RD [drive:][path]\n");
-	MSG_Add("SHELL_CMD_SET_HELP","Change environment variables.\n");
-	MSG_Add("SHELL_CMD_IF_HELP","Performs conditional processing in batch programs.\n");
-	MSG_Add("SHELL_CMD_GOTO_HELP","Jump to a labeled line in a batch script.\n");
-	MSG_Add("SHELL_CMD_SHIFT_HELP","Leftshift commandline parameters in a batch script.\n");
-	MSG_Add("SHELL_CMD_TYPE_HELP","Display the contents of a text-file.\n");
-	MSG_Add("SHELL_CMD_TYPE_HELP_LONG","TYPE [drive:][path][filename]\n");
-	MSG_Add("SHELL_CMD_REM_HELP","Add comments in a batch file.\n");
-	MSG_Add("SHELL_CMD_REM_HELP_LONG","REM [comment]\n");
-	MSG_Add("SHELL_CMD_NO_WILD","This is a simple version of the command, no wildcards allowed!\n");
-	MSG_Add("SHELL_CMD_RENAME_HELP","Renames one or more files.\n");
-	MSG_Add("SHELL_CMD_RENAME_HELP_LONG","RENAME [drive:][path]filename1 filename2.\n"
-	        "REN [drive:][path]filename1 filename2.\n\n"
-	        "Note that you can not specify a new drive or path for your destination file.\n");
-	MSG_Add("SHELL_CMD_DELETE_HELP","Removes one or more files.\n");
-	MSG_Add("SHELL_CMD_COPY_HELP","Copy files.\n");
-	MSG_Add("SHELL_CMD_CALL_HELP","Start a batch file from within another batch file.\n");
-	MSG_Add("SHELL_CMD_SUBST_HELP","Assign an internal directory to a drive.\n");
+	        "  ..   Especifica que vocˆ quer ir para a pasta pai.\n\n"
+	        "Digite CD unidade: para exibir a pasta atual na unidade especificada.\n"
+	        "Digite CD sem parƒmetros para exibir a unidade e pasta atuais.\n");
+	MSG_Add("SHELL_CMD_CLS_HELP","Limpa a tela.\n");
+	MSG_Add("SHELL_CMD_DIR_HELP","Exibe uma lista de arquivos e subpastas em uma pasta.\n");
+	MSG_Add("SHELL_CMD_ECHO_HELP","Exibe mensagens ou ativa ou desativa o eco de comando.\n");
+	MSG_Add("SHELL_CMD_EXIT_HELP","Encerra o interpretador de comando.\n");
+	MSG_Add("SHELL_CMD_HELP_HELP","Fornece informa‡”es de ajuda sobre comandos do MS-Dos.\n");
+	MSG_Add("SHELL_CMD_MKDIR_HELP","Cria uma pasta.\n");
+	MSG_Add("SHELL_CMD_MKDIR_HELP_LONG","MKDIR [unidade:][caminho]\n"
+	        "MD [unidade:][caminho]\n");
+	MSG_Add("SHELL_CMD_RMDIR_HELP","Remove uma pasta.\n");
+	MSG_Add("SHELL_CMD_RMDIR_HELP_LONG","RMDIR [unidade:][caminho]\n"
+	        "RD [unidade:][caminho]\n");
+	MSG_Add("SHELL_CMD_SET_HELP","Exibe, define ou remove vari veis de ambiente.\n");
+	MSG_Add("SHELL_CMD_IF_HELP","Realiza processamento condicional em arquivos em lotes.\n");
+	MSG_Add("SHELL_CMD_GOTO_HELP","Desvia o interpretador de comandos para uma linha com um r¢tulo em um\n"
+		   "arquivo em lotes.\n");
+	MSG_Add("SHELL_CMD_SHIFT_HELP","Altera a posi‡„o dos parƒmetros substitu¡veis em um arquivo em lotes.\n");
+	MSG_Add("SHELL_CMD_TYPE_HELP","Exibe o conte£do de um arquivo de texto.\n");
+	MSG_Add("SHELL_CMD_TYPE_HELP_LONG","TYPE [unidade:][caminho][arquivo]\n");
+	MSG_Add("SHELL_CMD_REM_HELP","Registra coment rios em um arquivo em lotes.\n");
+	MSG_Add("SHELL_CMD_REM_HELP_LONG","REM [coment rio]\n");
+	MSG_Add("SHELL_CMD_NO_WILD","Esta ‚ uma vers„o simples do comando, sem curingas permitidos!\n");
+	MSG_Add("SHELL_CMD_RENAME_HELP","Renomeia um ou mais arquivos.\n");
+	MSG_Add("SHELL_CMD_RENAME_HELP_LONG","RENAME [unidade:][caminho][nome_de_pasta1 | arquivo1] [nome_de_pasta2 | arquivo2]\n"
+	        "REN [unidade:][caminho][nome_de_pasta1 | arquivo1] [nome_de_pasta2 | arquivo2]\n\n"
+	        "Note que vocˆ n„o pode especificar uma nova unidade ou caminho para o\n"
+			"arquivo de destino.\n\n");
+	MSG_Add("SHELL_CMD_DELETE_HELP","Exclui um ou mais arquivos.\n");
+	MSG_Add("SHELL_CMD_COPY_HELP","Copia um ou mais arquivos para outro local.\n");
+	MSG_Add("SHELL_CMD_CALL_HELP","Chama um arquivo em lotes de outro.\n");
+	MSG_Add("SHELL_CMD_SUBST_HELP","Associa um caminho a uma letra de unidade.\n");
 #ifdef C_DBP_LIBRETRO //DBP: Added a fully featured implementation of SUBST that supports any source drive
 	MSG_Add("SHELL_CMD_SUBST_HELP_LONG", 
 	        "  X: [Y:]PATH  -  Assign PATH from Y: to drive X:.\n"
 	        "  X: /D  -  Delete substituted drive X:.\n");
 #endif
-	MSG_Add("SHELL_CMD_LOADHIGH_HELP","Loads a program into upper memory (requires xms=true,umb=true).\n");
-	MSG_Add("SHELL_CMD_CHOICE_HELP","Waits for a keypress and sets ERRORLEVEL.\n");
-	MSG_Add("SHELL_CMD_CHOICE_HELP_LONG","CHOICE [/C:choices] [/N] [/S] text\n"
-	        "  /C[:]choices  -  Specifies allowable keys.  Default is: yn.\n"
-	        "  /N  -  Do not display the choices at end of prompt.\n"
-	        "  /S  -  Enables case-sensitive choices to be selected.\n"
-	        "  text  -  The text to display as a prompt.\n");
-	MSG_Add("SHELL_CMD_ATTRIB_HELP","Does nothing. Provided for compatibility.\n");
-	MSG_Add("SHELL_CMD_PATH_HELP","Provided for compatibility.\n");
-	MSG_Add("SHELL_CMD_VER_HELP","View and set the reported DOS version.\n");
-	MSG_Add("SHELL_CMD_VER_VER","DOSBox version %s. Reported DOS version %d.%02d.\n");
+	MSG_Add("SHELL_CMD_LOADHIGH_HELP","Carrega um programa com mais mem¢ria (requer xms=true,umb=true).\n");
+	MSG_Add("SHELL_CMD_CHOICE_HELP","Espera o apertar de uma tecla e define o valor de ERRORLEVEL.\n");
+	MSG_Add("SHELL_CMD_CHOICE_HELP_LONG","CHOICE [/C:escolhas] [/N] [/S] texto\n"
+	        "  /C[:]escolhas - Especifica as teclas permitidas. Padr„o: yn..\n"
+	        "  /N            - N„o mostrar as escolhas no final do prompt.\n"
+	        "  /S            - Ativa op‡”es de escolhas sens¡veis a mai£sculas e min£sculas.\n"
+	        "  texto         -   Texto a ser mostrado como prompt.\n");
+	MSG_Add("SHELL_CMD_ATTRIB_HELP","Exibe ou altera atributos de arquivos.\n");
+	MSG_Add("SHELL_CMD_PATH_HELP","Exibe ou define um caminho de pesquisa para arquivos execut veis.\n");
+	MSG_Add("SHELL_CMD_VER_HELP","Exibe a vers„o do DOS informada pelo MSDos.\n");
+	MSG_Add("SHELL_CMD_VER_VER","DOSBox vers„o %s. Vers„o do DOS informada %d.%02d.\n");
 
 	/* Regular startup */
 	call_shellstop=CALLBACK_Allocate();

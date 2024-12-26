@@ -1858,82 +1858,83 @@ static void KEYB_ProgramStart(Program * * make) {
 void DOS_SetupPrograms(void) {
 	/*Add Messages */
 
-	MSG_Add("PROGRAM_MOUNT_CDROMS_FOUND","CDROMs found: %d\n");
+	MSG_Add("PROGRAM_MOUNT_CDROMS_FOUND","CDROMs encontrados: %d\n");
 	MSG_Add("PROGRAM_MOUNT_STATUS_FORMAT","%-5s  %-58s %-12s\n");
-	MSG_Add("PROGRAM_MOUNT_STATUS_2","Drive %c is mounted as %s\n");
-	MSG_Add("PROGRAM_MOUNT_STATUS_1","The currently mounted drives are:\n");
-	MSG_Add("PROGRAM_MOUNT_ERROR_1","Directory %s doesn't exist.\n");
-	MSG_Add("PROGRAM_MOUNT_ERROR_2","%s isn't a directory\n");
-	MSG_Add("PROGRAM_MOUNT_ILL_TYPE","Illegal type %s\n");
-	MSG_Add("PROGRAM_MOUNT_ALREADY_MOUNTED","Drive %c already mounted with %s\n");
+	MSG_Add("PROGRAM_MOUNT_STATUS_2","Unidade %c montada como %s\n");
+	MSG_Add("PROGRAM_MOUNT_STATUS_1","As unidades atualmente montadas sÑo:\n");
+	MSG_Add("PROGRAM_MOUNT_ERROR_1","A pasta %s nÑo existe.\n");
+	MSG_Add("PROGRAM_MOUNT_ERROR_2","%s nÑo Ç uma pasta\n");
+	MSG_Add("PROGRAM_MOUNT_ILL_TYPE","Tipo ilegal %s\n");
+	MSG_Add("PROGRAM_MOUNT_ALREADY_MOUNTED","Unidade %c j† montada com %s\n");
 	MSG_Add("PROGRAM_MOUNT_USAGE",
-		"Usage \033[34;1mMOUNT Drive-Letter Local-Directory\033[0m\n"
-		"For example: MOUNT c %s\n"
-		"This makes the directory %s act as the C: drive inside DOSBox.\n"
-		"The directory has to exist.\n");
-	MSG_Add("PROGRAM_MOUNT_UMOUNT_NOT_MOUNTED","Drive %c isn't mounted.\n");
-	MSG_Add("PROGRAM_MOUNT_UMOUNT_SUCCESS","Drive %c has successfully been removed.\n");
-	MSG_Add("PROGRAM_MOUNT_UMOUNT_NO_VIRTUAL","Virtual Drives can not be unMOUNTed.\n");
-	MSG_Add("PROGRAM_MOUNT_WARNING_WIN","\033[31;1mMounting c:\\ is NOT recommended. Please mount a (sub)directory next time.\033[0m\n");
-	MSG_Add("PROGRAM_MOUNT_WARNING_OTHER","\033[31;1mMounting / is NOT recommended. Please mount a (sub)directory next time.\033[0m\n");
+		"Uso \033[34;1mMOUNT Letra-da-Unidade Diret¢rio-Local\033[0m\n"
+		"Por exemplo: MOUNT c %s\n"
+		"Isto faz com que o diret¢rio %s funcione como a unidade C: dentro do DOSBox.\n"
+		"O diret¢rio precisa existir.\n");
+	MSG_Add("PROGRAM_MOUNT_UMOUNT_NOT_MOUNTED","Unidade %c nÑo montada.\n");
+	MSG_Add("PROGRAM_MOUNT_UMOUNT_SUCCESS","A unidade %c foi desmontada com sucesso.\n");
+	MSG_Add("PROGRAM_MOUNT_UMOUNT_NO_VIRTUAL","As unidades virtuais nÑo podem ser desmontadas.\n");
+	MSG_Add("PROGRAM_MOUNT_WARNING_WIN","\033[31;1mAviso: Montar C:\\ nÑo Ç recomendado.\033[0m\n");
+	MSG_Add("PROGRAM_MOUNT_WARNING_OTHER","\033[31;1mAviso: Montar / nÑo Ç recomendado.\033[0m\n");
 #ifdef C_DBP_NATIVE_OVERLAY
-	MSG_Add("PROGRAM_MOUNT_OVERLAY_NO_BASE","A normal directory needs to be MOUNTed first before an overlay can be added on top.\n");
-	MSG_Add("PROGRAM_MOUNT_OVERLAY_INCOMPAT_BASE","The overlay is NOT compatible with the drive that is specified.\n");
-	MSG_Add("PROGRAM_MOUNT_OVERLAY_MIXED_BASE","The overlay needs to be specified using the same addressing as the underlying drive. No mixing of relative and absolute paths.");
-	MSG_Add("PROGRAM_MOUNT_OVERLAY_SAME_AS_BASE","The overlay directory can not be the same as underlying drive.\n");
-	MSG_Add("PROGRAM_MOUNT_OVERLAY_GENERIC_ERROR","Something went wrong.\n");
-	MSG_Add("PROGRAM_MOUNT_OVERLAY_STATUS","Overlay %s on drive %c mounted.\n");
+	MSG_Add("PROGRAM_MOUNT_OVERLAY_NO_BASE","Por favor, MONTE primeiro uma pasta normal antes de adicionar uma sobreposiáÑo sobre ela.\n");
+	MSG_Add("PROGRAM_MOUNT_OVERLAY_INCOMPAT_BASE","A sobreposiáÑo nÑo Ç compat°vel com a unidade especificada.\n");
+	MSG_Add("PROGRAM_MOUNT_OVERLAY_MIXED_BASE","A sobreposiáÑo precisa ser especificada usando o mesmo endereáamento que\na unidade subjacente. Sem misturar caminhos relativos e absolutos.");
+	MSG_Add("PROGRAM_MOUNT_OVERLAY_SAME_AS_BASE","A pasta de sobreposiáÑo nÑo pode ser a mesma que a da unidade subjacente.\n");
+	MSG_Add("PROGRAM_MOUNT_OVERLAY_GENERIC_ERROR","Algo deu errado.\n");
+	MSG_Add("PROGRAM_MOUNT_OVERLAY_STATUS","SobreposiáÑo %s na unidade %c montada.\n");
 #endif
 
-	MSG_Add("PROGRAM_MEM_CONVEN","%10d Kb free conventional memory\n");
-	MSG_Add("PROGRAM_MEM_EXTEND","%10d Kb free extended memory\n");
-	MSG_Add("PROGRAM_MEM_EXPAND","%10d Kb free expanded memory\n");
-	MSG_Add("PROGRAM_MEM_UPPER","%10d Kb free upper memory in %d blocks (largest UMB %d Kb)\n");
+	MSG_Add("PROGRAM_MEM_CONVEN","%10d Kb de mem¢ria convencional livre\n");
+	MSG_Add("PROGRAM_MEM_EXTEND","%10d Kb de mem¢ria estendida livre\n");
+	MSG_Add("PROGRAM_MEM_EXPAND","%10d Kb de mem¢ria expandida livre\n");
+	MSG_Add("PROGRAM_MEM_UPPER","%10d Kb de mem¢ria superior livre em %d blocos (maior UMB %d Kb)\n");
 
-	MSG_Add("PROGRAM_LOADFIX_ALLOC","%d kb allocated.\n");
-	MSG_Add("PROGRAM_LOADFIX_DEALLOC","%d kb freed.\n");
-	MSG_Add("PROGRAM_LOADFIX_DEALLOCALL","Used memory freed.\n");
-	MSG_Add("PROGRAM_LOADFIX_ERROR","Memory allocation error.\n");
+	MSG_Add("PROGRAM_LOADFIX_ALLOC","%d kb alocados.\n");
+	MSG_Add("PROGRAM_LOADFIX_DEALLOC","%d kb liberados.\n");
+	MSG_Add("PROGRAM_LOADFIX_DEALLOCALL","Mem¢ria usada liberada.\n");
+	MSG_Add("PROGRAM_LOADFIX_ERROR","Erro de alocaáÑo de mem¢ria.\n");
 
-	MSG_Add("MSCDEX_SUCCESS","MSCDEX installed.\n");
-	MSG_Add("MSCDEX_ERROR_MULTIPLE_CDROMS","MSCDEX: Failure: Drive-letters of multiple CD-ROM drives have to be continuous.\n");
-	MSG_Add("MSCDEX_ERROR_NOT_SUPPORTED","MSCDEX: Failure: Not yet supported.\n");
-	MSG_Add("MSCDEX_ERROR_PATH","MSCDEX: Specified location is not a CD-ROM drive.\n");
-	MSG_Add("MSCDEX_ERROR_OPEN","MSCDEX: Failure: Invalid file or unable to open.\n");
-	MSG_Add("MSCDEX_TOO_MANY_DRIVES","MSCDEX: Failure: Too many CD-ROM drives (max: 5). MSCDEX Installation failed.\n");
-	MSG_Add("MSCDEX_LIMITED_SUPPORT","MSCDEX: Mounted subdirectory: limited support.\n");
-	MSG_Add("MSCDEX_INVALID_FILEFORMAT","MSCDEX: Failure: File is either no ISO/CUE image or contains errors.\n");
-	MSG_Add("MSCDEX_UNKNOWN_ERROR","MSCDEX: Failure: Unknown error.\n");
+	MSG_Add("MSCDEX_SUCCESS","MSCDEX instalado.\n");
+	MSG_Add("MSCDEX_ERROR_MULTIPLE_CDROMS","MSCDEX: Erro: as letras da unidade de v†rios CD-ROM devem ser cont°nuas.\n");
+	MSG_Add("MSCDEX_ERROR_NOT_SUPPORTED","MSCDEX: Erro: Ainda nÑo suportado.\n");
+	MSG_Add("MSCDEX_ERROR_PATH","MSCDEX: O local especificado nÑo Ç uma unidade de CD-ROM.\n");
+	MSG_Add("MSCDEX_ERROR_OPEN","MSCDEX: Erro: Arquivo inv†lido ou nÑo pode ser aberto.\n");
+	MSG_Add("MSCDEX_TOO_MANY_DRIVES","MSCDEX: Erro: Muitas unidades de CD-ROM (m†x: 5). Falha na instalaáÑo de MSCDEX.\n");
+	MSG_Add("MSCDEX_LIMITED_SUPPORT","MSCDEX: Subpasta montada: suporte limitado.\n");
+	MSG_Add("MSCDEX_INVALID_FILEFORMAT","MSCDEX: Erro: O arquivo nÑo Ç uma imagem ISO/CUE ou contÇm erros.\n");
+	MSG_Add("MSCDEX_UNKNOWN_ERROR","MSCDEX: Erro: Erro desconhecido.\n");
 
-	MSG_Add("PROGRAM_RESCAN_SUCCESS","Drive cache cleared.\n");
+	MSG_Add("PROGRAM_RESCAN_SUCCESS","Cache da unidade apagado.\n");
 
 #ifdef C_DBP_ENABLE_INTROPROGRAM
 	MSG_Add("PROGRAM_INTRO",
-		"\033[2J\033[32;1mWelcome to DOSBox\033[0m, an x86 emulator with sound and graphics.\n"
-		"DOSBox creates a shell for you which looks like old plain DOS.\n"
+        "\033[32;1mInformaáÑo:\033[0m\n\n"
+		"Para informaáîes b†sicas sobre montagem, digite \033[34;1mintro mount\033[0m\n"
+        "Para informaáîes sobre suporte Ö CD-ROM, digite \033[34;1mintro cdrom\033[0m\n"
+        "Para informaáîes sobre teclas especiais, digite \033[34;1mintro special\033[0m\n"
+        "Para informaáîes de uso, digite \033[34;1mintro usage\033[0m\n\n"
+        "Para obter a £ltima versÑo do MS-DOS, visite a p†gina da web:\033[34;1m\n"
 		"\n"
-		"For information about basic mount type \033[34;1mintro mount\033[0m\n"
-		"For information about CD-ROM support type \033[34;1mintro cdrom\033[0m\n"
-		"For information about special keys type \033[34;1mintro special\033[0m\n"
-		"For more information about DOSBox, go to \033[34;1mhttp://www.dosbox.com/wiki\033[0m\n"
+        "\033[34;1mhttps://microsoft.com/\033[0m ou \033[34;1mhttp://microsoft.software\033[0m\n"
 		"\n"
-		"\033[31;1mDOSBox will stop/exit without a warning if an error occurred!\033[0m\n"
+        "Para mais informaáîes sobre o MS-DOS, visite nossa Wiki:\n"
 		"\n"
-		"\n"
+        "\033[34;1mhttps://microsoft.com/wiki\033[0m\n"
 		);
 	MSG_Add("PROGRAM_INTRO_MOUNT_START",
-		"\033[32;1mHere are some commands to get you started:\033[0m\n"
-		"Before you can use the files located on your own filesystem,\n"
-		"You have to mount the directory containing the files.\n"
+		"\033[32;1mAqui tem alguns comandos para vocà comeáar:\033[0m\n"
+		"Antes que vocà possa utilizar os arquivos localizados em seu pr¢prio\n"
+		"sistema de arquivos, vocà tem que montar a pasta que contÇm os arquivos.\n"
 		"\n"
 		);
 	MSG_Add("PROGRAM_INTRO_MOUNT_WINDOWS",
 		"\033[44;1m\xC9\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD"
 		"\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD"
 		"\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n"
-		"\xBA \033[32mmount c c:\\dosgames\\\033[37m will create a C drive with c:\\dosgames as contents.\xBA\n"
+		"\xBA \033[32mmount c c:\\jogosdos\\\033[37m cria uma unidade C com o conte£do de c:\\jogosdos.\xBA\n"
 		"\xBA                                                                         \xBA\n"
-		"\xBA \033[32mc:\\dosgames\\\033[37m is an example. Replace it with your own games directory.  \033[37m \xBA\n"
+		"\xBA \033[32mc:\\jogosdos\\\033[37m Ç um exemplo. Substitua por sua pr¢pria pasta de jogos.  \033[37m \xBA\n"
 		"\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD"
 		"\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD"
 		"\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\033[0m\n"
@@ -1942,134 +1943,135 @@ void DOS_SetupPrograms(void) {
 		"\033[44;1m\xC9\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD"
 		"\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD"
 		"\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n"
-		"\xBA \033[32mmount c ~/dosgames\033[37m will create a C drive with ~/dosgames as contents.\xBA\n"
+		"\xBA \033[32mmount c ~/jogosdos\033[37m criar† uma unidade C com o conte£do de ~/jogosdos.\xBA\n"
 		"\xBA                                                                      \xBA\n"
-		"\xBA \033[32m~/dosgames\033[37m is an example. Replace it with your own games directory.\033[37m  \xBA\n"
+		"\xBA \033[32m~/jogosdos\033[37m Ç um exemplo. Substitua por sua pr¢pria pasta de jogos.\033[37m  \xBA\n"
 		"\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD"
 		"\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD"
 		"\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\033[0m\n"
 		);
 	MSG_Add("PROGRAM_INTRO_MOUNT_END",
-		"When the mount has successfully completed you can type \033[34;1mc:\033[0m to go to your freshly\n"
-		"mounted C-drive. Typing \033[34;1mdir\033[0m there will show its contents."
-		" \033[34;1mcd\033[0m will allow you to\n"
-		"enter a directory (recognised by the \033[33;1m[]\033[0m in a directory listing).\n"
-		"You can run programs/files which end with \033[31m.exe .bat\033[0m and \033[31m.com\033[0m.\n"
+		"Quando mount for completado corretamente vocà pode digitar \033[34;1mc:\033[0m para ir para\n"
+		"sua unidade montada C:. Digite \033[34;1mdir\033[0m para mostrar seu conte£do, \033[34;1mcd\033[0m permite\n"
+		"que vocà entre em uma pasta (reconhecido por \033[33;1m[]\033[0m em uma pasta listada).\n"
+		"Vocà pode executar programas terminados em \033[31m.exe .bat\033[0m e \033[31m.com\033[0m.\n"
 		);
 	MSG_Add("PROGRAM_INTRO_CDROM",
-		"\033[2J\033[32;1mHow to mount a Real/Virtual CD-ROM Drive in DOSBox:\033[0m\n"
-		"DOSBox provides CD-ROM emulation on several levels.\n"
+		"\033[2J\033[32;1mMontando um CD-ROM real ou virtual no MS-DOS:\033[0m\n"
+		"O MS-DOS fornece emulaáÑo de CD-ROM em v†rios n°veis.\n"
 		"\n"
-		"The \033[33mbasic\033[0m level works on all CD-ROM drives and normal directories.\n"
-		"It installs MSCDEX and marks the files read-only.\n"
-		"Usually this is enough for most games:\n"
-		"\033[34;1mmount d \033[0;31mD:\\\033[34;1m -t cdrom\033[0m   or   \033[34;1mmount d C:\\example -t cdrom\033[0m\n"
-		"If it doesn't work you might have to tell DOSBox the label of the CD-ROM:\n"
-		"\033[34;1mmount d C:\\example -t cdrom -label CDLABEL\033[0m\n"
+		"\033[33mN°vel b†sico\033[0m funciona em todos os CD-ROM e pastas normais.\n"
+		"Instala o MSCDEX e marca os arquivos como somente leitura.\n"
+		"Normalmente, Ç suficiente para a maioria dos jogos:\n"
+		"\033[34;1mmount d \033[0;31mD:\\\033[34;1m -t cdrom\033[0m   ou   \033[34;1mmount d C:\\exemplo -t cdrom\033[0m\n"
+		"Se nÑo funcionar, indique ao MS-DOS o r¢tulo do CD-ROM:\n"
+		"\033[34;1mmount d C:\\exemplo -t cdrom -label CDLABEL\033[0m\n"
 		"\n"
-		"The \033[33mnext\033[0m level adds some low-level support.\n"
-		"Therefore only works on CD-ROM drives:\n"
+		"\033[33mN°vel mÇdio\033[0m adiciona algum suporte de baixo n°vel.\n"
+		"Portanto, s¢ funciona em unidades de CD-ROM:\n"
 		"\033[34;1mmount d \033[0;31mD:\\\033[34;1m -t cdrom -usecd \033[33m0\033[0m\n"
 		"\n"
-		"The \033[33mlast\033[0m level of support depends on your Operating System:\n"
-		"For \033[1mWindows 2000\033[0m, \033[1mWindows XP\033[0m and \033[1mLinux\033[0m:\n"
+		"\033[33mNivel £ltimo\033[0m o suporte depende do  seu Sistema Operacional:\n"
+		"Para \033[1mWindows 2000\033[0m, \033[1mWindows XP\033[0m e \033[1mLinux\033[0m:\n"
 		"\033[34;1mmount d \033[0;31mD:\\\033[34;1m -t cdrom -usecd \033[33m0 \033[34m-ioctl\033[0m\n"
-		"For \033[1mWindows 9x\033[0m with a ASPI layer installed:\n"
+		"Para \033[1mWindows 9x\033[0m com a camada ASPI instalada:\n"
 		"\033[34;1mmount d \033[0;31mD:\\\033[34;1m -t cdrom -usecd \033[33m0 \033[34m-aspi\033[0m\n"
 		"\n"
-		"Replace \033[0;31mD:\\\033[0m with the location of your CD-ROM.\n"
-		"Replace the \033[33;1m0\033[0m in \033[34;1m-usecd \033[33m0\033[0m with the number reported for your CD-ROM if you type:\n"
+		"Substitua \033[0;31mD:\\\033[0m pelo local do seu CD-ROM.\n"
+		"Substitua o \033[33;1m0\033[0m em \033[34;1m-usecd \033[33m0\033[0m com o n£mero do seu CD-ROM digitando:\n"
 		"\033[34;1mmount -cd\033[0m\n"
 		);
 	MSG_Add("PROGRAM_INTRO_SPECIAL",
-		"\033[2J\033[32;1mSpecial keys:\033[0m\n"
-		"These are the default keybindings.\n"
-		"They can be changed in the \033[33mkeymapper\033[0m.\n"
+		"\033[2J\033[32;1mTeclas especiais:\033[0m\n"
+		"Essas sÑo as teclas de atalho padrÑo.\n"
+		"Elas podem ser alteradas no \033[33mmapeador de controle\033[0m.\n"
 		"\n"
-		"\033[33;1mALT-ENTER\033[0m   : Go full screen and back.\n"
-		"\033[33;1mALT-PAUSE\033[0m   : Pause DOSBox.\n"
-		"\033[33;1mCTRL-F1\033[0m     : Start the \033[33mkeymapper\033[0m.\n"
-		"\033[33;1mCTRL-F4\033[0m     : Update directory cache for all drives! Swap mounted disk-image.\n"
-		"\033[33;1mCTRL-ALT-F5\033[0m : Start/Stop creating a movie of the screen.\n"
-		"\033[33;1mCTRL-F5\033[0m     : Save a screenshot.\n"
-		"\033[33;1mCTRL-F6\033[0m     : Start/Stop recording sound output to a wave file.\n"
-		"\033[33;1mCTRL-ALT-F7\033[0m : Start/Stop recording of OPL commands.\n"
-		"\033[33;1mCTRL-ALT-F8\033[0m : Start/Stop the recording of raw MIDI commands.\n"
-		"\033[33;1mCTRL-F7\033[0m     : Decrease frameskip.\n"
-		"\033[33;1mCTRL-F8\033[0m     : Increase frameskip.\n"
-		"\033[33;1mCTRL-F9\033[0m     : Kill DOSBox.\n"
-		"\033[33;1mCTRL-F10\033[0m    : Capture/Release the mouse.\n"
-		"\033[33;1mCTRL-F11\033[0m    : Slow down emulation (Decrease DOSBox Cycles).\n"
-		"\033[33;1mCTRL-F12\033[0m    : Speed up emulation (Increase DOSBox Cycles).\n"
-		"\033[33;1mALT-F12\033[0m     : Unlock speed (turbo button/fast forward).\n"
+		"\033[33;1mALT-ENTER\033[0m   : Ir para tela cheia e voltar.\n"
+		"\033[33;1mALT-PAUSE\033[0m   : Pausar o DOSBox.\n"
+		"\033[33;1mCTRL-F1\033[0m     : Iniciar o \033[33mmapeador de controle\033[0m.\n"
+		"\033[33;1mCTRL-F4\033[0m     : Atualizar o cache de diret¢rio para todas as unidades! Trocar imagem de disco montada.\n"
+		"\033[33;1mCTRL-ALT-F5\033[0m : Iniciar/Parar a criaáÑo de um filme da tela.\n"
+		"\033[33;1mCTRL-F5\033[0m     : Salvar uma captura de tela.\n"
+		"\033[33;1mCTRL-F6\033[0m     : Iniciar/Parar a gravaáÑo da sa°da de som em um arquivo wave.\n"
+		"\033[33;1mCTRL-ALT-F7\033[0m : Iniciar/Parar a gravaáÑo de comandos OPL.\n"
+		"\033[33;1mCTRL-ALT-F8\033[0m : Iniciar/Parar a gravaáÑo de comandos MIDI crus.\n"
+		"\033[33;1mCTRL-F7\033[0m     : Reduzir salto de quadro.\n"
+		"\033[33;1mCTRL-F8\033[0m     : Aumentar salto de quadro.\n"
+		"\033[33;1mCTRL-F9\033[0m     : Encerrar o MSDOS.\n"
+		"\033[33;1mCTRL-F10\033[0m    : Capturar/Liberar o mouse.\n"
+		"\033[33;1mCTRL-F11\033[0m    : Diminuir a emulaáÑo (Diminuir ciclos do emulador).\n"
+		"\033[33;1mCTRL-F12\033[0m    : Acelerar a emulaáÑo (Aumentar ciclos do emulador).\n"
+		"\033[33;1mALT-F12\033[0m     : Desbloquear velocidade (botÑo turbo/avanáo r†pido).\n"
 		);
 #endif
-	MSG_Add("PROGRAM_BOOT_NOT_EXIST","Bootdisk file does not exist.  Failing.\n");
-	MSG_Add("PROGRAM_BOOT_NOT_OPEN","Cannot open bootdisk file.  Failing.\n");
-	MSG_Add("PROGRAM_BOOT_WRITE_PROTECTED","Image file is read-only! Might create problems.\n");
-	MSG_Add("PROGRAM_BOOT_PRINT_ERROR","This command boots DOSBox from either a floppy or hard disk image.\n\n"
-		"For this command, one can specify a succession of floppy disks swappable\n"
-		"by pressing Ctrl-F4, and -l specifies the mounted drive to boot from.  If\n"
-		"no drive letter is specified, this defaults to booting from the A drive.\n"
-		"The only bootable drive letters are A, C, and D.  For booting from a hard\n"
-		"drive (C or D), the image should have already been mounted using the\n"
-		"\033[34;1mIMGMOUNT\033[0m command.\n\n"
-		"The syntax of this command is:\n\n"
-		"\033[34;1mBOOT [diskimg1.img diskimg2.img] [-l driveletter]\033[0m\n"
+    MSG_Add("PROGRAM_BOOT_NOT_EXIST","O arquivo de disco de inicializaáÑo nÑo existe. Abortando.\n");
+    MSG_Add("PROGRAM_BOOT_NOT_OPEN","O arquivo de disco de inicializaáÑo nÑo pode ser aberto. Abortando.\n");
+    MSG_Add("PROGRAM_BOOT_WRITE_PROTECTED","O arquivo de imagem est† em modo somente leitura! Inicialize em modo protegido.\n");
+    MSG_Add("PROGRAM_BOOT_PRINT_ERROR","Este comando inicia o MS-DOS de uma imagem de disquete ou de disco r°gido.\n\n"
+        "Para este comando, Ç poss°vel indicar uma sucessÑo de disquetes intercambi†veis\n"
+        "pelo comando de menu, e unidade: especifica de qual unidade montada iniciar.\n"
+        "Se nÑo for especificada nenhuma letra, por padrÑo ser† a unidade A. As unidades\n"
+        "que podem ser iniciadas sÑo A, C e D. Para iniciar do disco r°gido (C ou D), a\n"
+        "imagem deve estar previamente montada usando o comando \033[34;1mIMGMOUNT\033[0m.\n\n"
+        "A sintaxe deste comando Ç uma das seguintes:\n\n"
+        "\033[34;1mBOOT [diskimg1.img diskimg2.img] [-l letra_da_unidade]\033[0m\n\n"
 		);
-	MSG_Add("PROGRAM_BOOT_UNABLE","Unable to boot off of drive %c");
-	MSG_Add("PROGRAM_BOOT_IMAGE_MOUNTED","Floppy image(s) already mounted.\n");
-	MSG_Add("PROGRAM_BOOT_IMAGE_OPEN","Opening image file: %s\n");
-	MSG_Add("PROGRAM_BOOT_IMAGE_NOT_OPEN","Cannot open %s");
-	MSG_Add("PROGRAM_BOOT_BOOT","Booting from drive %c...\n");
-	MSG_Add("PROGRAM_BOOT_CART_WO_PCJR","PCjr cartridge found, but machine is not PCjr");
-	MSG_Add("PROGRAM_BOOT_CART_LIST_CMDS","Available PCjr cartridge commandos:%s");
-	MSG_Add("PROGRAM_BOOT_CART_NO_CMDS","No PCjr cartridge commandos found");
+	MSG_Add("PROGRAM_BOOT_UNABLE","NÑo foi poss°vel inicializar a partir da unidade %c");
+	MSG_Add("PROGRAM_BOOT_IMAGE_MOUNTED", "Imagem(ns) de disquete j† montada(s).\n");
+	MSG_Add("PROGRAM_BOOT_IMAGE_OPEN","Abrindo arquivo imagem: %s\n");
+	MSG_Add("PROGRAM_BOOT_IMAGE_NOT_OPEN","NÑo foi poss°vel abrir %s");
+	MSG_Add("PROGRAM_BOOT_BOOT","Iniciando a partir da unidade %c...\n");
+	MSG_Add("PROGRAM_BOOT_CART_WO_PCJR","Cartucho PCjr encontrado, mas a m†quina nÑo Ç um PCjr");
+	MSG_Add("PROGRAM_BOOT_CART_LIST_CMDS","Comandos dispon°veis no cartucho PCjr: %s");
+	MSG_Add("PROGRAM_BOOT_CART_NO_CMDS","Os comandos do cartucho PCjr nÑo foram encontrados");
 
-	MSG_Add("PROGRAM_LOADROM_SPECIFY_FILE","Must specify ROM file to load.\n");
-	MSG_Add("PROGRAM_LOADROM_CANT_OPEN","ROM file not accessible.\n");
-	MSG_Add("PROGRAM_LOADROM_TOO_LARGE","ROM file too large.\n");
-	MSG_Add("PROGRAM_LOADROM_INCOMPATIBLE","Video BIOS not supported by machine type.\n");
-	MSG_Add("PROGRAM_LOADROM_UNRECOGNIZED","ROM file not recognized.\n");
-	MSG_Add("PROGRAM_LOADROM_BASIC_LOADED","BASIC ROM loaded.\n");
+	MSG_Add("PROGRAM_LOADROM_SPECIFY_FILE","Deve especificar o arquivo ROM a ser carregado.\n");
+	MSG_Add("PROGRAM_LOADROM_CANT_OPEN","Arquivo ROM nÑo acess°vel.\n");
+	MSG_Add("PROGRAM_LOADROM_TOO_LARGE","Arquivo ROM muito grande.\n");
+	MSG_Add("PROGRAM_LOADROM_INCOMPATIBLE","BIOS de v°deo nÑo suportada por este tipo de m†quina.\n");
+	MSG_Add("PROGRAM_LOADROM_UNRECOGNIZED","Arquivo ROM nÑo reconhecido.\n");
+	MSG_Add("PROGRAM_LOADROM_BASIC_LOADED","BASIC ROM carregada.\n");
 
-	MSG_Add("PROGRAM_IMGMOUNT_SPECIFY_DRIVE","Must specify drive letter to mount image at.\n");
-	MSG_Add("PROGRAM_IMGMOUNT_SPECIFY2","Must specify drive number (0 or 3) to mount image at (0,1=fda,fdb;2,3=hda,hdb).\n");
+	MSG_Add("PROGRAM_IMGMOUNT_SPECIFY_DRIVE","ê necess†rio especificar a letra da unidade onde a imagem ser† montada.\n");
+	MSG_Add("PROGRAM_IMGMOUNT_SPECIFY2","ê necess†rio especificar o n£mero da unidade (0 ou 3) para montar a imagem em\n0,1=fda,fdb;2,3=hda,hdb).\n");
 	MSG_Add("PROGRAM_IMGMOUNT_SPECIFY_GEOMETRY",
-		"For \033[33mCD-ROM\033[0m images:   \033[34;1mIMGMOUNT drive-letter location-of-image -t iso\033[0m\n"
+		"Para imagens de \033[33mCD-ROM\033[0m:   \033[34;1mIMGMOUNT letra-da-unidade caminho-da-imagem -t iso\033[0m\n"
 		"\n"
-		"For \033[33mhardrive\033[0m images: Must specify drive geometry for hard drives:\n"
-		"bytes_per_sector, sectors_per_cylinder, heads_per_cylinder, cylinder_count.\n"
-		"\033[34;1mIMGMOUNT drive-letter location-of-image -size bps,spc,hpc,cyl\033[0m\n");
-	MSG_Add("PROGRAM_IMGMOUNT_INVALID_IMAGE","Could not load image file.\n"
-		"Check that the path is correct and the image is accessible.\n");
-	MSG_Add("PROGRAM_IMGMOUNT_INVALID_GEOMETRY","Could not extract drive geometry from image.\n"
-		"Use parameter -size bps,spc,hpc,cyl to specify the geometry.\n");
-	MSG_Add("PROGRAM_IMGMOUNT_TYPE_UNSUPPORTED","Type \"%s\" is unsupported. Specify \"hdd\" or \"floppy\" or\"iso\".\n");
-	MSG_Add("PROGRAM_IMGMOUNT_FORMAT_UNSUPPORTED","Format \"%s\" is unsupported. Specify \"fat\" or \"iso\" or \"none\".\n");
-	MSG_Add("PROGRAM_IMGMOUNT_SPECIFY_FILE","Must specify file-image to mount.\n");
-	MSG_Add("PROGRAM_IMGMOUNT_FILE_NOT_FOUND","Image file not found.\n");
-	MSG_Add("PROGRAM_IMGMOUNT_MOUNT","To mount directories, use the \033[34;1mMOUNT\033[0m command, not the \033[34;1mIMGMOUNT\033[0m command.\n");
-	MSG_Add("PROGRAM_IMGMOUNT_ALREADY_MOUNTED","Drive already mounted at that letter.\n");
-	MSG_Add("PROGRAM_IMGMOUNT_CANT_CREATE","Can't create drive from file.\n");
-	MSG_Add("PROGRAM_IMGMOUNT_MOUNT_NUMBER","Drive number %d mounted as %s\n");
-	MSG_Add("PROGRAM_IMGMOUNT_NON_LOCAL_DRIVE", "The image must be on a host or local drive.\n");
-	MSG_Add("PROGRAM_IMGMOUNT_MULTIPLE_NON_CUEISO_FILES", "Using multiple files is only supported for cue/iso images.\n");
+		"Para imagens de \033[33mharddrive\033[0m: ê necess†rio especificar a geometria da unidade para discos r°gidos:\n"
+		"bytes_por_setor, setores_por_cilindro, cabeáas_por_cilindro, quantidade_de_cilindros.\n"
+		"\033[34;1mIMGMOUNT letra_da_unidade local_da_imagem -size bps,spc,hpc,cyl\033[0m\n");
+	MSG_Add("PROGRAM_IMGMOUNT_INVALID_IMAGE","NÑo foi poss°vel carregar o arquivo de imagem..\n"
+		"Verifique se o caminho est† correto e a imagem acess°vel.\n");
+	MSG_Add("PROGRAM_IMGMOUNT_INVALID_GEOMETRY","NÑo foi poss°vel obter a geometria de unidade a partir da imagem.\n"
+		"Use o parÉmetro -size bps,spc,hpc,cyl para especificar a geometria.\n");
+	MSG_Add("PROGRAM_IMGMOUNT_TYPE_UNSUPPORTED","O tipo \"%s\" nÑo Ç suportado. Especifique \"hdd\" ou \"floppy\" ou \"iso\".\n");
+	MSG_Add("PROGRAM_IMGMOUNT_FORMAT_UNSUPPORTED","O formato \"%s\" nÑo Ç suportado. Especifique \"fat\" ou \"iso\" ou \"none\".\n");
+	MSG_Add("PROGRAM_IMGMOUNT_SPECIFY_FILE","ê preciso especificar o arquivo de imagem para montar.\n");
+	MSG_Add("PROGRAM_IMGMOUNT_FILE_NOT_FOUND","Arquivo imagem nÑo encontrado.\n");
+	MSG_Add("PROGRAM_IMGMOUNT_MOUNT","Para montar pastas, use o comando \033[34;1mMOUNT\033[0m e nÑo o\033[0m comando \033[34;1mIMGMOUNT\033[0m.\n");
+	MSG_Add("PROGRAM_IMGMOUNT_ALREADY_MOUNTED","A unidade j† est† montada com essa letra.\n");
+	MSG_Add("PROGRAM_IMGMOUNT_CANT_CREATE","NÑo Ç poss°vel criar uma unidade a partir de um arquivo.\n");
+	MSG_Add("PROGRAM_IMGMOUNT_MOUNT_NUMBER","Unidade n£mero %d est† montada como %s\n");
+	MSG_Add("PROGRAM_IMGMOUNT_NON_LOCAL_DRIVE", "A imagem deve estar em um anfitriÑo ou em uma unidade local.\n");
+	MSG_Add("PROGRAM_IMGMOUNT_MULTIPLE_NON_CUEISO_FILES", "O uso de m£ltiplos arquivos s¢ Ç suportado para imagens cue/iso.\n");
 
-	MSG_Add("PROGRAM_KEYB_INFO","Codepage %i has been loaded\n");
-	MSG_Add("PROGRAM_KEYB_INFO_LAYOUT","Codepage %i has been loaded for layout %s\n");
-	MSG_Add("PROGRAM_KEYB_SHOWHELP",
-		"\033[32;1mKEYB\033[0m [keyboard layout ID[ codepage number[ codepage file]]]\n\n"
-		"Some examples:\n"
-		"  \033[32;1mKEYB\033[0m: Display currently loaded codepage.\n"
-		"  \033[32;1mKEYB\033[0m sp: Load the spanish (SP) layout, use an appropriate codepage.\n"
-		"  \033[32;1mKEYB\033[0m sp 850: Load the spanish (SP) layout, use codepage 850.\n"
-		"  \033[32;1mKEYB\033[0m sp 850 mycp.cpi: Same as above, but use file mycp.cpi.\n");
-	MSG_Add("PROGRAM_KEYB_NOERROR","Keyboard layout %s loaded for codepage %i\n");
-	MSG_Add("PROGRAM_KEYB_FILENOTFOUND","Keyboard file %s not found\n\n");
-	MSG_Add("PROGRAM_KEYB_INVALIDFILE","Keyboard file %s invalid\n");
-	MSG_Add("PROGRAM_KEYB_LAYOUTNOTFOUND","No layout in %s for codepage %i\n");
-	MSG_Add("PROGRAM_KEYB_INVCPFILE","None or invalid codepage file for layout %s\n\n");
+	MSG_Add("PROGRAM_KEYB_INFO","P†gina de c¢digo %i carregada\n");
+	MSG_Add("PROGRAM_KEYB_INFO_LAYOUT","P†gina de c¢digo %i carregada para o esquema %s\n");
+	MSG_Add("PROGRAM_KEYB_SHOWHELP","Configura um teclado para um idioma espec°fico.\n\n"
+		"Uso: \033[32;1mKEYB\033[0m [ID do esquema do teclado [p†gina de c¢digo [arquivo]]]\n"
+		"Alguns exemplos:\n"
+		"\033[32;1mKEYB\033[0m                 Exibe a p†gina de c¢digo carregada atualmente.\n"
+		"\033[32;1mKEYB sp\033[0m              Carrega o esquema espanhol (SP) com a\n"
+		"                     p†gina de c¢digo apropriada.\n"
+		"\033[32;1mKEYB sp 850\033[0m          Carrega o esquema espanhol (SP) com a\n"
+		"                     p†gina de c¢digo 850.\n"
+		"\033[32;1mKEYB sp 850 mycp.cpi\033[0m O mesmo de cima, mas usando o arquivo mycp.cpi.\n"
+		"\033[32;1mKEYB sp_mod 850\033[0m      Carrega o esquema de sp_mod.kl, usa p†gina de c¢digo 850.\n");
+	MSG_Add("PROGRAM_KEYB_NOERROR","Esquema de teclado %s carregado para p†gina de c¢digo %i\n");
+	MSG_Add("PROGRAM_KEYB_FILENOTFOUND","Arquivo de teclado %s nÑo encontrado\n\n");
+	MSG_Add("PROGRAM_KEYB_INVALIDFILE","Arquivo de teclado %s inv†lido\n");
+	MSG_Add("PROGRAM_KEYB_LAYOUTNOTFOUND","NÑo existe esquema em %s para a p†gina de c¢digo %i\n");
+	MSG_Add("PROGRAM_KEYB_INVCPFILE","Nenhum arquivo de p†gina de c¢digo ou Ç inv†lido para o esquema %s\n\n");
 
 	/*regular setup*/
 	PROGRAMS_MakeFile("MOUNT.COM",MOUNT_ProgramStart);

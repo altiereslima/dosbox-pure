@@ -103,11 +103,11 @@ struct DBP_InputBind
 enum { DBP_MAX_PORTS = 8, DBP_KEYBOARD_PORT, DBP_PORT_MASK = 0x7, DBP_SHIFT_PORT_BIT = 0x80, DBP_NO_PORT = 255, DBP_JOY_ANALOG_RANGE = 0x8000 }; // analog stick range is -0x8000 to 0x8000
 static const char* DBP_KBDNAMES[] =
 {
-	"None","1","2","3","4","5","6","7","8","9","0","Q","W","E","R","T","Y","U","I","O","P","A","S","D","F","G","H","J","K","L","Z","X","C","V","B","N","M",
-	"F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","F11","F12","Esc","Tab","Backspace","Enter","Space","Left-Alt","Right-Alt","Left-Ctrl","Right-Ctrl","Left-Shift","Right-Shift",
-	"Caps-Lock","Scroll-Lock","Num-Lock","Grave `","Minus -","Equals =","Backslash","Left-Bracket [","Right-Bracket ]","Semicolon ;","Quote '","Period .","Comma ,","Slash /","Backslash \\",
-	"Print-Screen","Pause","Insert","Home","Page-Up","Delete","End","Page-Down","Left","Up","Down","Right","NP-1","NP-2","NP-3","NP-4","NP-5","NP-6","NP-7","NP-8","NP-9","NP-0",
-	"NP-Divide /","NP-Multiply *","NP-Minus -","NP-Plus +","NP-Enter","NP-Period .",""
+	"Nada","1","2","3","4","5","6","7","8","9","0","Q","W","E","R","T","Y","U","I","O","P","A","S","D","F","G","H","J","K","L","Z","X","C","V","B","N","M",
+	"F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","F11","F12","Esc","Tab","Backspace","Enter","Espaco","Alt-esquerdo","Alt-direito","Ctrl-esquerdo","Ctrl-direito","Shift-esquerdo","Shift-direito",
+	"Caps-Lock","Scroll-Lock","Num-Lock","Grave `","Menos -","Igual =","Barra invertida","Colchete aberto [","Colchete fechado ]","Ponto e virgula ;","Apostrofo '","Ponto .","Virgula ,","Barra /","Barra invertida \\",
+	"Print-Screen","Pause","Insert","Home","Page-Up","Delete","End","Page-Down","Esquerda","Cima","Baixo","Direita","1-NP","2-NP","3-NP","4-NP","5-NP","6-NP","7-NP","8-NP","9-NP","0-NP",
+	"Dividir-NP /","Multiplicar-NP *","Menos-NP -","Mais-NP +","Enter-NP","Ponto-NP .",""
 };
 struct DBP_WheelItem { Bit8u port, key_count, k[4]; };
 static std::vector<DBP_InputBind> dbp_input_binds;
@@ -153,40 +153,40 @@ enum DBP_Event_Type : Bit8u
 	_DBPET_MAX
 };
 //static const char* DBP_Event_Type_Names[] = { "JOY1X", "JOY1Y", "JOY2X", "JOY2Y", "JOYMX", "JOYMY", "MOUSEMOVE", "MOUSEDOWN", "MOUSEUP", "MOUSESETSPEED", "MOUSERESETSPEED", "JOYHATSETBIT", "JOYHATUNSETBIT", "JOY1DOWN", "JOY1UP", "JOY2DOWN", "JOY2UP", "KEYDOWN", "KEYUP", "ONSCREENKEYBOARD", "ONSCREENKEYBOARDUP", "ACTIONWHEEL", "ACTIONWHEELUP", "SHIFTPORT", "SHIFTPORTUP", "AXIS_TO_KEY", "CHANGEMOUNTS", "REFRESHSYSTEM", "MAX" };
-static const char *DBPDEV_Keyboard = "Keyboard", *DBPDEV_Mouse = "Mouse", *DBPDEV_Joystick = "Joystick";
+static const char *DBPDEV_Keyboard = "Teclado", *DBPDEV_Mouse = "Mouse", *DBPDEV_Joystick = "Joystick";
 static const struct DBP_SpecialMapping { int16_t evt, meta; const char *dev, *name; } DBP_SpecialMappings[] =
 {
-	{ DBPET_JOYMY,         -1, DBPDEV_Mouse,    "Move Up"      }, // 200
-	{ DBPET_JOYMY,          1, DBPDEV_Mouse,    "Move Down"    }, // 201
-	{ DBPET_JOYMX,         -1, DBPDEV_Mouse,    "Move Left"    }, // 202
-	{ DBPET_JOYMX,          1, DBPDEV_Mouse,    "Move Right"   }, // 203
-	{ DBPET_MOUSEDOWN,      0, DBPDEV_Mouse,    "Left Click"   }, // 204
-	{ DBPET_MOUSEDOWN,      1, DBPDEV_Mouse,    "Right Click"  }, // 205
-	{ DBPET_MOUSEDOWN,      2, DBPDEV_Mouse,    "Middle Click" }, // 206
-	{ DBPET_MOUSESETSPEED,  1, DBPDEV_Mouse,    "Speed Up"     }, // 207
-	{ DBPET_MOUSESETSPEED, -1, DBPDEV_Mouse,    "Slow Down"    }, // 208
-	{ DBPET_JOY1Y,         -1, DBPDEV_Joystick, "Up"           }, // 209
-	{ DBPET_JOY1Y,          1, DBPDEV_Joystick, "Down"         }, // 210
-	{ DBPET_JOY1X,         -1, DBPDEV_Joystick, "Left"         }, // 211
-	{ DBPET_JOY1X,          1, DBPDEV_Joystick, "Right"        }, // 212
-	{ DBPET_JOY1DOWN,       0, DBPDEV_Joystick, "Button 1"     }, // 213
-	{ DBPET_JOY1DOWN,       1, DBPDEV_Joystick, "Button 2"     }, // 214
-	{ DBPET_JOY2DOWN,       0, DBPDEV_Joystick, "Button 3"     }, // 215
-	{ DBPET_JOY2DOWN,       1, DBPDEV_Joystick, "Button 4"     }, // 216
-	{ DBPET_JOYHATSETBIT,   8, DBPDEV_Joystick, "Hat Up"       }, // 217
-	{ DBPET_JOYHATSETBIT,   2, DBPDEV_Joystick, "Hat Down"     }, // 218
-	{ DBPET_JOYHATSETBIT,   1, DBPDEV_Joystick, "Hat Left"     }, // 219
-	{ DBPET_JOYHATSETBIT,   4, DBPDEV_Joystick, "Hat Right"    }, // 220
-	{ DBPET_JOY2Y,         -1, DBPDEV_Joystick, "Joy 2 Up"     }, // 221
-	{ DBPET_JOY2Y,          1, DBPDEV_Joystick, "Joy 2 Down"   }, // 222
-	{ DBPET_JOY2X,         -1, DBPDEV_Joystick, "Joy 2 Left"   }, // 223
-	{ DBPET_JOY2X,          1, DBPDEV_Joystick, "Joy 2 Right"  }, // 224
-	{ DBPET_ONSCREENKEYBOARD, 0, NULL, "On Screen Keyboard"    }, // 225
-	{ DBPET_ACTIONWHEEL,      0, NULL, "Action Wheel"          }, // 226
-	{ DBPET_SHIFTPORT,        0, NULL, "Port #1 while holding" }, // 227
-	{ DBPET_SHIFTPORT,        1, NULL, "Port #2 while holding" }, // 228
-	{ DBPET_SHIFTPORT,        2, NULL, "Port #3 while holding" }, // 229
-	{ DBPET_SHIFTPORT,        3, NULL, "Port #4 while holding" }, // 230
+	{ DBPET_JOYMY,         -1, DBPDEV_Mouse,    "para cima"      }, // 200
+	{ DBPET_JOYMY,          1, DBPDEV_Mouse,    "para baixo"    }, // 201
+	{ DBPET_JOYMX,         -1, DBPDEV_Mouse,    "para a esquerda"    }, // 202
+	{ DBPET_JOYMX,          1, DBPDEV_Mouse,    "para a direita"   }, // 203
+	{ DBPET_MOUSEDOWN,      0, DBPDEV_Mouse,    "Clique esquerdo"   }, // 204
+	{ DBPET_MOUSEDOWN,      1, DBPDEV_Mouse,    "Clique direito"  }, // 205
+	{ DBPET_MOUSEDOWN,      2, DBPDEV_Mouse,    "Clique no meio" }, // 206
+	{ DBPET_MOUSESETSPEED,  1, DBPDEV_Mouse,    "Acelerar"     }, // 207
+	{ DBPET_MOUSESETSPEED, -1, DBPDEV_Mouse,    "Desacelerar"    }, // 208
+	{ DBPET_JOY1Y,         -1, DBPDEV_Joystick, "Cima"           }, // 209
+	{ DBPET_JOY1Y,          1, DBPDEV_Joystick, "Baixo"         }, // 210
+	{ DBPET_JOY1X,         -1, DBPDEV_Joystick, "Esq."         }, // 211
+	{ DBPET_JOY1X,          1, DBPDEV_Joystick, "Dir."        }, // 212
+	{ DBPET_JOY1DOWN,       0, DBPDEV_Joystick, "Botao 1"     }, // 213
+	{ DBPET_JOY1DOWN,       1, DBPDEV_Joystick, "Botao 2"     }, // 214
+	{ DBPET_JOY2DOWN,       0, DBPDEV_Joystick, "Botao 3"     }, // 215
+	{ DBPET_JOY2DOWN,       1, DBPDEV_Joystick, "Botao 4"     }, // 216
+	{ DBPET_JOYHATSETBIT,   8, DBPDEV_Joystick, "Hat cima"       }, // 217
+	{ DBPET_JOYHATSETBIT,   2, DBPDEV_Joystick, "Hat baixo"     }, // 218
+	{ DBPET_JOYHATSETBIT,   1, DBPDEV_Joystick, "Hat esquerda"     }, // 219
+	{ DBPET_JOYHATSETBIT,   4, DBPDEV_Joystick, "Hat direita"    }, // 220
+	{ DBPET_JOY2Y,         -1, DBPDEV_Joystick, "Joy 2 cima"     }, // 221
+	{ DBPET_JOY2Y,          1, DBPDEV_Joystick, "Joy 2 baixo"   }, // 222
+	{ DBPET_JOY2X,         -1, DBPDEV_Joystick, "Joy 2 esquerda"   }, // 223
+	{ DBPET_JOY2X,          1, DBPDEV_Joystick, "Joy 2 direita"  }, // 224
+	{ DBPET_ONSCREENKEYBOARD, 0, NULL, "Teclado na tela"    }, // 225
+	{ DBPET_ACTIONWHEEL,      0, NULL, "Roda de acao"              }, // 226
+	{ DBPET_SHIFTPORT,        0, NULL, "Porta #1 enquanto pressionado"}, // 227
+	{ DBPET_SHIFTPORT,        1, NULL, "Porta #2 enquanto pressionado"}, // 228
+	{ DBPET_SHIFTPORT,        2, NULL, "Porta #3 enquanto pressionado"}, // 229
+	{ DBPET_SHIFTPORT,        3, NULL, "Porta #4 enquanto pressionado"}, // 230
 };
 #define DBP_SPECIALMAPPING(key) DBP_SpecialMappings[(key)-DBP_SPECIALMAPPINGS_KEY]
 enum { DBP_SPECIALMAPPINGS_KEY = 200, DBP_SPECIALMAPPINGS_MAX = 200+(sizeof(DBP_SpecialMappings)/sizeof(DBP_SpecialMappings[0])) };
@@ -493,7 +493,7 @@ static void DBP_ReportCoreMemoryMaps()
 	mdesc_expandedmem->ptr   = MemBase + conventional_end;
 
 	#ifndef NDEBUG
-	log_cb(RETRO_LOG_INFO, "[DOSBOX STATUS] ReportCoreMemoryMaps - Program: %s - Booted OS: %d - Program Memory: %d KB\n", RunningProgram, (int)booted_os, (mdescs[0].len / 1024));
+	log_cb(RETRO_LOG_INFO, "[DOSBOX STATUS] ReportCoreMemoryMaps - Programa: %s - SO inicializado: %d - Program Memory: %d KB\n", RunningProgram, (int)booted_os, (mdescs[0].len / 1024));
 	#endif
 
 	struct retro_memory_map mmaps = { mdescs, (unsigned)(!booted_os ? 3 : 2) };
@@ -812,7 +812,7 @@ static std::string DBP_GetSaveFile(DBP_SaveFileType type, const char** out_filen
 	}
 	else if (type == SFT_NEWOSIMAGE)
 	{
-		res.append(!dbp_content_name.empty() ? dbp_content_name.c_str() : "Installed OS").append(".img");
+		res.append(!dbp_content_name.empty() ? dbp_content_name.c_str() : "SO instalado").append(".img");
 		size_t num = 1, baselen = res.size() - 4;
 		while (FILE* f = fopen_wrap(res.c_str(), "rb"))
 		{
@@ -1158,7 +1158,7 @@ struct DBP_PadMapping
 		padmap->Read(&dbp_custom_mapping[0], &(padmap_length = (Bit16u)file_length));
 		if (!version_length || version != 0 || !padmap_length)
 		{
-			retro_notify(0, RETRO_LOG_ERROR, "Corrupt gamepad mapping data in %c:\\%s", 'C', "PADMAP.DBP");
+			retro_notify(0, RETRO_LOG_ERROR, "Dados de mapeamento do gamepad corrompidos em %c:\\%s", 'C', "PADMAP.DBP");
 			DBP_ASSERT(0);
 			dbp_custom_mapping.clear();
 		}
@@ -1205,7 +1205,7 @@ struct DBP_PadMapping
 			DOS_File *padmap = nullptr;
 			if (!Drives['C'-'A'] || !Drives['C'-'A']->FileCreate(&padmap, (char*)"PADMAP.DBP", DOS_ATTR_ARCHIVE))
 			{
-				retro_notify(0, RETRO_LOG_ERROR, "Unable to write gamepad mapping data %c:\\%s", 'C', "PADMAP.DBP");
+				retro_notify(0, RETRO_LOG_ERROR, "Não é possível gravar dados de mapeamento do gamepad %c:\\%s", 'C', "PADMAP.DBP");
 				DBP_ASSERT(0);
 				return;
 			}
@@ -1241,7 +1241,7 @@ struct DBP_PadMapping
 
 	static const char* GetPresetName(EPreset preset)
 	{
-		static const char* presets[] = { "Generic Keyboard", "Mouse w/ Left Analog", "Mouse w/ Right Analog", "Gravis Gamepad (4 Buttons)", "First 2 Button Joystick", "Second 2 Button Joystick", "Thrustmaster Flight Stick", "Both DOS Joysticks", "Custom Mapping" };
+		static const char* presets[] = { "Teclado generico", "Mouse c/ alavanca esquerda", "Mouse c/ alavanca direita", "Gravis Gamepad (4 botoes)", "Primeiro joystick de 2 botoes", "Segundo joystick de 2 botoes", "Thrustmaster Flight Stick", "Ambos os joysticks do DOS", "Mapeamento personalizado" };
 		return (preset == PRESET_AUTOMAPPED ? dbp_auto_mapping_title : preset <= PRESET_CUSTOM ? presets[preset - 2] : NULL);
 	}
 
@@ -1379,13 +1379,13 @@ struct DBP_PadMapping
 
 			retro_controller_description *types = descs + port * TYPES_COUNT, *type = types;
 			*(type++) = { "Disabled", (unsigned)RETRO_DEVICE_NONE };
-			*(type++) = { (dbp_port_mode[port] == MODE_MAPPER ? input_names.back().c_str() : "Use Gamepad Mapper"), (unsigned)RETRO_DEVICE_JOYPAD };
+			*(type++) = { (dbp_port_mode[port] == MODE_MAPPER ? input_names.back().c_str() : "Usar Mapeador de Controle"), (unsigned)RETRO_DEVICE_JOYPAD };
 			if (dbp_auto_mapping) *(type++) = { dbp_auto_mapping_title, (unsigned)RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_JOYPAD, 99) };
 			for (int i = PRESET_GENERICKEYBOARD; i != PRESET_CUSTOM; i++)
 				*(type++) = { GetPresetName((EPreset)i), (unsigned)RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_JOYPAD, i - PRESET_GENERICKEYBOARD) };
-			*(type++) = { "Custom Keyboard Bindings", (unsigned)RETRO_DEVICE_KEYBOARD };
-			*(type++) = { "Custom Keyboard + Mouse on Left Stick and B/A/X",  (unsigned)RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_KEYBOARD, 1) };
-			*(type++) = { "Custom Keyboard + Mouse on Right Stick and L/R/X", (unsigned)RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_KEYBOARD, 2) };
+			*(type++) = { "Associações de Teclado Personalizadas", (unsigned)RETRO_DEVICE_KEYBOARD };
+			*(type++) = { "Teclado Personalizado + Mouse no Analógico Esquerdo e B/A/X",  (unsigned)RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_KEYBOARD, 1) };
+			*(type++) = { "Teclado Personalizado + Mouse no Analógico Direito e L/R/X", (unsigned)RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_KEYBOARD, 2) };
 
 			ports[port].num_types = (unsigned)(type - types);
 			ports[port].types = types;
@@ -1521,7 +1521,7 @@ private:
 
 		dbp_binds_changed |= (1 << port);
 		return mapping;
-		err: retro_notify(0, RETRO_LOG_ERROR, "Gamepad mapping data is invalid"); return mapping+(DBP_PADMAP_MAXSIZE_PORT*DBP_MAX_PORTS);
+		err: retro_notify(0, RETRO_LOG_ERROR, "Os dados de mapeamento do gamepad são inválidos"); return mapping+(DBP_PADMAP_MAXSIZE_PORT*DBP_MAX_PORTS);
 	}
 
 	static const Bit8u* SkipMapping(const Bit8u* mapping)
