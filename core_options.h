@@ -21,23 +21,23 @@ namespace DBP_OptionCat
 	static const char* General     = "Geral";
 	static const char* Input       = "Entrada";
 	static const char* Performance = "Desempenho";
-	static const char* Video       = "Vídeo";
+	static const char* Video       = "V¡deo";
 	static const char* System      = "Sistema";
-	static const char* Audio       = "Áudio";
+	static const char* Audio       = "†udio";
 };
 
 static retro_core_option_v2_category option_cats[] =
 {
 	#ifndef DBP_STANDALONE
-	{ DBP_OptionCat::General,     DBP_OptionCat::General,     "Configurações gerais (estados de salvamento, menu iniciar, FPS fixo)." },
+	{ DBP_OptionCat::General,     DBP_OptionCat::General,     "Configura‡”es gerais (estados de salvamento, menu iniciar, FPS fixo)." },
 	#else
-	{ DBP_OptionCat::General,     DBP_OptionCat::General,     "Configurações gerais (teclas de atalho, menu iniciar, FPS fixo)." }, // <<< NOVA TRADUÇÃO
+	{ DBP_OptionCat::General,     DBP_OptionCat::General,     "Configura‡”es gerais (teclas de atalho, menu iniciar, FPS fixo)." },
 	#endif
-	{ DBP_OptionCat::Input,       DBP_OptionCat::Input,       "Configurações de teclado, mouse e joystick." },
+	{ DBP_OptionCat::Input,       DBP_OptionCat::Input,       "Configura‡”es de teclado, mouse e joystick." },
 	{ DBP_OptionCat::Performance, DBP_OptionCat::Performance, "Ajuste o desempenho da CPU emulada." },
-	{ DBP_OptionCat::Video,       DBP_OptionCat::Video,       "Configurações para a placa gráfica emulada e proporção de aspecto." },
-	{ DBP_OptionCat::System,      DBP_OptionCat::System,      "Outras configurações de emulação de hardware para RAM, CPU e SO." },
-	{ DBP_OptionCat::Audio,       DBP_OptionCat::Audio,       "Configurações de MIDI, SoundBlaster e outras de áudio." },
+	{ DBP_OptionCat::Video,       DBP_OptionCat::Video,       "Configura‡”es para a placa gr fica emulada e propor‡„o de aspecto." },
+	{ DBP_OptionCat::System,      DBP_OptionCat::System,      "Outras configura‡”es de emula‡„o de hardware para RAM, CPU e SO." },
+	{ DBP_OptionCat::Audio,       DBP_OptionCat::Audio,       "Configura‡”es de MIDI, SoundBlaster e outras de  udio." },
 	{ NULL, NULL, NULL }
 };
 
@@ -142,12 +142,12 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 		"interface_hotkeymod",
 		"Modificador de Tecla de Atalho", NULL,
 		"Define quais teclas modificadoras precisam ser pressionadas para usar as teclas de atalho." "\n"
-			"   F1  - Pausar/Continuar (F12 para avançar um quadro enquanto pausado)" "\n"
-			"   F2  - Câmera Lenta (alternar/enquanto pressionado)" "\n"
-			"   F3  - Avanço Rápido (alternar/enquanto pressionado)" "\n"
-			"   F5  - Salvamento Rápido" "\n"
+			"   F1  - Pausar/Continuar (F12 para avan‡ar um quadro enquanto pausado)" "\n"
+			"   F2  - Cƒmera Lenta (alternar/enquanto pressionado)" "\n"
+			"   F3  - Avan‡o R pido (alternar/enquanto pressionado)" "\n"
+			"   F5  - Salvamento R pido" "\n"
 			"   F7  - Tela Cheia/Janela" "\n"
-			"   F9  - Carregamento Rápido" "\n"
+			"   F9  - Carregamento R pido" "\n"
 			"   F11 - Travar Mouse" "\n"
 			"   F12 - Alternar Menu na Tela", NULL,
 		DBP_OptionCat::General,
@@ -167,8 +167,8 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	},
 	{
 		"interface_speedtoggle",
-		"Modo de Avanço Rápido/Câmera Lenta", NULL,
-		"Define se o avanço rápido e a câmera lenta são alternados ou mantidos.", NULL,
+		"Modo de Avan‡o R pido/Cƒmera Lenta", NULL,
+		"Define se o avan‡o r pido e a cƒmera lenta s„o alternados ou mantidos.", NULL,
 		DBP_OptionCat::General,
 		{
 			{ "toggle", "Alternar" },
@@ -178,19 +178,19 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	},
 	{
 		"interface_fastrate",
-		"Limite de Avanço Rápido", NULL,
-		"Define o limite do avanço rápido.", NULL,
+		"Limite de Avan‡o R pido", NULL,
+		"Define o limite do avan‡o r pido.", NULL,
 		DBP_OptionCat::General,
 		{
 			{ "1.1" , "110%" }, { "1.2" , "120%" }, { "1.3" , "130%" }, { "1.5" , "150%" }, { "1.75" , "175%" }, { "2" , "200%" }, { "2.5" , "250%" }, { "3" , "300%" },
-			{ "4" , "400%" }, { "5" , "500%" }, { "6" , "600%" }, { "7" , "700%" }, { "8" , "800%" }, { "9" , "900%" }, { "10" , "1000%" }, { "0" , "O mais rápido possível" }, 
+			{ "4" , "400%" }, { "5" , "500%" }, { "6" , "600%" }, { "7" , "700%" }, { "8" , "800%" }, { "9" , "900%" }, { "10" , "1000%" }, { "0" , "O mais r pido poss¡vel" }, 
 		},
 		"5"
 	},
 	{
 		"interface_slowrate",
-		"Velocidade da Câmera Lenta", NULL,
-		"Define a velocidade enquanto a câmera lenta estiver ativa.", NULL,
+		"Velocidade da Cƒmera Lenta", NULL,
+		"Define a velocidade enquanto a cƒmera lenta estiver ativa.", NULL,
 		DBP_OptionCat::General,
 		{
 			{ "0.1", "10%" }, { "0.2", "20%" }, { "0.3", "30%" }, { "0.4", "40%" }, { "0.5", "50%" }, { "0.6", "60%" }, 
@@ -201,7 +201,7 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	{
 		"interface_systemhotkeys",
 		"Sempre Ativar Teclas de Atalho do Sistema", NULL,
-		"Define se ALT+F4 (Sair) e ALT+Enter (Tela Cheia) são processados mesmo enquanto um jogo está em execução.", NULL,
+		"Define se ALT+F4 (Sair) e ALT+Enter (Tela Cheia) s„o processados mesmo enquanto um jogo est  em execu‡„o.", NULL,
 		DBP_OptionCat::General,
 		{
 			{ "false", "Desativado" },
@@ -211,8 +211,8 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	},
 	{
 		"interface_middlemouse",
-		"Botão do Meio do Mouse Abre o Menu", NULL,
-		"Se ativado, o botão do meio do mouse abrirá/fechará o Menu na Tela.", NULL,
+		"Bot„o do Meio do Mouse Abre o Menu", NULL,
+		"Se ativado, o bot„o do meio do mouse abrir /fechar  o Menu na Tela.", NULL,
 		DBP_OptionCat::General,
 		{
 			{ "false", "Desativado" },
@@ -222,8 +222,8 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	},
 	{
 		"interface_lockmouse",
-		"Estado Padrão do Travamento do Mouse", NULL,
-		"Se ativado, o mouse ficará travado no início do programa.", NULL,
+		"Estado Padr„o do Travamento do Mouse", NULL,
+		"Se ativado, o mouse ficar  travado no in¡cio do programa.", NULL,
 		DBP_OptionCat::General,
 		{
 			{ "false", "Desativado" },
@@ -234,9 +234,9 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	#endif
 	{
 		"dosbox_pure_force60fps", // legacy name
-		"Forçar FPS de Saída", NULL, // Título atualizado
-		"Ative para forçar a saída a uma taxa fixa. Tente 60 FPS se tiver problemas de 'screen tearing' ou sincronia de vídeo." "\n"
-		"A saída terá quadros pulados em taxas mais baixas e quadros duplicados em taxas mais altas.", NULL,
+		"For‡ar FPS de Sa¡da", NULL, // T¡tulo atualizado
+		"Ative para for‡ar a sa¡da a uma taxa fixa. Tente 60 FPS se tiver problemas de 'screen tearing' ou sincronia de v¡deo." "\n"
+		"A sa¡da ter  quadros pulados em taxas mais baixas e quadros duplicados em taxas mais altas.", NULL,
 		DBP_OptionCat::General,
 		{
 			{ "false", "Desativado" },
@@ -260,8 +260,8 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	{
 		"dosbox_pure_savestate",
 		"Suporte para Salvar Estados", NULL,
-		"Certifique-se de testá-lo em cada jogo antes de usá-lo. Jogos complexos do DOS do final da era podem ter problemas." "\n"
-		"Lembre-se de que os estados salvos com configurações diferentes de vídeo, CPU ou memória não podem ser carregados." "\n"
+		"Certifique-se de test -lo em cada jogo antes de us -lo. Jogos complexos do DOS do final da era podem ter problemas." "\n"
+		"Lembre-se de que os estados salvos com configura‡”es diferentes de v¡deo, CPU ou mem¢ria n„o podem ser carregados." "\n"
 		"O suporte ao rebobinamento tem um alto custo de desempenho e precisa de pelo menos 40 MB de buffer de rebobinamento.", NULL,
 		DBP_OptionCat::General,
 		{
@@ -274,7 +274,7 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	#endif
 	{
 		"dosbox_pure_strict_mode",
-		"Avançado > Usar Modo Estrito", NULL,
+		"Avan‡ado > Usar Modo Estrito", NULL,
 		"Desabilita a linha de comando, executando sistemas operacionais instalados e utilizando arquivos .BAT/.COM/.EXE/DOS.YML a partir do jogo salvo.", NULL,
 		DBP_OptionCat::General,
 		{
@@ -285,37 +285,37 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	},
 	{
 		"dosbox_pure_conf",
-		"Avançado > Carregamento de dosbox.conf", NULL,
-		"O DOSBox Pure deve ser configurado via opções principais, mas opcionalmente suporta o carregamento de arquivos .conf legados.", NULL,
+		"Avan‡ado > Carregamento de dosbox.conf", NULL,
+		"O DOSBox Pure deve ser configurado via op‡”es principais, mas opcionalmente suporta o carregamento de arquivos .conf legados.", NULL,
 		DBP_OptionCat::General,
 		{
-			{ "false", "Suporte a conf desabilitado (padrão)" },
-			{ "inside", "Tentar 'dosbox.conf' no conteúdo carregado (ZIP ou pasta)" },
-			{ "outside", "Tentar '.conf' com o mesmo nome do conteúdo carregado (ao lado do ZIP ou pasta)" },
+			{ "false", "Suporte a conf desabilitado (padr„o)" },
+			{ "inside", "Tentar 'dosbox.conf' no conte£do carregado (ZIP ou pasta)" },
+			{ "outside", "Tentar '.conf' com o mesmo nome do conte£do carregado (ao lado do ZIP ou pasta)" },
 		},
 		"false"
 	},
 	{
 		"dosbox_pure_menu_time",
-		"Avançado > Menu Iniciar", NULL,
+		"Avan‡ado > Menu Iniciar", NULL,
 		"Definir o comportamento do menu Iniciar antes e depois de iniciar um jogo." "\n"
-		"Você também pode forçar a abertura mantendo pressionada a tecla Shift ou L2/R2 ao selecionar 'Reiniciar'.", NULL,
+		"Vocˆ tamb‚m pode for‡ar a abertura mantendo pressionada a tecla Shift ou L2/R2 ao selecionar 'Reiniciar'.", NULL,
 		DBP_OptionCat::General,
 		{
-			{ "99", "Mostrar no início, mostrar novamente após a saída do jogo (padrão)" },
+			{ "99", "Mostrar no in¡cio, mostrar novamente ap¢s a sa¡da do jogo (padr„o)" },
 #ifndef STATIC_LINKING
-			{ "5", "Mostrar no início, desligar o núcleo 5 segundos após a saída do jogo iniciado automaticamente" },
-			{ "3", "Mostrar no início, desligar o núcleo 3 segundos após a saída do jogo iniciado automaticamente" },
-			{ "0", "Mostrar no início, desligar o núcleo imediatamente após a saída do jogo iniciado automaticamente" },
+			{ "5", "Mostrar no in¡cio, desligar o n£cleo 5 segundos ap¢s a sa¡da do jogo iniciado automaticamente" },
+			{ "3", "Mostrar no in¡cio, desligar o n£cleo 3 segundos ap¢s a sa¡da do jogo iniciado automaticamente" },
+			{ "0", "Mostrar no in¡cio, desligar o n£cleo imediatamente ap¢s a sa¡da do jogo iniciado automaticamente" },
 #endif
-			{ "-1", "Sempre mostrar menu na inicialização e após a saída do jogo, ignorar a configuração de início automático" },
+			{ "-1", "Sempre mostrar menu na inicializa‡„o e ap¢s a sa¡da do jogo, ignorar a configura‡„o de in¡cio autom tico" },
 		},
 		"99"
 	},
 	{
 		"dosbox_pure_menu_transparency",
-		"Avançado > Transparência do Menu", NULL,
-		"Defina o nível de transparência do Menu e do Teclado na Tela.", NULL,
+		"Avan‡ado > Transparˆncia do Menu", NULL,
+		"Defina o n¡vel de transparˆncia do Menu e do Teclado na Tela.", NULL,
 		DBP_OptionCat::General,
 		{
 			{ "10", "10%" }, { "20", "20%" }, { "30", "30%" }, { "40", "40%" }, { "50", "50%" }, { "60", "60%" }, { "70", "70%" }, { "80", "80%" }, { "90", "90%" }, { "100", "100%" },
@@ -326,33 +326,33 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	// Input
 	{
 		"dosbox_pure_on_screen_keyboard", // legacy name
-		"Usar Botão L3 para Mostrar Menu", NULL, // <<< NOVA TRADUÇÃO
-		"Sempre vincular o botão L3 do controle para mostrar o menu para trocar CDs/Disquetes e usar o Teclado na Tela.", NULL, // <<< NOVA TRADUÇÃO
+		"Usar Bot„o L3 para Mostrar Menu", NULL, // <<< NOVA TRADU€ŽO
+		"Sempre vincular o bot„o L3 do controle para mostrar o menu para trocar CDs/Disquetes e usar o Teclado na Tela.", NULL, // <<< NOVA TRADU€ŽO
 		DBP_OptionCat::Input,
-		{ { "true", "Ativado (Padrão para Menu)" }, { "keyboard", "Ativado (Padrão para Teclado na Tela)" }, { "false", "Desativado" } }, // <<< NOVA TRADUÇÃO
+		{ { "true", "Ativado (Padr„o para Menu)" }, { "keyboard", "Ativado (Padr„o para Teclado na Tela)" }, { "false", "Desativado" } }, // <<< NOVA TRADU€ŽO
 		"true"
 	},
 	{
 		"dosbox_pure_mouse_input",
 		"Modo de Entrada do Mouse", NULL,
-		"Você pode desativar o tratamento de entrada de um mouse ou uma tela sensível ao toque (o mouse emulado através do joystick ainda funcionará)." "\n"
-		"No modo de touchpad, use o arrastar para mover, toque para clicar, toque com dois dedos para clicar com o botão direito e pressione e segure para arrastar", NULL,
+		"Vocˆ pode desativar o tratamento de entrada de um mouse ou uma tela sens¡vel ao toque (o mouse emulado atrav‚s do joystick ainda funcionar )." "\n"
+		"No modo de touchpad, use o arrastar para mover, toque para clicar, toque com dois dedos para clicar com o bot„o direito e pressione e segure para arrastar", NULL,
 		DBP_OptionCat::Input,
 #if defined(ANDROID) || defined(DBP_IOS) || defined(HAVE_LIBNX) || defined(_3DS) || defined(WIIU) || defined(VITA)
 		{
-			{ "pad", "Modo touchpad (padrão, ver descrição, melhor para telas sensíveis ao toque)" },
-			{ "true", "Automático (virtual ou direto)" },
+			{ "pad", "Modo touchpad (padr„o, ver descri‡„o, melhor para telas sens¡veis ao toque)" },
+			{ "true", "Autom tico (virtual ou direto)" },
 			{ "virtual", "Movimento de mouse virtual" },
-			{ "direct", "Mouse controlado diretamente (não suportado por todos os jogos)" },
+			{ "direct", "Mouse controlado diretamente (n„o suportado por todos os jogos)" },
 			{ "false", "Desativado (ignorar entradas do mouse)" },
 		},
 		"pad"
 #else
 		{
-			{ "true", "Automático (padrão)" },
+			{ "true", "Autom tico (padr„o)" },
 			{ "virtual", "Movimento de mouse virtual" },
-			{ "direct", "Mouse controlado diretamente (não suportado por todos os jogos)" },
-			{ "pad", "Modo touchpad (consulte a descrição, melhor para telas sensíveis ao toque)" },
+			{ "direct", "Mouse controlado diretamente (n„o suportado por todos os jogos)" },
+			{ "pad", "Modo touchpad (consulte a descri‡„o, melhor para telas sens¡veis ao toque)" },
 			{ "false", "Desativado (ignorar entradas do mouse)" },
 		},
 		"true"
@@ -361,18 +361,18 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	{
 		"dosbox_pure_mouse_wheel",
 		"Vincular Roda do Mouse a Tecla", NULL,
-		"Vincule a roda do mouse para cima e para baixo a duas teclas do teclado para poder usá-la em jogos de DOS.", NULL,
+		"Vincule a roda do mouse para cima e para baixo a duas teclas do teclado para poder us -la em jogos de DOS.", NULL,
 		DBP_OptionCat::Input,
 		{
 			{ "67/68", "Colchete Esquerdo/Colchete Direito" },
-			{ "72/71", "Vírgula/Ponto" },
+			{ "72/71", "V¡rgula/Ponto" },
 			{ "79/82", "Page-Up/Page-Down" },
 			{ "78/81", "Home/End" },
 			{ "80/82", "Delete/Page-Down" },
-			{ "64/65", "Hífen/Igual" },
-			{ "69/70", "Ponto e Vírgula/Aspas" },
-			{ "99/100", "Menos do Teclado Numérico/Mais do Teclado Numérico" },
-			{ "97/98", "Dividir do Teclado Numérico/Multiplicar do Teclado Numérico" },
+			{ "64/65", "H¡fen/Igual" },
+			{ "69/70", "Ponto e V¡rgula/Aspas" },
+			{ "99/100", "Menos do Teclado Num‚rico/Mais do Teclado Num‚rico" },
+			{ "97/98", "Dividir do Teclado Num‚rico/Multiplicar do Teclado Num‚rico" },
 			{ "84/85", "Cima/Baixo" },
 			{ "83/86", "Esquerda/Direita" },
 			{ "11/13", "Q/E" },
@@ -398,8 +398,8 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	},
 	{
 		"dosbox_pure_mouse_speed_factor_x",
-		"Avançado > Sensibilidade Horizontal do Mouse", NULL,
-		"Experimente com este valor se o mouse estiver muito rápido/lento ao se mover para a esquerda/direita.", NULL,
+		"Avan‡ado > Sensibilidade Horizontal do Mouse", NULL,
+		"Experimente com este valor se o mouse estiver muito r pido/lento ao se mover para a esquerda/direita.", NULL,
 		DBP_OptionCat::Input,
 		{
 			{ "0.2",  "20%" }, { "0.25",  "25%" }, { "0.3",  "30%" }, { "0.35",  "35%" }, { "0.4",  "40%" }, { "0.45",  "45%" },
@@ -414,11 +414,11 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	},
 	{
 		"dosbox_pure_actionwheel_inputs",
-		"Avançado > Entradas da Roda de Ação", NULL,
-		"Define quais entradas controlam a roda de ação.", NULL,
+		"Avan‡ado > Entradas da Roda de A‡„o", NULL,
+		"Define quais entradas controlam a roda de a‡„o.", NULL,
 		DBP_OptionCat::Input,
 		{
-			{ "14", "Alavanca Direita, D-Pad, Mouse (Padrão)" }, { "6",  "Alavanca Direita, D-Pad" }, { "10", "Alavanca Direita, Mouse" }, { "2",  "Alavanca Direita" },
+			{ "14", "Alavanca Direita, D-Pad, Mouse (Padr„o)" }, { "6",  "Alavanca Direita, D-Pad" }, { "10", "Alavanca Direita, Mouse" }, { "2",  "Alavanca Direita" },
 			{ "15", "Ambas as Alavancas, D-Pad, Mouse" }, { "7",  "Ambas as Alavancas, D-Pad" }, { "11", "Ambas as Alavancas, Mouse" }, { "3",  "Ambas as Alavancas" },
 			{ "13", "Alavanca Esquerda, D-Pad, Mouse" }, { "5",  "Alavanca Esquerda, D-Pad" }, { "9",  "Alavanca Esquerda, Mouse" }, { "1",  "Alavanca Esquerda" },
 			{ "12", "D-Pad, Mouse" }, { "4",  "D-Pad" }, { "8",  "Mouse" },
@@ -427,52 +427,52 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	},
 	{
 		"dosbox_pure_auto_mapping",
-		"Avançado > Mapeamentos Automáticos de Gamepad", NULL,
+		"Avan‡ado > Mapeamentos Autom ticos de Gamepad", NULL,
 		"O DOSBox Pure pode aplicar automaticamente um esquema de mapeamento de controle de gamepad quando detecta um jogo." "\n"
-		"Esses mapeamentos de botões são fornecidos pelo Projeto Keyb2Joypad (de Jemy Murphy e bigjim).", NULL,
+		"Esses mapeamentos de bot”es s„o fornecidos pelo Projeto Keyb2Joypad (de Jemy Murphy e bigjim).", NULL,
 		DBP_OptionCat::Input,
-		{ { "true", "Ativado (padrão)" }, { "notify", "Ativar com notificação na detecção de jogo" }, { "false", "Desativado" } },
+		{ { "true", "Ativado (padr„o)" }, { "notify", "Ativar com notifica‡„o na detec‡„o de jogo" }, { "false", "Desativado" } },
 		"true"
 	},
 	{
 		"dosbox_pure_keyboard_layout",
-		"Avançado > Layout do Teclado", NULL,
-		"Selecione o layout do teclado (não afetará o Teclado na Tela).", NULL,
+		"Avan‡ado > Layout do Teclado", NULL,
+		"Selecione o layout do teclado (n„o afetar  o Teclado na Tela).", NULL,
 		DBP_OptionCat::Input,
 		{
-			{ "us",    "EUA (padrão)" },
+			{ "us",    "EUA (padr„o)" },
 			{ "uk",    "Reino Unido" },
-			{ "be",    "Bélgica" },
+			{ "be",    "B‚lgica" },
 			{ "br",    "Brasil" },
-			{ "hr",    "Croácia" },
-			{ "cz243", "República Tcheca" },
+			{ "hr",    "Cro cia" },
+			{ "cz243", "Rep£blica Tcheca" },
 			{ "dk",    "Dinamarca" },
-			{ "su",    "Finlândia" },
-			{ "fr",    "França" },
+			{ "su",    "Finlƒndia" },
+			{ "fr",    "Fran‡a" },
 			{ "gr",    "Alemanha" },
-			{ "gk",    "Grécia" },
+			{ "gk",    "Gr‚cia" },
 			{ "hu",    "Hungria" },
-			{ "is161", "Islândia" },
-			{ "it",    "Itália" },
+			{ "is161", "Islƒndia" },
+			{ "it",    "It lia" },
 			{ "nl",    "Holanda" },
 			{ "no",    "Noruega" },
-			{ "pl",    "Polônia" },
+			{ "pl",    "Pol“nia" },
 			{ "po",    "Portugal" },
-			{ "ru",    "Rússia" },
-			{ "sk",    "Eslováquia" },
-			{ "si",    "Eslovênia" },
+			{ "ru",    "R£ssia" },
+			{ "sk",    "Eslov quia" },
+			{ "si",    "Eslovˆnia" },
 			{ "sp",    "Espanha" },
-			{ "sv",    "Suécia" },
-			{ "sg",    "Suíça (Alemão)" },
-			{ "sf",    "Suíça (Francês)" },
+			{ "sv",    "Su‚cia" },
+			{ "sg",    "Su¡‡a (Alem„o)" },
+			{ "sf",    "Su¡‡a (Francˆs)" },
 			{ "tr",    "Turquia" },
 		},
-		"br" // Mantido 'br' como padrão, conforme sua tradução anterior
+		"br" // Mantido 'br' como padr„o, conforme sua tradu‡„o anterior
 	},
 	{
 		"dosbox_pure_joystick_analog_deadzone",
-		"Avançado > Zona Morta Analógica do Joystick", NULL,
-		"Defina a zona morta das alavancas analógicas do joystick. Pode ser usada para eliminar desvios causados por hardware de joystick mal calibrado.", NULL,
+		"Avan‡ado > Zona Morta Anal¢gica do Joystick", NULL,
+		"Defina a zona morta das alavancas anal¢gicas do joystick. Pode ser usada para eliminar desvios causados por hardware de joystick mal calibrado.", NULL,
 		DBP_OptionCat::Input,
 		{
 			{ "0",  "0%" }, { "5",  "5%" }, { "10", "10%" }, { "15", "15%" }, { "20", "20%" }, { "25", "25%" }, { "30", "30%" }, { "35", "35%" }, { "40", "40%" },
@@ -481,10 +481,10 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	},
 	{
 		"dosbox_pure_joystick_timed",
-		"Avançado > Habilitar Intervalos Cronometrados do Joystick", NULL,
-		"Habilitar intervalos cronometrados para os eixos do joystick. Experimente esta opção se o seu joystick apresentar desvio." "\n\n", NULL, //end of Input > Advanced section
+		"Avan‡ado > Habilitar Intervalos Cronometrados do Joystick", NULL,
+		"Habilitar intervalos cronometrados para os eixos do joystick. Experimente esta op‡„o se o seu joystick apresentar desvio." "\n\n", NULL, //end of Input > Advanced section
 		DBP_OptionCat::Input,
-		{ { "true", "Ativado (padrão)" }, { "false", "Desativado" } },
+		{ { "true", "Ativado (padr„o)" }, { "false", "Desativado" } },
 		"true"
 	},
 
@@ -492,11 +492,11 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	{
 		"dosbox_pure_cycles",
 		"Desempenho Emulado", NULL,
-		"O desempenho bruto que o DOSBox tentará emular." "\n\n", NULL, //end of Performance section
+		"O desempenho bruto que o DOSBox tentar  emular." "\n\n", NULL, //end of Performance section
 		DBP_OptionCat::Performance,
 		{
-			{ "auto",    "AUTO - O DOSBox tentará detectar as necessidades de desempenho (padrão)" },
-			{ "max",     "MAX - Emular o maior número de instruções possível" },
+			{ "auto",    "AUTO - O DOSBox tentar  detectar as necessidades de desempenho (padr„o)" },
+			{ "max",     "MAX - Emular o maior n£mero de instru‡”es poss¡vel" },
 			{ "315",     "8086/8088, 4,77 MHz a partir de 1980 (315 cps)" },
 			{ "1320",    "286, 6 MHz a partir de 1982 (1320 cps)" },
 			{ "2750",    "286, 12,5 MHz a partir de 1985 (2750 cps)" },
@@ -513,8 +513,8 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	},
 	{
 		"dosbox_pure_cycles_max",
-		"Detalhado > Desempenho Emulado Máximo", NULL,
-		"Com a velocidade de CPU dinâmica (AUTO ou MAX acima), o nível máximo de desempenho emulado.", NULL,
+		"Detalhado > Desempenho Emulado M ximo", NULL,
+		"Com a velocidade de CPU dinƒmica (AUTO ou MAX acima), o n¡vel m ximo de desempenho emulado.", NULL,
 		DBP_OptionCat::Performance,
 		{
 			{ "none",    "Ilimitado" },
@@ -535,7 +535,7 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	{
 		"dosbox_pure_cycles_scale",
 		"Detalhado > Escala de Desempenho", NULL,
-		"Ajuste fino do desempenho emulado para necessidades específicas.", NULL,
+		"Ajuste fino do desempenho emulado para necessidades espec¡ficas.", NULL,
 		DBP_OptionCat::Performance,
 		{
 			{ "0.2",  "20%" }, { "0.25",  "25%" }, { "0.3",  "30%" }, { "0.35",  "35%" }, { "0.4",  "40%" }, { "0.45",  "45%" },
@@ -551,8 +551,8 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	{
 		"dosbox_pure_cycle_limit",
 		"Detalhado > Limitar Uso da CPU", NULL,
-		"Quanto tempo por quadro deve ser usado pela emulação ao emular o DOS o mais rápido possível." "\n"
-		"Diminua isso se o seu dispositivo esquentar enquanto usa este núcleo." "\n\n", NULL, //end of Performance > Detailed section
+		"Quanto tempo por quadro deve ser usado pela emula‡„o ao emular o DOS o mais r pido poss¡vel." "\n"
+		"Diminua isso se o seu dispositivo esquentar enquanto usa este n£cleo." "\n\n", NULL, //end of Performance > Detailed section
 		DBP_OptionCat::Performance,
 		{
 			//{ "0.2", "20%" }, { "0.21", "21%" }, { "0.22", "22%" }, { "0.23", "23%" }, { "0.24", "24%" }, { "0.25", "25%" }, { "0.26", "26%" }, { "0.27", "27%" }, { "0.28", "28%" }, { "0.29", "29%" },
@@ -570,13 +570,13 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	},
 	{
 		"dosbox_pure_perfstats",
-		"Avançado > Mostrar Estatísticas de Desempenho", NULL,
-		"Ative para mostrar estatísticas sobre desempenho e taxa de quadros e verificar se a emulação é executada em velocidade máxima.", NULL,
+		"Avan‡ado > Mostrar Estat¡sticas de Desempenho", NULL,
+		"Ative para mostrar estat¡sticas sobre desempenho e taxa de quadros e verificar se a emula‡„o ‚ executada em velocidade m xima.", NULL,
 		DBP_OptionCat::Performance,
 		{
 			{ "none",     "Desativada" },
 			{ "simple",   "Simples" },
-			{ "detailed", "Informações detalhadas" },
+			{ "detailed", "Informa‡”es detalhadas" },
 		},
 		"none"
 	},
@@ -584,11 +584,11 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	// Video
 	{
 		"dosbox_pure_machine",
-		"Chip Gráfico Emulado (necessário reiniciar)", NULL,
-		"O tipo de chip gráfico que o DOSBox emulará.", NULL,
+		"Chip Gr fico Emulado (necess rio reiniciar)", NULL,
+		"O tipo de chip gr fico que o DOSBox emular .", NULL,
 		DBP_OptionCat::Video,
 		{
-			{ "svga",     "SVGA (Super Video Graphics Array) (padrão)" },
+			{ "svga",     "SVGA (Super Video Graphics Array) (padr„o)" },
 			{ "vga",      "VGA (Video Graphics Array)" },
 			{ "ega",      "EGA (Enhanced Graphics Adapter)" },
 			{ "cga",      "CGA (Color Graphics Adapter)" },
@@ -601,13 +601,13 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	{
 		"dosbox_pure_cga",
 		"Modo CGA", NULL,
-		"A variação de CGA que está sendo emulada.", NULL,
+		"A varia‡„o de CGA que est  sendo emulada.", NULL,
 		DBP_OptionCat::Video,
 		{
-			{ "early_auto", "Modelo antigo, modo composto automático (padrão)" },
+			{ "early_auto", "Modelo antigo, modo composto autom tico (padr„o)" },
 			{ "early_on",   "Modelo antigo, modo composto ligado" },
 			{ "early_off",  "Modelo antigo, modo composto desligado" },
-			{ "late_auto", "Modelo recente, modo composto automático" },
+			{ "late_auto", "Modelo recente, modo composto autom tico" },
 			{ "late_on",   "Modelo recente, modo composto ligado" },
 			{ "late_off",  "Modelo recente, modo composto desligado" },
 		},
@@ -616,23 +616,23 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	{
 		"dosbox_pure_hercules",
 		"Modo de Cor para Hercules", NULL,
-		"O esquema de cores para a emulação Hercules.", NULL,
+		"O esquema de cores para a emula‡„o Hercules.", NULL,
 		DBP_OptionCat::Video,
 		{
-			{ "white", "Preto e branco (padrão)" },
-			{ "amber", "Preto e âmbar" },
+			{ "white", "Preto e branco (padr„o)" },
+			{ "amber", "Preto e ƒmbar" },
 			{ "green", "Preto e verde" },
 		},
 		"white"
 	},
 	{
 		"dosbox_pure_svga",
-		"Modo SVGA (necessário reiniciar)", NULL,
-		"A variação SVGA que está sendo emulada. Tente mudar isso se encontrar problemas gráficos.", NULL,
+		"Modo SVGA (necess rio reiniciar)", NULL,
+		"A varia‡„o SVGA que est  sendo emulada. Tente mudar isso se encontrar problemas gr ficos.", NULL,
 		DBP_OptionCat::Video,
 		{
-			{ "svga_s3",       "S3 Trio64 (padrão)" },
-			{ "vesa_nolfb",    "S3 Trio64 sem hack de buffer de linha (reduz cintilação em alguns jogos)" },
+			{ "svga_s3",       "S3 Trio64 (padr„o)" },
+			{ "vesa_nolfb",    "S3 Trio64 sem hack de buffer de linha (reduz cintila‡„o em alguns jogos)" },
 			{ "vesa_oldvbe",   "S3 Trio64 VESA 1.3" },
 			{ "svga_et3000",   "Tseng Labs ET3000" },
 			{ "svga_et4000",   "Tseng Labs ET4000" },
@@ -642,13 +642,13 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	},
 	{
 		"dosbox_pure_svgamem",
-		"Memória SVGA (necessária reinicialização)", NULL,
-		"A quantidade de memória disponível para a placa SVGA emulada.", NULL,
+		"Mem¢ria SVGA (necess ria reinicializa‡„o)", NULL,
+		"A quantidade de mem¢ria dispon¡vel para a placa SVGA emulada.", NULL,
 		DBP_OptionCat::Video,
 		{
 			{ "0",  "512KB" },
 			{ "1", "1MB" },
-			{ "2", "2MB (padrão)" },
+			{ "2", "2MB (padr„o)" },
 			{ "3", "3MB" },
 			{ "4", "4MB" },
 			{ "8", "8MB (nem sempre reconhecido)" },
@@ -657,14 +657,14 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	},
 	{
 		"dosbox_pure_voodoo",
-		"Emulação 3dfx Voodoo", NULL,
+		"Emula‡„o 3dfx Voodoo", NULL,
 		"Habilita certos jogos com suporte para o acelerador 3D Voodoo." "\n"
-		"Emulador 3dfx Voodoo Graphics SST-1/2 por Aaron Giles e a equipe do MAME (licença: BSD-3-Clause)", NULL,
+		"Emulador 3dfx Voodoo Graphics SST-1/2 por Aaron Giles e a equipe do MAME (licen‡a: BSD-3-Clause)", NULL,
 		DBP_OptionCat::Video,
 		{
-			{ "8mb", "Habilitado - 8MB de memória (padrão)" },
-			{ "12mb", "Habilitado - 12MB de memória, Textura Dual" },
-			{ "4mb", "Habilitado - 4MB de memória, Somente Baixa Resolução" },
+			{ "8mb", "Habilitado - 8MB de mem¢ria (padr„o)" },
+			{ "12mb", "Habilitado - 12MB de mem¢ria, Textura Dual" },
+			{ "4mb", "Habilitado - 4MB de mem¢ria, Somente Baixa Resolu‡„o" },
 			{ "off", "Desabilitado" },
 		},
 		"8mb",
@@ -673,17 +673,17 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 		"dosbox_pure_voodoo_perf",
 		"Desempenho 3dfx Voodoo", NULL,
 		#ifndef DBP_STANDALONE
-		"Opções para ajustar o comportamento da emulação 3dfx Voodoo." "\n"
-		"Mudar para OpenGL requer um reinício." "\n"
-		"Se o OpenGL estiver disponível, a aceleração 3D do lado do anfitrião é utilizada, o que pode tornar a renderização 3D muito mais rápida.\n"
-		"Automático usará OpenGL se for o driver de vídeo ativo no frontend.", NULL,
+		"Op‡”es para ajustar o comportamento da emula‡„o 3dfx Voodoo." "\n"
+		"Mudar para OpenGL requer um rein¡cio." "\n"
+		"Se o OpenGL estiver dispon¡vel, a acelera‡„o 3D do lado do anfitri„o ‚ utilizada, o que pode tornar a renderiza‡„o 3D muito mais r pida.\n"
+		"Autom tico usar  OpenGL se for o driver de v¡deo ativo no frontend.", NULL,
 		#else
-		"Opções para ajustar o comportamento da emulação 3dfx Voodoo.", NULL,
+		"Op‡”es para ajustar o comportamento da emula‡„o 3dfx Voodoo.", NULL,
 		#endif
 		DBP_OptionCat::Video,
 		{
 			#ifndef DBP_STANDALONE
-			{ "auto", "Automático (padrão)" },
+			{ "auto", "Autom tico (padr„o)" },
 			{ "4", "Hardware OpenGL" },
 			#else
 			{ "auto", "Hardware OpenGL" },
@@ -698,7 +698,7 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	{
 		"dosbox_pure_voodoo_scale",
 		"Escalonamento OpenGL 3dfx Voodoo", NULL,
-		"Aumentar a resolução nativa da imagem renderizada.", NULL,
+		"Aumentar a resolu‡„o nativa da imagem renderizada.", NULL,
 		DBP_OptionCat::Video,
 		{
 			{ "1", "1x" }, { "2", "2x" }, { "3", "3x" }, { "4", "4x" }, { "5", "5x" }, { "6", "6x" }, { "7", "7x" }, { "8", "8x" },
@@ -707,14 +707,14 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	},
 	{
 		"dosbox_pure_voodoo_gamma",
-		"Correção de Gama 3dfx Voodoo", NULL,
-		"Mudar o brilho da saída renderizada 3dfx.", NULL,
+		"Corre‡„o de Gama 3dfx Voodoo", NULL,
+		"Mudar o brilho da sa¡da renderizada 3dfx.", NULL,
 		DBP_OptionCat::Video,
 		{
 			{ "-10", "-10" }, { "-9", "-9" }, { "-8", "-8" }, { "-7", "-7" }, { "-6", "-6" }, { "-5", "-5" }, { "-4", "-4" }, { "-3", "-3" }, { "-2", "-2" }, { "-1", "-1" },
 			{ "0", "Nenhum" },
 			{ "1", "+1" }, { "2", "+2" }, { "3", "+3" }, { "4", "+4" }, { "5", "+5" }, { "6", "+6" }, { "7", "+7" }, { "8", "+8" }, { "9", "+9" }, { "10", "+10" },
-			{ "999", "Desativar Correção de Gama" },
+			{ "999", "Desativar Corre‡„o de Gama" },
 		},
 		"-2",
 	},
@@ -722,11 +722,11 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	{
 		"interface_scaling",
 		"Escalonamento", NULL,
-		"Escolha como escalonar a exibição do jogo para a resolução da janela/tela cheia. O escalonamento por inteiro forçará todos os pixels a terem o mesmo tamanho, mas pode adicionar uma borda.", NULL,
+		"Escolha como escalonar a exibi‡„o do jogo para a resolu‡„o da janela/tela cheia. O escalonamento por inteiro for‡ar  todos os pixels a terem o mesmo tamanho, mas pode adicionar uma borda.", NULL,
 		DBP_OptionCat::Video,
 		{
-			{ "default", "Escalonamento Nítido (padrão)" },
-			{ "nearest", "Escalonamento Simples (vizinho mais próximo)" },
+			{ "default", "Escalonamento N¡tido (padr„o)" },
+			{ "nearest", "Escalonamento Simples (vizinho mais pr¢ximo)" },
 			{ "bilinear", "Escalonamento Bilinear" },
 			{ "integer", "Escalonamento por Inteiro" },
 		},
@@ -735,15 +735,15 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	{
 		"interface_crtfilter",
 		"Filtro CRT", NULL,
-		"Habilita o efeito de filtro CRT na tela exibida (funciona melhor em telas de alta resolução e sem escalonamento por inteiro).", NULL,
+		"Habilita o efeito de filtro CRT na tela exibida (funciona melhor em telas de alta resolu‡„o e sem escalonamento por inteiro).", NULL,
 		DBP_OptionCat::Video,
 		{
 			{ "false", "Desativado" },
 			{ "1", "Apenas Scanlines" },
-			{ "2", "Fósforos estilo TV" },
-			{ "3", "Fósforos de grade de abertura" },
-			{ "4", "Fósforos estilo VGA esticado" },
-			{ "5", "Fósforos estilo VGA" },
+			{ "2", "F¢sforos estilo TV" },
+			{ "3", "F¢sforos de grade de abertura" },
+			{ "4", "F¢sforos estilo VGA esticado" },
+			{ "5", "F¢sforos estilo VGA" },
 		},
 		"false"
 	},
@@ -753,13 +753,13 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 		NULL, NULL,
 		DBP_OptionCat::Video,
 		{
-			{ "0", "Sem vãos de scanline" },
-			{ "1", "Vãos mais fracos" },
-			{ "2", "Vãos fracos" },
-			{ "3", "Vãos normais" },
-			{ "4", "Vãos fortes" },
-			{ "5", "Vãos mais fortes" },
-			{ "8", "Vãos fortíssimos" },
+			{ "0", "Sem v„os de scanline" },
+			{ "1", "V„os mais fracos" },
+			{ "2", "V„os fracos" },
+			{ "3", "V„os normais" },
+			{ "4", "V„os fortes" },
+			{ "5", "V„os mais fortes" },
+			{ "8", "V„os fort¡ssimos" },
 		},
 		"2"
 	},
@@ -769,24 +769,24 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 		NULL, NULL,
 		DBP_OptionCat::Video,
 		{
-			{ "0", "Embaçado" },
+			{ "0", "Emba‡ado" },
 			{ "1", "Suave" },
-			{ "2", "Padrão" },
+			{ "2", "Padr„o" },
 			{ "3", "Pixelado" },
-			{ "4", "Mais nítido" },
-			{ "7", "O mais nítido" },
+			{ "4", "Mais n¡tido" },
+			{ "7", "O mais n¡tido" },
 		},
 		"2"
 	},
 	{
 		"interface_crtmask",
-		"Filtro CRT - Força da Máscara de Fósforo", NULL,
+		"Filtro CRT - For‡a da M scara de F¢sforo", NULL,
 		NULL, NULL,
 		DBP_OptionCat::Video,
 		{
 			{ "0", "Desativado" },
 			{ "1", "Fraco" },
-			{ "2", "Padrão" },
+			{ "2", "Padr„o" },
 			{ "3", "Forte" },
 			{ "4", "Muito Forte" },
 		},
@@ -800,7 +800,7 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 		{
 			{ "0", "Desativado" },
 			{ "1", "Fraca" },
-			{ "2", "Padrão" },
+			{ "2", "Padr„o" },
 			{ "3", "Forte" },
 			{ "4", "Muito Forte" },
 		},
@@ -814,7 +814,7 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 		{
 			{ "0", "Desativado" },
 			{ "1", "Fraco" },
-			{ "2", "Padrão" },
+			{ "2", "Padr„o" },
 			{ "3", "Forte" },
 			{ "4", "Muito Forte" },
 		},
@@ -823,17 +823,17 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	#endif
 	{
 		"dosbox_pure_aspect_correction",
-		"Correção da Proporção de Tela", NULL,
-		"Ajusta a proporção de tela para aproximar o que um monitor CRT exibiria (funciona melhor em telas de alta resolução e sem escalonamento por inteiro).", NULL,
+		"Corre‡„o da Propor‡„o de Tela", NULL,
+		"Ajusta a propor‡„o de tela para aproximar o que um monitor CRT exibiria (funciona melhor em telas de alta resolu‡„o e sem escalonamento por inteiro).", NULL,
 		DBP_OptionCat::Video,
 		{
-			{ "false", "Desativado (padrão)" },
-			{ "true", "Ativado (escaneamento único)" },
-			{ "doublescan", "Ativado (escaneamento duplo quando aplicável)" },
-			{ "padded", "Ajustado para 4:3 (escaneamento único)" },
-			{ "padded-doublescan", "Ajustado para 4:3 (escaneamento duplo quando aplicável)" },
+			{ "false", "Desativado (padr„o)" },
+			{ "true", "Ativado (escaneamento £nico)" },
+			{ "doublescan", "Ativado (escaneamento duplo quando aplic vel)" },
+			{ "padded", "Ajustado para 4:3 (escaneamento £nico)" },
+			{ "padded-doublescan", "Ajustado para 4:3 (escaneamento duplo quando aplic vel)" },
 			#ifdef DBP_STANDALONE
-			{ "fill", "Esticar a tela para preencher a janela, ignorando a proporção" }, // <<< NOVA TRADUÇÃO
+			{ "fill", "Esticar a tela para preencher a janela, ignorando a propor‡„o" }, // <<< NOVA TRADU€ŽO
 			#endif
 		},
 		"false"
@@ -841,24 +841,24 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	{
 		"dosbox_pure_overscan",
 		"Tamanho da Borda do Overscan", NULL,
-		"Quando habilitado, mostra uma borda ao redor da tela. Alguns jogos usam a cor da borda para transmitir informações." "\n\n", NULL, // fim da seção de Vídeo
+		"Quando habilitado, mostra uma borda ao redor da tela. Alguns jogos usam a cor da borda para transmitir informa‡”es." "\n\n", NULL, // fim da se‡„o de V¡deo
 		DBP_OptionCat::Video,
-		{ { "0", "Desativado (padrão)" }, { "1", "Pequeno" }, { "2", "Médio" }, { "3", "Grande" } },
+		{ { "0", "Desativado (padr„o)" }, { "1", "Pequeno" }, { "2", "M‚dio" }, { "3", "Grande" } },
 		"0"
 	},
 
 	// System
 	{
 		"dosbox_pure_memory_size",
-		"Tamanho da Memória (necessário reiniciar)", NULL,
-		"A quantidade de memória (alta) que a máquina emulada possui. Você também pode desativar a memória estendida (EMS/XMS)." "\n"
-		"Não é recomendado usar mais do que o padrão devido à incompatibilidade com certos jogos e aplicativos.", NULL,
+		"Tamanho da Mem¢ria (necess rio reiniciar)", NULL,
+		"A quantidade de mem¢ria (alta) que a m quina emulada possui. Vocˆ tamb‚m pode desativar a mem¢ria estendida (EMS/XMS)." "\n"
+		"N„o ‚ recomendado usar mais do que o padr„o devido … incompatibilidade com certos jogos e aplicativos.", NULL,
 		DBP_OptionCat::System,
 		{
-			{ "none", "Desativar memória estendida (sem EMS/XMS)" },
+			{ "none", "Desativar mem¢ria estendida (sem EMS/XMS)" },
 			{ "4",  "4 MB" },
 			{ "8",  "8 MB" },
-			{ "16", "16 MB (padrão)" },
+			{ "16", "16 MB (padr„o)" },
 			{ "24", "24 MB" },
 			{ "32", "32 MB" },
 			{ "48", "48 MB" },
@@ -875,45 +875,45 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	{
 		"dosbox_pure_modem",
 		"Tipo de Modem", NULL,
-		"Tipo de modem emulado em COM1 para jogo em rede. Com o modem dial-up, um lado precisa discar qualquer número para se conectar.", NULL,
+		"Tipo de modem emulado em COM1 para jogo em rede. Com o modem dial-up, um lado precisa discar qualquer n£mero para se conectar.", NULL,
 		DBP_OptionCat::System,
 		{
 			{ "null", "Modem Nulo (Serial Direto)" },
-			{ "dial", "Modem Dial-Up (Padrão Hayes)" },
+			{ "dial", "Modem Dial-Up (Padr„o Hayes)" },
 		},
 		"null"
 	},
 	{
 		"dosbox_pure_cpu_type",
-		"Tipo de CPU (necessário reiniciar)", NULL,
-		"Tipo de CPU emulado. 'Auto' é a opção mais rápida." "\n"
-			"Jogos que requerem seleção específica de tipo de CPU:" "\n"
-			"386 (pré-busca): X-Men: Madness in The Murderworld, Terminator 1, Contra, Fifa International Soccer 1994" "\n"
+		"Tipo de CPU (necess rio reiniciar)", NULL,
+		"Tipo de CPU emulado. 'Auto' ‚ a op‡„o mais r pida." "\n"
+			"Jogos que requerem sele‡„o espec¡fica de tipo de CPU:" "\n"
+			"386 (pr‚-busca): X-Men: Madness in The Murderworld, Terminator 1, Contra, Fifa International Soccer 1994" "\n"
 			"486 (lento): Betrayal in Antara" "\n"
 			"Pentium (lento): Fifa International Soccer 1994, jogos do Windows 95/Windows 3.x" "\n\n", NULL, //end of System section
 		DBP_OptionCat::System,
 		{
-			{ "auto", "Automático - Conjunto de recursos misto com máxima performance e compatibilidade" },
-			{ "386", "386 - Conjunto de instruções 386 com acesso rápido à memória" },
-			{ "386_slow", "386 (lento) - Conjunto de instruções 386 com verificações de privilégio de memória" },
-			{ "386_prefetch", "386 (pré-busca) - Com emulação de fila de pré-busca (apenas nos núcleos 'auto' e 'normal')" },
-			{ "486_slow", "486 (lento) - Conjunto de instruções 486 com verificações de privilégio de memória" },
-			{ "pentium_slow", "Pentium (lento) - Conjunto de instruções 586 com verificações de privilégio de memória" },
+			{ "auto", "Autom tico - Conjunto de recursos misto com m xima performance e compatibilidade" },
+			{ "386", "386 - Conjunto de instru‡”es 386 com acesso r pido … mem¢ria" },
+			{ "386_slow", "386 (lento) - Conjunto de instru‡”es 386 com verifica‡”es de privil‚gio de mem¢ria" },
+			{ "386_prefetch", "386 (pr‚-busca) - Com emula‡„o de fila de pr‚-busca (apenas nos n£cleos 'auto' e 'normal')" },
+			{ "486_slow", "486 (lento) - Conjunto de instru‡”es 486 com verifica‡”es de privil‚gio de mem¢ria" },
+			{ "pentium_slow", "Pentium (lento) - Conjunto de instru‡”es 586 com verifica‡”es de privil‚gio de mem¢ria" },
 		},
 		"auto"
 	},
 	{
 		"dosbox_pure_cpu_core",
-		"Avançado > Núcleo da CPU", NULL,
-		"Método de emulação (núcleo da CPU do DOSBox) usado.", NULL,
+		"Avan‡ado > N£cleo da CPU", NULL,
+		"M‚todo de emula‡„o (n£cleo da CPU do DOSBox) usado.", NULL,
 		DBP_OptionCat::System,
 		{
 			#if defined(C_DYNAMIC_X86)
-			{ "auto", "Automático - Jogos em modo real usam normal, jogos em modo protegido usam dinâmico" },
-			{ "dynamic", "Dinâmico - Recompilação dinâmica (rápida, usando a implementação dynamic_x86)" },
+			{ "auto", "Autom tico - Jogos em modo real usam normal, jogos em modo protegido usam dinƒmico" },
+			{ "dynamic", "Dinƒmico - Recompila‡„o dinƒmica (r pida, usando a implementa‡„o dynamic_x86)" },
 			#elif defined(C_DYNREC)
-			{ "auto", "Automático - Jogos em modo real usam normal, jogos em modo protegido usam dinâmico" },
-			{ "dynamic", "Dinâmico - Recompilação dinâmica (rápida, usando a implementação dynrec)" },
+			{ "auto", "Autom tico - Jogos em modo real usam normal, jogos em modo protegido usam dinƒmico" },
+			{ "dynamic", "Dinƒmico - Recompila‡„o dinƒmica (r pida, usando a implementa‡„o dynrec)" },
 			#endif
 			{ "normal", "Normal (interpretador)" },
 			{ "simple", "Simples (interpretador otimizado para jogos antigos em modo real)" },
@@ -926,35 +926,35 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	},
 	{
 		"dosbox_pure_bootos_ramdisk",
-		"Avançado > Modificações no Disco do SO (necessário reiniciar)", NULL,
-		"Ao executar um sistema operacional instalado, as modificações na unidade C: serão feitas na imagem de disco por padrão." "\n"
-		"Definir para 'Descartar' permite que o conteúdo seja fechado a qualquer momento sem preocupações com corrupção do sistema de arquivos ou do registro." "\n"
-		"Ao usar 'Salvar Diferença por Conteúdo', a imagem do disco nunca deve ser modificada novamente, caso contrário, as diferenças existentes se tornarão inutilizáveis.", NULL,
+		"Avan‡ado > Modifica‡”es no Disco do SO (necess rio reiniciar)", NULL,
+		"Ao executar um sistema operacional instalado, as modifica‡”es na unidade C: ser„o feitas na imagem de disco por padr„o." "\n"
+		"Definir para 'Descartar' permite que o conte£do seja fechado a qualquer momento sem preocupa‡”es com corrup‡„o do sistema de arquivos ou do registro." "\n"
+		"Ao usar 'Salvar Diferen‡a por Conte£do', a imagem do disco nunca deve ser modificada novamente, caso contr rio, as diferen‡as existentes se tornar„o inutiliz veis.", NULL,
 		DBP_OptionCat::System,
 		{
-			{ "false", "Manter (padrão)" },
+			{ "false", "Manter (padr„o)" },
 			{ "true", "Descartar" },
-			{ "diff", "Salvar Diferença por Conteúdo" },
+			{ "diff", "Salvar Diferen‡a por Conte£do" },
 		},
 		"false"
 	},
 	{
 		"dosbox_pure_bootos_dfreespace",
-		"Avançado > Espaço Livre em D: no SO (necessário reiniciar)", NULL,
-		"Controla a quantidade de espaço livre disponível na unidade D: ao executar um sistema operacional instalado." "\n"
-		"Se o tamanho total da unidade D: (dados + espaço livre) exceder 2 GB, não poderá ser usado nas versões anteriores do Windows 95." "\n"
-		"ATENÇÃO: Os arquivos de salvamento criados estão vinculados a essa configuração, portanto, alterá-la ocultará todas as alterações existentes na unidade D:.", NULL,
+		"Avan‡ado > Espa‡o Livre em D: no SO (necess rio reiniciar)", NULL,
+		"Controla a quantidade de espa‡o livre dispon¡vel na unidade D: ao executar um sistema operacional instalado." "\n"
+		"Se o tamanho total da unidade D: (dados + espa‡o livre) exceder 2 GB, n„o poder  ser usado nas vers”es anteriores do Windows 95." "\n"
+		"ATEN€ŽO: Os arquivos de salvamento criados est„o vinculados a essa configura‡„o, portanto, alter -la ocultar  todas as altera‡”es existentes na unidade D:.", NULL,
 		DBP_OptionCat::System,
-		{ { "1024", "1GB (padrão)" }, { "2048", "2GB" }, { "4096", "4GB" }, { "8192", "8GB" }, { "discard", "Descartar Alterações em D:" }, { "hide", "Desativar Disco Rígido D: (usar apenas CD-ROM)" } }, // <<< NOVA TRADUÇÃO
+		{ { "1024", "1GB (padr„o)" }, { "2048", "2GB" }, { "4096", "4GB" }, { "8192", "8GB" }, { "discard", "Descartar Altera‡”es em D:" }, { "hide", "Desativar Disco R¡gido D: (usar apenas CD-ROM)" } }, // <<< NOVA TRADU€ŽO
 		"1024"
 	},
 	{
 		"dosbox_pure_bootos_forcenormal",
-		"Avançado > Forçar Núcleo Normal no SO", NULL,
-		"O núcleo normal pode ser mais estável ao executar um sistema operacional instalado." "\n"
+		"Avan‡ado > For‡ar N£cleo Normal no SO", NULL,
+		"O n£cleo normal pode ser mais est vel ao executar um sistema operacional instalado." "\n"
 		"Isso pode ser ligado e desligado para contornar travamentos." "\n\n", NULL, //end of System > Advanced section
 		DBP_OptionCat::System,
-		{ { "false", "Desativado (padrão)" }, { "true", "Ativado" } },
+		{ { "false", "Desativado (padr„o)" }, { "true", "Ativado" } },
 		"false"
 	},
 
@@ -962,8 +962,8 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	#ifndef DBP_STANDALONE
 	{
 		"dosbox_pure_audiorate",
-		"Taxa de Amostragem de Áudio (necessário reiniciar)", NULL,
-		"Isso deve corresponder à configuração de taxa de saída de áudio do frontend (Hz).", NULL,
+		"Taxa de Amostragem de †udio (necess rio reiniciar)", NULL,
+		"Isso deve corresponder … configura‡„o de taxa de sa¡da de  udio do frontend (Hz).", NULL,
 		DBP_OptionCat::Audio,
 		{
 			{ "48000", NULL },
@@ -983,8 +983,8 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	#else
 	{
 		"interface_audiolatency",
-		"Latência de Áudio", NULL,
-		"Se definido muito baixo, podem ocorrer falhas no áudio. O valor é para processamento interno e a latência percebida será maior.", NULL,
+		"Latˆncia de †udio", NULL,
+		"Se definido muito baixo, podem ocorrer falhas no  udio. O valor ‚ para processamento interno e a latˆncia percebida ser  maior.", NULL,
 		DBP_OptionCat::Audio,
 		{
 			{ "10", "10 ms" }, { "15", "15 ms" }, { "20", "20 ms" }, { "25", "25 ms" }, { "30", "30 ms" }, { "35", "35 ms" }, { "40", "40 ms" }, { "45", "45 ms" }, { "50", "50 ms" },
@@ -995,8 +995,8 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	#endif
 	{
 		"dosbox_pure_sblaster_conf",
-		"Configurações do SoundBlaster", NULL,
-		"Defina o endereço, interrupção, DMA de 8 bits baixos e DMA de 16 bits altos.", NULL,
+		"Configura‡”es do SoundBlaster", NULL,
+		"Defina o endere‡o, interrup‡„o, DMA de 8 bits baixos e DMA de 16 bits altos.", NULL,
 		DBP_OptionCat::Audio,
 		{
 			// Some common (and less common) port, irq, low and high dma settings (based on a very scientific web search)
@@ -1015,13 +1015,13 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	},
 	{
 		"dosbox_pure_midi",
-		"Saída MIDI", NULL,
-		"Selecione o arquivo SoundFont .SF2, arquivo .ROM ou interface usada para saída MIDI." "\n"
+		"Sa¡da MIDI", NULL,
+		"Selecione o arquivo SoundFont .SF2, arquivo .ROM ou interface usada para sa¡da MIDI." "\n"
 		#ifndef DBP_STANDALONE
-		"Para adicionar SoundFonts ou arquivos ROM, copie-os para o diretório 'system' do frontend." "\n"
+		"Para adicionar SoundFonts ou arquivos ROM, copie-os para o diret¢rio 'system' do frontend." "\n"
 		"Para usar o driver MIDI do frontend, certifique-se de que ele esteja configurado corretamente."
 		#else
-		"Para adicionar SoundFonts ou arquivos ROM, copie-os para o diretório 'system' do DOSBox Pure." "\n" // <<< NOVA TRADUÇÃO
+		"Para adicionar SoundFonts ou arquivos ROM, copie-os para o diret¢rio 'system' do DOSBox Pure." "\n" // <<< NOVA TRADU€ŽO
 		#endif
 		"\n\n", NULL, //end of Audio section
 		DBP_OptionCat::Audio,
@@ -1032,11 +1032,11 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	},
 	{
 		"dosbox_pure_sblaster_type",
-		"Avançado > Tipo de SoundBlaster", NULL,
+		"Avan‡ado > Tipo de SoundBlaster", NULL,
 		"Tipo de placa SoundBlaster emulada.", NULL,
 		DBP_OptionCat::Audio,
 		{
-			{ "sb16", "SoundBlaster 16 (padrão)" },
+			{ "sb16", "SoundBlaster 16 (padr„o)" },
 			{ "sbpro2", "SoundBlaster Pro 2" },
 			{ "sbpro1", "SoundBlaster Pro" },
 			{ "sb2", "SoundBlaster 2.0" },
@@ -1048,14 +1048,14 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	},
 	{
 		"dosbox_pure_sblaster_adlib_mode",
-		"Avançado > Modo Adlib/FM do SoundBlaster", NULL,
-		"O modo de síntese FM emulado pelo SoundBlaster. Todos os modos são compatíveis com o Adlib, exceto o CMS.", NULL,
+		"Avan‡ado > Modo Adlib/FM do SoundBlaster", NULL,
+		"O modo de s¡ntese FM emulado pelo SoundBlaster. Todos os modos s„o compat¡veis com o Adlib, exceto o CMS.", NULL,
 		DBP_OptionCat::Audio,
 		{
-			{ "auto",     "Automático (selecionar com base no tipo de SoundBlaster) (padrão)" },
+			{ "auto",     "Autom tico (selecionar com base no tipo de SoundBlaster) (padr„o)" },
 			{ "cms",      "CMS (Creative Music System / GameBlaster)" },
 			{ "opl2",     "OPL-2 (AdLib / OPL-2 / Yamaha 3812)" },
-			{ "dualopl2", "Dual OPL-2 (Dual OPL-2 usado pelo SoundBlaster Pro 1.0 para som estéreo)" },
+			{ "dualopl2", "Dual OPL-2 (Dual OPL-2 usado pelo SoundBlaster Pro 1.0 para som est‚reo)" },
 			{ "opl3",     "OPL-3 (AdLib / OPL-3 / Yamaha YMF262)" },
 			{ "opl3gold", "OPL-3 Gold (AdLib Gold / OPL-3 / Yamaha YMF262)" },
 			{ "none",     "Desativado" },
@@ -1064,38 +1064,38 @@ static retro_core_option_v2_definition option_defs[DBP_Option::_OPTIONS_TOTAL] =
 	},
 	{
 		"dosbox_pure_sblaster_adlib_emu",
-		"Avançado > Provedor de Adlib SoundBlaster", NULL,
-		"Provedor para a emulação do Adlib. O padrão possui boa qualidade e baixos requisitos de desempenho.", NULL,
+		"Avan‡ado > Provedor de Adlib SoundBlaster", NULL,
+		"Provedor para a emula‡„o do Adlib. O padr„o possui boa qualidade e baixos requisitos de desempenho.", NULL,
 		DBP_OptionCat::Audio,
 		{
-			{ "default", "Padrão" },
+			{ "default", "Padr„o" },
 			{ "nuked", "Alta qualidade Nuked OPL3" },
 		},
 		"default"
 	},
 	{
 		"dosbox_pure_gus",
-		"Avançado > Habilitar Emulação do Gravis Ultrasound (necessário reiniciar)", NULL,
-		"Habilitar emulação do Gravis Ultrasound. As configurações estão fixadas em porta 0x240, IRQ 5, DMA 3." "\n"
-		"Se a variável ULTRADIR precisar ser diferente do padrão 'C:\\ULTRASND' você precisará inserir 'SET ULTRADIR=...' na linha de comando ou em um arquivo em lote.", NULL,
+		"Avan‡ado > Habilitar Emula‡„o do Gravis Ultrasound (necess rio reiniciar)", NULL,
+		"Habilitar emula‡„o do Gravis Ultrasound. As configura‡”es est„o fixadas em porta 0x240, IRQ 5, DMA 3." "\n"
+		"Se a vari vel ULTRADIR precisar ser diferente do padr„o 'C:\\ULTRASND' vocˆ precisar  inserir 'SET ULTRADIR=...' na linha de comando ou em um arquivo em lote.", NULL,
 		DBP_OptionCat::Audio,
-		{ { "false", "Desativado (padrão)" }, { "true", "Ativado" } },
+		{ { "false", "Desativado (padr„o)" }, { "true", "Ativado" } },
 		"false"
 	},
 	{
 		"dosbox_pure_tandysound",
-		"Avançado > Habilitar Dispositivo de Som Tandy (reinício necessário)", NULL,
-		"Habilita a emulação do Dispositivo de Som Tandy mesmo quando executando sem a emulação do Adaptador Gráfico Tandy.", NULL,
+		"Avan‡ado > Habilitar Dispositivo de Som Tandy (rein¡cio necess rio)", NULL,
+		"Habilita a emula‡„o do Dispositivo de Som Tandy mesmo quando executando sem a emula‡„o do Adaptador Gr fico Tandy.", NULL,
 		DBP_OptionCat::Audio,
-		{ { "auto", "Desativado (padrão)" }, { "on", "Ativado" } },
+		{ { "auto", "Desativado (padr„o)" }, { "on", "Ativado" } },
 		"auto"
 	},
 	{
 		"dosbox_pure_swapstereo",
-		"Avançado > Trocar Canais Estéreo", NULL,
-		"Trocar o canal de áudio esquerdo e direito." "\n\n", NULL, //end of Audio > Advanced section
+		"Avan‡ado > Trocar Canais Est‚reo", NULL,
+		"Trocar o canal de  udio esquerdo e direito." "\n\n", NULL, //end of Audio > Advanced section
 		DBP_OptionCat::Audio,
-		{ { "false", "Desativado (padrão)" }, { "true", "Ativado" } },
+		{ { "false", "Desativado (padr„o)" }, { "true", "Ativado" } },
 		"false"
 	},
 
