@@ -729,7 +729,7 @@ struct DBP_MapperMenuState final : DBP_MenuState
 		}
 		else
 		{
-			list.emplace_back(IT_NONE, 0, "Predefini‡„o: ");
+			list.emplace_back(IT_NONE, 0, "Predefinição: ");
 			list.emplace_back(IT_PRESET, 0, "  "); list.back().str += DBP_PadMapping::GetPortPresetName(bind_port);
 			list.emplace_back(IT_NONE, 2);
 
@@ -741,7 +741,7 @@ struct DBP_MapperMenuState final : DBP_MenuState
 				const Bit32u padpdii = PORT_DEVICE_INDEX_ID(pad);
 				list.emplace_back(IT_NONE);
 				if (!a) list.back().str = DBP_MapperJoypadNames[i];
-				else  ((list.back().str = DBP_MapperJoypadNames[2+pad.index]) += " Anal¢gico ") += DBP_MapperJoypadNames[(i-JOYPAD_MAX)%4];
+				else  ((list.back().str = DBP_MapperJoypadNames[2+pad.index]) += " Analóg. ") += DBP_MapperJoypadNames[(i-JOYPAD_MAX)%4];
 
 				size_t numBefore = list.size();
 				for (const DBP_InputBind& b : dbp_input_binds)
@@ -815,7 +815,7 @@ struct DBP_MapperMenuState final : DBP_MenuState
 		bool have_add = false;
 		for (Item& it : list) { if (it.type == IT_ADD) { have_add = true; break; } }
 		list.clear();
-		list.emplace_back(IT_NONE, 22, "Selecionar Predefini‡„o");
+		list.emplace_back(IT_NONE, 22, "Selecionar Predefinição");
 		list.emplace_back(IT_NONE);
 		Bit16s off = (dbp_auto_mapping ? 0 : 1), n = 1 + off;
 		for (const char* p; (p = DBP_PadMapping::GetPresetName((DBP_PadMapping::EPreset)n)) != NULL;) list.emplace_back(IT_PRESET, n++, p);
@@ -1401,8 +1401,8 @@ struct DBP_PureMenuState final : DBP_MenuState
 				buf.DrawBox(w-68, bot, 60, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
 				buf.DrawBox(w-217, bot, 150, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
 				buf.DrawBox(w-312, bot, 96, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
-				buf.PrintCenteredOutlined(lh, w-68, 60, bot+2, "\x7 Run", buf.COL_BTNTEXT);
-				buf.PrintCenteredOutlined(lh, w-217, 150, bot+2, "\x1A\x1B Definir Auto-iniciar", buf.COL_BTNTEXT);
+				buf.PrintCenteredOutlined(lh, w-68, 60, bot+2, "\x7 Executar", buf.COL_BTNTEXT);
+				buf.PrintCenteredOutlined(lh, w-217, 150, bot+2, "\x1A\x1B Auto-iniciar", buf.COL_BTNTEXT);
 				buf.PrintCenteredOutlined(lh, w-312, 96, bot+2, "\x18\x19 Rolar", buf.COL_BTNTEXT);
 			}
 
