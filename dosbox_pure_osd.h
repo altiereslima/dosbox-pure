@@ -632,7 +632,7 @@ struct DBP_SystemMenuState final : DBP_MenuState
 		int hdr = lh*2, rows = (h - hdr - ftr) / lh, count = (int)list.size(), l = 30, r = w-30;
 		if (l < 0) { l = 0, r = w; }
 		buf.DrawBox(l + 60, hdr-6-lh, r-l-120, lh+4, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
-		buf.PrintCenteredOutlined(lh, 0, w, hdr-lh-4, "DOSBox Pure System Menu", buf.COL_MENUTITLE);
+		buf.PrintCenteredOutlined(lh, 0, w, hdr-lh-4, "Menu do Sistema do DOSBox Pure", buf.COL_MENUTITLE);
 		DrawMenuBase(buf, blend, lh, rows, m, mouseMoved, l, r, hdr);
 		for (int i = scroll, maxw = r-l-27; i != count && i != (scroll + rows); i++)
 		{
