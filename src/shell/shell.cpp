@@ -587,60 +587,60 @@ static char const * const init_line="/INIT AUTOEXEC.BAT";
 
 void SHELL_Init() {
 	/* Add messages */
-MSG_Add("SHELL_ILLEGAL_PATH","Caminho n‚Äûo encontrado.\n");
-	MSG_Add("SHELL_CMD_HELP","Se quiser uma lista de todos os comandos internos suportados digite \033[33;1mhelp /all\033[0m.\nVocÀÜ tamb‚Äöm pode encontrar comandos externos e programas na unidade Z:\nUma breve lista dos comandos mais usados:\n");
-	MSG_Add("SHELL_CMD_ECHO_ON","ECHO est¬† ativado.\n");
-	MSG_Add("SHELL_CMD_ECHO_OFF","ECHO est¬† desativado.\n");
-	MSG_Add("SHELL_ILLEGAL_SWITCH","Par∆ímetro inv¬†lido - %s.\n");
-	MSG_Add("SHELL_MISSING_PARAMETER","Um par∆ímetro obrigat¬¢rio est¬† faltando.\n");
-	MSG_Add("SHELL_CMD_CHDIR_ERROR","Pasta inv¬†lida - %s.\n");
+MSG_Add("SHELL_ILLEGAL_PATH","Caminho nÑo encontrado.\n");
+	MSG_Add("SHELL_CMD_HELP","Se quiser uma lista de todos os comandos internos suportados digite \033[33;1mhelp /all\033[0m.\nVocà tambÇm pode encontrar comandos externos e programas na unidade Z:\nUma breve lista dos comandos mais usados:\n");
+	MSG_Add("SHELL_CMD_ECHO_ON","ECHO est† ativado.\n");
+	MSG_Add("SHELL_CMD_ECHO_OFF","ECHO est† desativado.\n");
+	MSG_Add("SHELL_ILLEGAL_SWITCH","ParÉmetro inv†lido - %s.\n");
+	MSG_Add("SHELL_MISSING_PARAMETER","Um parÉmetro obrigat¢rio est† faltando.\n");
+	MSG_Add("SHELL_CMD_CHDIR_ERROR","Pasta inv†lida - %s.\n");
 	MSG_Add("SHELL_CMD_CHDIR_HINT","Dica: Para mudar para um tipo de unidade diferente \033[31m%c:\033[0m\n");
-	MSG_Add("SHELL_CMD_CHDIR_HINT_2","nome_de_pasta contem espa‚Ä°os sem aspas.\nTente \033[31mcd %s\033[0m ou adicione corretamente as aspas.\n");
-	MSG_Add("SHELL_CMD_CHDIR_HINT_3","VocÀÜ ainda est¬† no drive Z:, e a pasta especificada n‚Äûo pode ser encontrada.\nPara acessar uma unidade montada, mude para a unidade com uma sintaxe como \033[31mC:\033[0m.\n");
+	MSG_Add("SHELL_CMD_CHDIR_HINT_2","nome_de_pasta contem espaáos sem aspas.\nTente \033[31mcd %s\033[0m ou adicione corretamente as aspas.\n");
+	MSG_Add("SHELL_CMD_CHDIR_HINT_3","Vocà ainda est† no drive Z:, e a pasta especificada nÑo pode ser encontrada.\nPara acessar uma unidade montada, mude para a unidade com uma sintaxe como \033[31mC:\033[0m.\n");
 	MSG_Add("SHELL_CMD_DATE_HELP","Exibe ou define a data.\n");
-	MSG_Add("SHELL_CMD_DATE_ERROR","A data especificada n‚Äûo ‚Äö correta.\n");
+	MSG_Add("SHELL_CMD_DATE_ERROR","A data especificada nÑo Ç correta.\n");
 	MSG_Add("SHELL_CMD_DATE_DAYS","3DomSegTerQuaQuiSexSab");
 	MSG_Add("SHELL_CMD_DATE_NOW","Data atual: ");
 	MSG_Add("SHELL_CMD_DATE_SETHLP","Digite a nova data.\n");
 	MSG_Add("SHELL_CMD_DATE_FORMAT","M/D/Y");
 	MSG_Add("SHELL_CMD_DATE_HELP_LONG","DATE [[/T] [/H] [/S] | data]\n"\
 									"  data: Nova data a ser definida\n"\
-									"  /S:         Usa a data e hora do sistema anfitri‚Äûo no DOS\n"\
+									"  /S:         Usa a data e hora do sistema anfitriÑo no DOS\n"\
 									"  /F:         Retorna para a data e hora interna do MS-Dos\n"\
 									"  /T:         Exibe apenas a data, sem solicitar uma nova\n"\
-									"  /H:         Sincronizar com o anfitri‚Äûo\n");
+									"  /H:         Sincronizar com o anfitriÑo\n");
 	MSG_Add("SHELL_CMD_TIME_HELP","Exibe ou ajusta a hora do sistema.\n");
 	MSG_Add("SHELL_CMD_TIME_NOW","Hora atual: ");
 	MSG_Add("SHELL_CMD_TIME_HELP_LONG","TIME [/T] [/H]\n"\
 									"  /T:         Exibe apenas a hora, sem solicitar uma nova\n"\
-									"  /H:         Sincronizar com o anfitri‚Äûo\n");
-	MSG_Add("SHELL_CMD_MKDIR_ERROR","N‚Äûo ‚Äö poss¬°vel criar a pasta - %s\n");
-	MSG_Add("SHELL_CMD_RMDIR_ERROR","Caminho inv¬†lido, n‚Äûo ‚Äö uma pasta ou n‚Äûo est¬† vazia - %s.\n");
-	MSG_Add("SHELL_CMD_DEL_ERROR","N‚Äûo ‚Äö poss¬°vel excluir - %s.\n");
+									"  /H:         Sincronizar com o anfitriÑo\n");
+	MSG_Add("SHELL_CMD_MKDIR_ERROR","NÑo Ç poss°vel criar a pasta - %s\n");
+	MSG_Add("SHELL_CMD_RMDIR_ERROR","Caminho inv†lido, nÑo Ç uma pasta ou nÑo est† vazia - %s.\n");
+	MSG_Add("SHELL_CMD_DEL_ERROR","NÑo Ç poss°vel excluir - %s.\n");
 	MSG_Add("SHELL_SYNTAXERROR","Erro de sintaxe.\n");
-	MSG_Add("SHELL_CMD_SET_NOT_SET","Vari¬†vel de ambiente %s n‚Äûo definida.\n");
-	MSG_Add("SHELL_CMD_SET_OUT_OF_SPACE","N‚Äûo h¬† espa‚Ä°o suficiente no ambiente.\n");
+	MSG_Add("SHELL_CMD_SET_NOT_SET","Vari†vel de ambiente %s nÑo definida.\n");
+	MSG_Add("SHELL_CMD_SET_OUT_OF_SPACE","NÑo h† espaáo suficiente no ambiente.\n");
 	MSG_Add("SHELL_CMD_IF_EXIST_MISSING_FILENAME","IF EXIST: Arquivo inexistente.\n");
-	MSG_Add("SHELL_CMD_IF_ERRORLEVEL_MISSING_NUMBER","IF ERRORLEVEL: Falta n¬£mero.\n");
-	MSG_Add("SHELL_CMD_IF_ERRORLEVEL_INVALID_NUMBER","IF ERRORLEVEL: N¬£mero inv¬†lido.\n");
-	MSG_Add("SHELL_CMD_GOTO_MISSING_LABEL","Nenhum r¬¢tulo fornecido ao comando GOTO.\n");
-	MSG_Add("SHELL_CMD_GOTO_LABEL_NOT_FOUND","GOTO: R¬¢tulo %s n‚Äûo encontrado.\n");
-	MSG_Add("SHELL_CMD_FILE_NOT_FOUND","Arquivo n‚Äûo encontrado - %s.\n");
-	MSG_Add("SHELL_CMD_FILE_EXISTS","O arquivo %s j¬† existe.\n");
+	MSG_Add("SHELL_CMD_IF_ERRORLEVEL_MISSING_NUMBER","IF ERRORLEVEL: Falta n£mero.\n");
+	MSG_Add("SHELL_CMD_IF_ERRORLEVEL_INVALID_NUMBER","IF ERRORLEVEL: N£mero inv†lido.\n");
+	MSG_Add("SHELL_CMD_GOTO_MISSING_LABEL","Nenhum r¢tulo fornecido ao comando GOTO.\n");
+	MSG_Add("SHELL_CMD_GOTO_LABEL_NOT_FOUND","GOTO: R¢tulo %s nÑo encontrado.\n");
+	MSG_Add("SHELL_CMD_FILE_NOT_FOUND","Arquivo nÑo encontrado - %s.\n");
+	MSG_Add("SHELL_CMD_FILE_EXISTS","O arquivo %s j† existe.\n");
 	MSG_Add("SHELL_CMD_DIR_INTRO","Pasta de %s.\n");
 	MSG_Add("SHELL_CMD_DIR_BYTES_USED","%5d arquivo(s) %17s bytes.\n");
-	MSG_Add("SHELL_CMD_DIR_BYTES_FREE","%5d pasta(s)  %17s bytes dispon¬°veis.\n");
+	MSG_Add("SHELL_CMD_DIR_BYTES_FREE","%5d pasta(s)  %17s bytes dispon°veis.\n");
 #ifdef C_DBP_ENABLE_INTROPROGRAM
-	MSG_Add("SHELL_EXECUTE_DRIVE_NOT_FOUND","Unidade %c n‚Äûo existe!\nVocÀÜ deve \033[31mmont¬†-la\033[0m antes. Digite \033[1;33mintro\033[0m ou \033[1;33mintro mount\033[0m para mais informa‚Ä°‚Äûo.\n");
+	MSG_Add("SHELL_EXECUTE_DRIVE_NOT_FOUND","Unidade %c nÑo existe!\nVocà deve \033[31mmont†-la\033[0m antes. Digite \033[1;33mintro\033[0m ou \033[1;33mintro mount\033[0m para mais informaáÑo.\n");
 #else
-	MSG_Add("SHELL_EXECUTE_DRIVE_NOT_FOUND","Unidade %c n‚Äûo existe!\nVocÀÜ deve \033[31mmont¬†-la\033[0m antes. Digite \033[1;33mintro\033[0m ou \033[1;33mintro mount\033[0m para mais informa‚Ä°‚Äûo.\n");
+	MSG_Add("SHELL_EXECUTE_DRIVE_NOT_FOUND","Unidade %c nÑo existe!\nVocà deve \033[31mmont†-la\033[0m antes. Digite \033[1;33mintro\033[0m ou \033[1;33mintro mount\033[0m para mais informaáÑo.\n");
 #endif
-	MSG_Add("SHELL_EXECUTE_ILLEGAL_COMMAND","Comando ou nome de arquivo inv¬†lido - %s.\n");
+	MSG_Add("SHELL_EXECUTE_ILLEGAL_COMMAND","Comando ou nome de arquivo inv†lido - %s.\n");
 	MSG_Add("SHELL_CMD_PAUSE","Pressione qualquer tecla para continuar. . .\n");
 	MSG_Add("SHELL_CMD_PAUSE_HELP","Suspende o processamento de um arquivo em lotes e exibe uma mensagem.\n");
 	MSG_Add("SHELL_CMD_COPY_FAILURE","Erro ao copiar: %s.\n");
 	MSG_Add("SHELL_CMD_COPY_SUCCESS","   %d arquivo(s) copiado(s).\n");
-	MSG_Add("SHELL_CMD_SUBST_NO_REMOVE","N‚Äûo foi poss¬°vel remover, a unidade n‚Äûo est¬† em uso.\n");
+	MSG_Add("SHELL_CMD_SUBST_NO_REMOVE","NÑo foi poss°vel remover, a unidade nÑo est† em uso.\n");
 	MSG_Add("SHELL_CMD_SUBST_FAILURE","SUBST: Existe um erro na sua linha de comando");
 
 	MSG_Add("SHELL_STARTUP_BEGIN", "");
@@ -657,34 +657,34 @@ MSG_Add("SHELL_ILLEGAL_PATH","Caminho n‚Äûo encontrado.\n");
 	        "CHDIR [..]\n"
 	        "CD [unidade:][caminho]\n"
 	        "CD [..]\n\n"
-	        "  ..   Especifica que vocÀÜ quer ir para a pasta pai.\n\n"
+	        "  ..   Especifica que vocà quer ir para a pasta pai.\n\n"
 	        "Digite CD unidade: para exibir a pasta atual na unidade especificada.\n"
-	        "Digite CD sem par∆ímetros para exibir a unidade e pasta atuais.\n");
+	        "Digite CD sem parÉmetros para exibir a unidade e pasta atuais.\n");
 	MSG_Add("SHELL_CMD_CLS_HELP","Limpa a tela.\n");
 	MSG_Add("SHELL_CMD_DIR_HELP","Exibe uma lista de arquivos e subpastas em uma pasta.\n");
 	MSG_Add("SHELL_CMD_ECHO_HELP","Exibe mensagens ou ativa ou desativa o eco de comando.\n");
 	MSG_Add("SHELL_CMD_EXIT_HELP","Encerra o interpretador de comando.\n");
-	MSG_Add("SHELL_CMD_HELP_HELP","Fornece informa‚Ä°‚Äùes de ajuda sobre comandos do MS-Dos.\n");
+	MSG_Add("SHELL_CMD_HELP_HELP","Fornece informaáîes de ajuda sobre comandos do MS-Dos.\n");
 	MSG_Add("SHELL_CMD_MKDIR_HELP","Cria uma pasta.\n");
 	MSG_Add("SHELL_CMD_MKDIR_HELP_LONG","MKDIR [unidade:][caminho]\n"
 	        "MD [unidade:][caminho]\n");
 	MSG_Add("SHELL_CMD_RMDIR_HELP","Remove uma pasta.\n");
 	MSG_Add("SHELL_CMD_RMDIR_HELP_LONG","RMDIR [unidade:][caminho]\n"
 	        "RD [unidade:][caminho]\n");
-	MSG_Add("SHELL_CMD_SET_HELP","Exibe, define ou remove vari¬†veis de ambiente.\n");
+	MSG_Add("SHELL_CMD_SET_HELP","Exibe, define ou remove vari†veis de ambiente.\n");
 	MSG_Add("SHELL_CMD_IF_HELP","Realiza processamento condicional em arquivos em lotes.\n");
-	MSG_Add("SHELL_CMD_GOTO_HELP","Desvia o interpretador de comandos para uma linha com um r¬¢tulo em um\n"
+	MSG_Add("SHELL_CMD_GOTO_HELP","Desvia o interpretador de comandos para uma linha com um r¢tulo em um\n"
 		   "arquivo em lotes.\n");
-	MSG_Add("SHELL_CMD_SHIFT_HELP","Altera a posi‚Ä°‚Äûo dos par∆ímetros substitu¬°veis em um arquivo em lotes.\n");
-	MSG_Add("SHELL_CMD_TYPE_HELP","Exibe o conte¬£do de um arquivo de texto.\n");
+	MSG_Add("SHELL_CMD_SHIFT_HELP","Altera a posiáÑo dos parÉmetros substitu°veis em um arquivo em lotes.\n");
+	MSG_Add("SHELL_CMD_TYPE_HELP","Exibe o conte£do de um arquivo de texto.\n");
 	MSG_Add("SHELL_CMD_TYPE_HELP_LONG","TYPE [unidade:][caminho][arquivo]\n");
-	MSG_Add("SHELL_CMD_REM_HELP","Registra coment¬†rios em um arquivo em lotes.\n");
-	MSG_Add("SHELL_CMD_REM_HELP_LONG","REM [coment¬†rio]\n");
-	MSG_Add("SHELL_CMD_NO_WILD","Esta ‚Äö uma vers‚Äûo simples do comando, sem curingas permitidos!\n");
+	MSG_Add("SHELL_CMD_REM_HELP","Registra coment†rios em um arquivo em lotes.\n");
+	MSG_Add("SHELL_CMD_REM_HELP_LONG","REM [coment†rio]\n");
+	MSG_Add("SHELL_CMD_NO_WILD","Esta Ç uma versÑo simples do comando, sem curingas permitidos!\n");
 	MSG_Add("SHELL_CMD_RENAME_HELP","Renomeia um ou mais arquivos.\n");
 	MSG_Add("SHELL_CMD_RENAME_HELP_LONG","RENAME [unidade:][caminho][nome_de_pasta1 | arquivo1] [nome_de_pasta2 | arquivo2]\n"
 	        "REN [unidade:][caminho][nome_de_pasta1 | arquivo1] [nome_de_pasta2 | arquivo2]\n\n"
-	        "Note que vocÀÜ n‚Äûo pode especificar uma nova unidade ou caminho para o\n"
+	        "Note que vocà nÑo pode especificar uma nova unidade ou caminho para o\n"
 			"arquivo de destino.\n\n");
 	MSG_Add("SHELL_CMD_DELETE_HELP","Exclui um ou mais arquivos.\n");
 	MSG_Add("SHELL_CMD_COPY_HELP","Copia um ou mais arquivos para outro local.\n");
@@ -692,20 +692,20 @@ MSG_Add("SHELL_ILLEGAL_PATH","Caminho n‚Äûo encontrado.\n");
 	MSG_Add("SHELL_CMD_SUBST_HELP","Associa um caminho a uma letra de unidade.\n");
 #ifdef C_DBP_LIBRETRO //DBP: Added a fully featured implementation of SUBST that supports any source drive
 	MSG_Add("SHELL_CMD_SUBST_HELP_LONG", 
-	        "  X: [Y:]PATH  -  Associa CAMINHO de Y: ‚Ä¶ unidade X:.\n"
-	        "  X: /D  -  Exclui a unidade substitu¬°da X:.\n");
+	        "  X: [Y:]PATH  -  Associa CAMINHO de Y: Ö unidade X:.\n"
+	        "  X: /D  -  Exclui a unidade substitu°da X:.\n");
 #endif
-	MSG_Add("SHELL_CMD_LOADHIGH_HELP","Carrega um programa com mais mem¬¢ria (requer xms=true,umb=true).\n");
+	MSG_Add("SHELL_CMD_LOADHIGH_HELP","Carrega um programa com mais mem¢ria (requer xms=true,umb=true).\n");
 	MSG_Add("SHELL_CMD_CHOICE_HELP","Espera o apertar de uma tecla e define o valor de ERRORLEVEL.\n");
 	MSG_Add("SHELL_CMD_CHOICE_HELP_LONG","CHOICE [/C:escolhas] [/N] [/S] texto\n"
-	        "  /C[:]escolhas - Especifica as teclas permitidas. Padr‚Äûo: yn..\n"
-	        "  /N            - N‚Äûo mostrar as escolhas no final do prompt.\n"
-	        "  /S            - Ativa op‚Ä°‚Äùes de escolhas sens¬°veis a mai¬£sculas e min¬£sculas.\n"
+	        "  /C[:]escolhas - Especifica as teclas permitidas. PadrÑo: yn..\n"
+	        "  /N            - NÑo mostrar as escolhas no final do prompt.\n"
+	        "  /S            - Ativa opáîes de escolhas sens°veis a mai£sculas e min£sculas.\n"
 	        "  texto         -   Texto a ser mostrado como prompt.\n");
 	MSG_Add("SHELL_CMD_ATTRIB_HELP","Exibe ou altera atributos de arquivos.\n");
-	MSG_Add("SHELL_CMD_PATH_HELP","Exibe ou define um caminho de pesquisa para arquivos execut¬†veis.\n");
-	MSG_Add("SHELL_CMD_VER_HELP","Exibe a vers‚Äûo do DOS informada pelo MSDos.\n");
-	MSG_Add("SHELL_CMD_VER_VER","DOSBox vers‚Äûo %s. Vers‚Äûo do DOS informada %d.%02d.\n");
+	MSG_Add("SHELL_CMD_PATH_HELP","Exibe ou define um caminho de pesquisa para arquivos execut†veis.\n");
+	MSG_Add("SHELL_CMD_VER_HELP","Exibe a versÑo do DOS informada pelo MSDos.\n");
+	MSG_Add("SHELL_CMD_VER_VER","DOSBox versÑo %s. VersÑo do DOS informada %d.%02d.\n");
 
 	/* Regular startup */
 	call_shellstop=CALLBACK_Allocate();
