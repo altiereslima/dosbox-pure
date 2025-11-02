@@ -2082,7 +2082,7 @@ struct DBP_MenuInterceptor : DBP_Interceptor
 	{
 		// Get latest values (without emitting events) when leaving intercepted screen
 		for (DBP_InputBind& b : dbp_input_binds)
-			b.lastval = input_state_cb(b.port, b.device, b.index, b->id);
+			b.lastval = input_state_cb(b.port, b.device, b.index, b.id);
 
 		// Release all keys when switching between key event intercepting
 		DBP_ReleaseKeyEvents(false);
