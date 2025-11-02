@@ -105,8 +105,8 @@ enum { DBP_MAX_PORTS = 8, DBP_KEYBOARD_PORT, DBP_PORT_MASK = 0x7, DBP_SHIFT_PORT
 static const char* DBP_KBDNAMES[KBD_LAST+1] =
 {
 	"Nenhum","1","2","3","4","5","6","7","8","9","0","Q","W","E","R","T","Y","U","I","O","P","A","S","D","F","G","H","J","K","L","Z","X","C","V","B","N","M",
-	"F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","F11","F12","Esc","Tab","Backspace","Enter","Espa\x87o","Alt-Esquerdo","Alt-Direito","Ctrl-Esquerdo","Ctrl-Direito","Shift-Esquerdo","Shift-Direito",
-	"Caps-Lock","Scroll-Lock","Num-Lock","Acento `","H\xa1fen -","Igual =","Barra Invertida","Colchete-Esquerdo [","Colchete-Direito ]","Ponto e V\xa1rgula ;","Aspas '","Ponto .","V\xa1rgula ,","Barra /","Barra Invertida \\",
+	"F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","F11","F12","Esc","Tab","Backspace","Enter","Espa‡o","Alt-Esquerdo","Alt-Direito","Ctrl-Esquerdo","Ctrl-Direito","Shift-Esquerdo","Shift-Direito",
+	"Caps-Lock","Scroll-Lock","Num-Lock","Acento `","H¡fen -","Igual =","Barra Invertida","Colchete-Esquerdo [","Colchete-Direito ]","Ponto e V¡rgula ;","Aspas '","Ponto .","V¡rgula ,","Barra /","Barra Invertida \\",
 	"Print-Screen","Pause","Insert","Home","Page-Up","Delete","End","Page-Down","Esquerda","Cima","Baixo","Direita","NP-1","NP-2","NP-3","NP-4","NP-5","NP-6","NP-7","NP-8","NP-9","NP-0",
 	"NP-Dividir /","NP-Multiplicar *","NP-Subtrair -","NP-Somar +","NP-Enter","NP-Ponto .",""
 };
@@ -171,10 +171,10 @@ static const struct DBP_SpecialMapping { int16_t evt, meta; const char *dev, *na
 	{ DBPET_JOY1Y,          1, DBPDEV_Joystick, "Baixo",         "joy_down"           },
 	{ DBPET_JOY1X,         -1, DBPDEV_Joystick, "Esquerda",         "joy_left"           },
 	{ DBPET_JOY1X,          1, DBPDEV_Joystick, "Direita",        "joy_right"          },
-	{ DBPET_JOY1DOWN,       0, DBPDEV_Joystick, "Bot\x84o 1",     "joy_button1"        },
-	{ DBPET_JOY1DOWN,       1, DBPDEV_Joystick, "Bot\x84o 2",     "joy_button2"        },
-	{ DBPET_JOY2DOWN,       0, DBPDEV_Joystick, "Bot\x84o 3",     "joy_button3"        },
-	{ DBPET_JOY2DOWN,       1, DBPDEV_Joystick, "Bot\x84o 4",     "joy_button4"        },
+	{ DBPET_JOY1DOWN,       0, DBPDEV_Joystick, "Bot„o 1",     "joy_button1"        },
+	{ DBPET_JOY1DOWN,       1, DBPDEV_Joystick, "Bot„o 2",     "joy_button2"        },
+	{ DBPET_JOY2DOWN,       0, DBPDEV_Joystick, "Bot„o 3",     "joy_button3"        },
+	{ DBPET_JOY2DOWN,       1, DBPDEV_Joystick, "Bot„o 4",     "joy_button4"        },
 	{ DBPET_JOYHATSETBIT,   8, DBPDEV_Joystick, "Hat para Cima",       "joy_hat_up"         },
 	{ DBPET_JOYHATSETBIT,   2, DBPDEV_Joystick, "Hat para Baixo",     "joy_hat_down"       },
 	{ DBPET_JOYHATSETBIT,   1, DBPDEV_Joystick, "Hat para Esquerda",     "joy_hat_left"       },
@@ -184,7 +184,7 @@ static const struct DBP_SpecialMapping { int16_t evt, meta; const char *dev, *na
 	{ DBPET_JOY2X,         -1, DBPDEV_Joystick, "Joy 2 Esquerda",   "joy_2_left"         },
 	{ DBPET_JOY2X,          1, DBPDEV_Joystick, "Joy 2 Direita",  "joy_2_right"        },
 	{ DBPET_TOGGLEOSD,      0, NULL, "Abrir Menu / Teclado"  },
-	{ DBPET_ACTIONWHEEL,    0, NULL, "Roda de A\x87\x84o", "wheel" },
+	{ DBPET_ACTIONWHEEL,    0, NULL, "Roda de A‡„o", "wheel" },
 	{ DBPET_SHIFTPORT,      0, NULL, "Porta #1 enquanto segura" },
 	{ DBPET_SHIFTPORT,      1, NULL, "Porta #2 enquanto segura" },
 	{ DBPET_SHIFTPORT,      2, NULL, "Porta #3 enquanto segura" },
@@ -1944,27 +1944,27 @@ static void DBP_PureLabelProgram(Program** make)
 	{
 		void Run(void)
 		{
-			if (!cmd->GetStringRemain(temp_line)) { WriteOut("Uso: LABEL [unidade:] [novo r\xa2tulo]\n"); return; }
+			if (!cmd->GetStringRemain(temp_line)) { WriteOut("Uso: LABEL [unidade:] [novo r¢tulo]\n"); return; }
 			const char* line = temp_line.c_str();
 			char drive = (line[1] == '\0' || line[1] == ':' || line[1] == ' ' ? line[0] : 0);
 			drive = (drive >= 'A' && drive <= 'Z' ? drive : (drive >= 'a' && drive <= 'z' ? drive-0x20 : 0));
 			for (line += (drive ? (line[1] == ':' ? 2 : 1) : 0); *line && *line <= ' '; line++) {}
 			if (!drive) drive = DOS_GetDefaultDrive()+'A';
-			if (!Drives[drive-'A']) { WriteOut("A unidade %c: n\x84o existe\n", drive); return; }
+			if (!Drives[drive-'A']) { WriteOut("A unidade %c: n„o existe\n", drive); return; }
 
-			const char* msg = "O r\xa2tulo da unidade %c: \x82 '%s'\n";
+			const char* msg = "O r¢tulo da unidade %c: ‚ '%s'\n";
 			std::string lbl = Drives[drive-'A']->GetLabel();
 			if (*line)
 			{
 				char newlabel[20];
 				Set_Label(line, newlabel, MSCDEX_HasDrive(drive));
-				if (lbl == newlabel) msg = "O r\xa2tulo da unidade %c: j\xa0 estava definido como '%s'\n";
+				if (lbl == newlabel) msg = "O r¢tulo da unidade %c: j  estava definido como '%s'\n";
 				else
 				{
 					Drives[drive-'A']->label.SetLabel(newlabel, MSCDEX_HasDrive(drive), true);
 					std::string result = Drives[drive-'A']->GetLabel();
-					if (lbl == result) msg = "O r\xa2tulo da unidade %c: n\x84o foi alterado, est\xa0 definido como somente leitura para '%s'\n";
-					else { lbl.swap(result); msg = "O r\xa2tulo da unidade %c: foi alterado para '%s'\n"; }
+					if (lbl == result) msg = "O r¢tulo da unidade %c: n„o foi alterado, est  definido como somente leitura para '%s'\n";
+					else { lbl.swap(result); msg = "O r¢tulo da unidade %c: foi alterado para '%s'\n"; }
 				}
 			}
 			if (lbl.find('.') != std::string::npos) lbl.erase(lbl.find('.'), 1);
@@ -1980,14 +1980,14 @@ static void DBP_PureRemountProgram(Program** make)
 	{
 		void Run(void)
 		{
-			cmd->GetStringRemain(temp_line);
+cmd->GetStringRemain(temp_line);
 			const char* p1 = temp_line.c_str(), *p2 = (p1 ? strchr(p1, ' ') : NULL);
 			char drive1 = (      p1[0] && p1[p1[1] == ':' ? 2 : 1] <= ' ' ? (p1[0] >= 'A' && p1[0] <= 'Z' ? p1[0] : (p1[0] >= 'a' && p1[0] <= 'z' ? p1[0]-0x20 : 0)) : 0);
 			char drive2 = (p2 && p2[1] && p2[p2[2] == ':' ? 3 : 2] <= ' ' ? (p2[1] >= 'A' && p2[1] <= 'Z' ? p2[1] : (p2[1] >= 'a' && p2[1] <= 'z' ? p2[1]-0x20 : 0)) : 0);
 			if (!drive1) { WriteOut("Uso: REMOUNT [unidade_antiga:] [unidade_nova:]\n"); return; }
 			if (!drive2) { drive2 = drive1; drive1 = DOS_GetDefaultDrive()+'A'; }
-			if (!DBP_IsMounted(drive1)) { WriteOut("A unidade %c: n\x84o existe\n", drive1); return; }
-			if ( DBP_IsMounted(drive2)) { WriteOut("A unidade %c: j\xa0 existe\n", drive2); return; }
+			if (!DBP_IsMounted(drive1)) { WriteOut("A unidade %c: n„o existe\n", drive1); return; }
+			if ( DBP_IsMounted(drive2)) { WriteOut("A unidade %c: j  existe\n", drive2); return; }
 			WriteOut("Remontando %c: para %c:\n", drive1, drive2);
 			DBP_Remount(drive1, drive2);
 		}
@@ -2105,7 +2105,7 @@ static void set_variables(bool force_midi_scan = false)
 	#endif
 	def.values[i++] = { "disabled", "Desativado" };
 	if (dbp_system_cached)
-		def.values[i++] = { "scan", (!strcmp(DBP_Option::Get(DBP_Option::midi), "scan") ? "Escaneamento da pasta do sistema conclu\xa1do" : "Escanear pasta do sistema por soundfonts (abra este menu novamente depois)") };
+		def.values[i++] = { "scan", (!strcmp(DBP_Option::Get(DBP_Option::midi), "scan") ? "Escaneamento da pasta do sistema conclu¡do" : "Escanear pasta do sistema por soundfonts (abra este menu novamente depois)") };
 	def.values[i] = { 0, 0 };
 	def.default_value = def.values[0].value;
 
@@ -2173,7 +2173,7 @@ bool DBP_Option::Apply(Section& section, const char* var_name, const char* new_v
 	Property* prop = section.GetProp(var_name);
 	if (prop->IsFixed())
 	{
-		if (user_modified) retro_notify(0, RETRO_LOG_WARN, "N\x84o \x82 poss\xa1vel alterar a configura\x87\x84o que foi fixada pela configura\x87\x84o do jogo");
+		if (user_modified) retro_notify(0, RETRO_LOG_WARN, "N„o ‚ poss¡vel alterar a configura‡„o que foi fixada pela configura‡„o do jogo");
 		return false;
 	}
 
@@ -2184,9 +2184,9 @@ bool DBP_Option::Apply(Section& section, const char* var_name, const char* new_v
 	if ((disallow_in_game && dbp_game_running) || (need_restart && reInitSection))
 	{
 		if (disallow_in_game && user_modified)
-			retro_notify(0, RETRO_LOG_WARN, "N\x84o \x82 poss\xa1vel alterar o valor enquanto o jogo est\xa0 em execu\x87\x84o");
+			retro_notify(0, RETRO_LOG_WARN, "N„o ‚ poss¡vel alterar o valor enquanto o jogo est  em execu‡„o");
 		else if ((dbp_game_running || DBP_OSD.ptr._all == NULL || !DBP_FullscreenOSD) && user_modified)
-			retro_notify(2000, RETRO_LOG_INFO, "A configura\x87\x84o ser\xa0 aplicada ap\xa2s reiniciar");
+			retro_notify(2000, RETRO_LOG_INFO, "A configura‡„o ser  aplicada ap¢s reiniciar");
 		DBP_Run::startup.reboot = true;
 		reInitSection = false;
 	}
@@ -2397,7 +2397,7 @@ static bool check_variables()
 		const char* voodoo_perf = DBP_Option::Get(DBP_Option::voodoo_perf);
 		DBP_Option::Apply(sec_pci, "voodoo_perf", ((voodoo_perf[0] == 'a' || voodoo_perf[0] == '4') ? (dbp_hw_render.context_type == RETRO_HW_CONTEXT_NONE ? "1" : "4") : voodoo_perf));
 		if (dbp_hw_render.context_type == RETRO_HW_CONTEXT_NONE && (atoi(voodoo_perf) & 0x4))
-			retro_notify(0, RETRO_LOG_WARN, "Para habilitar a renderiza\x87\x84o por hardware OpenGL, feche e reabra.");
+			retro_notify(0, RETRO_LOG_WARN, "Para habilitar a renderiza‡„o por hardware OpenGL, feche e reabra.");
 		DBP_Option::GetAndApply(sec_pci, "voodoo_gamma", DBP_Option::voodoo_gamma);
 		DBP_Option::GetAndApply(sec_pci, "voodoo_scale", DBP_Option::voodoo_scale);
 	}
@@ -2587,7 +2587,7 @@ static void init_dosbox_parse_drives()
 			dbp_auto_mapping_names = (char*)buf + mappings_bk.mappings_action_offset;
 
 			if (dbp_auto_mapping_mode == 'n' && !dbp_custom_mapping.size()) //notify
-				retro_notify(0, RETRO_LOG_INFO, "Mapeamentos autom\xa0ticos de GamePad detectados para %s", static_title.c_str());
+				retro_notify(0, RETRO_LOG_INFO, "Mapeamentos autom ticos de GamePad detectados para %s", static_title.c_str());
 			return;
 		}
 	}};
@@ -3011,7 +3011,7 @@ bool retro_load_game(const struct retro_game_info *info) //#4
 	enum retro_pixel_format pixel_format = RETRO_PIXEL_FORMAT_XRGB8888;
 	if (!environ_cb(RETRO_ENVIRONMENT_SET_PIXEL_FORMAT, &pixel_format))
 	{
-		retro_notify(0, RETRO_LOG_ERROR, "O frontend n\x84o suporta XRGB8888.\n");
+		retro_notify(0, RETRO_LOG_ERROR, "O frontend n„o suporta XRGB8888.\n");
 		return false;
 	}
 
@@ -3047,18 +3047,18 @@ bool retro_load_game(const struct retro_game_info *info) //#4
 							*glproc.ptr = dbp_hw_render.get_proc_address(buf);
 							if (!*glproc.ptr)
 							{
-								GFX_ShowMsg("[DBP:GL] %s Fun\x87\x84o OpenGL %s n\x84o est\xa0 dispon\xa1vel!", (glproc.required ? "Requerida" : "Opcional"), glproc.name);
+								GFX_ShowMsg("[DBP:GL] %s Fun‡„o OpenGL %s n„o est  dispon¡vel!", (glproc.required ? "Requerida" : "Opcional"), glproc.name);
 								if (glproc.required) { DBP_ASSERT(0); missRequired = true; }
 							}
-							else GFX_ShowMsg("[DBP:GL] Usando a fun\x87\x84o de extens\x84o OpenGL %s", buf);
+							else GFX_ShowMsg("[DBP:GL] Usando a fun‡„o de extens„o OpenGL %s", buf);
 						}
-						else GFX_ShowMsg("[DBP:GL] Usando a fun\x87\x84o de extens\x84o OpenGL %s", buf);
+						else GFX_ShowMsg("[DBP:GL] Usando a fun‡„o de extens„o OpenGL %s", buf);
 					}
 				}
 				if (missRequired)
 				{
 					gl_error:
-					retro_notify(0, RETRO_LOG_ERROR, "Erro durante a inicializa\x87\x84o do OpenGL. Por favor, mude a op\x87\x84o de v\xa1deo 'Desempenho 3dfx Voodoo' para 'Software'. Habilite os logs para detalhes.");
+					retro_notify(0, RETRO_LOG_ERROR, "Erro durante a inicializa‡„o do OpenGL. Por favor, mude a op‡„o de v¡deo 'Desempenho 3dfx Voodoo' para 'Software'. Habilite os logs para detalhes.");
 					OnReset(voodoo_ogl_initfailed, true);
 					dbp_hw_render.context_type = RETRO_HW_CONTEXT_DUMMY; // signal failed context
 					av_info.timing.fps = -1; // force update of av_info in retro_run
@@ -3293,7 +3293,7 @@ void retro_get_system_av_info(struct retro_system_av_info *info) // #5
 	av_info.timing.fps = DBP_GetFPS();
 	av_info.timing.sample_rate = DBP_MIXER_GetFrequency();
 	if (dbp_perf == DBP_PERF_DETAILED)
-		retro_notify(0, RETRO_LOG_INFO, "Resolu\x87\x84o de Inicializa\x87\x84o: %d x %d @ %4.2f hz", (int)render.src.width, (int)render.src.height, render.src.fps);
+		retro_notify(0, RETRO_LOG_INFO, "Resolu‡„o de Inicializa‡„o: %d x %d @ %4.2f hz", (int)render.src.width, (int)render.src.height, render.src.fps);
 	*info = av_info;
 }
 
@@ -3618,7 +3618,7 @@ void retro_run(void)
 				#endif
 				);
 		else
-			retro_notify(-1500, RETRO_LOG_INFO, "Velocidade da Emula\x87\x84o: %4.1f%%",
+			retro_notify(-1500, RETRO_LOG_INFO, "Velocidade da Emula‡„o: %4.1f%%",
 				((float)tpfTarget / (float)tpfActual * 100));
 		#ifdef DBP_ENABLE_FPS_COUNTERS
 		dbp_fpscount_retro = dbp_fpscount_gfxstart = dbp_fpscount_gfxend = dbp_fpscount_event = dbp_fpscount_skip_run = dbp_fpscount_skip_render = 0;
@@ -3629,7 +3629,7 @@ void retro_run(void)
 	double targetfps = DBP_GetFPS();
 	if (av_info.geometry.base_width != view_width || av_info.geometry.base_height != view_height || av_info.geometry.aspect_ratio != buf.ratio || av_info.timing.fps != targetfps || next_fpsboost != last_fpsboost)
 	{
-		log_cb(RETRO_LOG_INFO, "[DOSBOX] Resolu\x87\x84o alterada %ux%u @ %.3fHz AR: %.5f => %ux%u @ %.3fHz AR: %.5f\n",
+		log_cb(RETRO_LOG_INFO, "[DOSBOX] Resolu‡„o alterada %ux%u @ %.3fHz AR: %.5f => %ux%u @ %.3fHz AR: %.5f\n",
 			av_info.geometry.base_width, av_info.geometry.base_height, av_info.timing.fps, av_info.geometry.aspect_ratio,
 			view_width, view_height, av_info.timing.fps, buf.ratio);
 		bool newfps = (av_info.timing.fps != targetfps || next_fpsboost != last_fpsboost), newmax = (av_info.geometry.max_width < view_width || av_info.geometry.max_height < view_height);
@@ -3692,44 +3692,44 @@ static bool retro_serialize_all(DBPArchive& ar, bool unlock_thread)
 		switch (ar.had_error)
 		{
 			case DBPArchive::ERR_LAYOUT:
-				retro_notify(0, RETRO_LOG_ERROR, "%s%s", "Erro ao Carregar Estado: ", "Formato de arquivo inv\xa0lido");
+				retro_notify(0, RETRO_LOG_ERROR, "%s%s", "Erro ao Carregar Estado: ", "Formato de arquivo inv lido");
 				break;
 			case DBPArchive::ERR_VERSION:
-				retro_notify(0, RETRO_LOG_ERROR, "%sVers\x84o n\x84o suportada (%d)", "Erro ao Carregar Estado: ", ar.version);
+				retro_notify(0, RETRO_LOG_ERROR, "%sVers„o n„o suportada (%d)", "Erro ao Carregar Estado: ", ar.version);
 				break;
 			case DBPArchive::ERR_DOSNOTRUNNING:
 			case DBPArchive::ERR_GAMENOTRUNNING:
 				if (ar.mode == DBPArchive::MODE_LOAD)
-					retro_notify(0, RETRO_LOG_WARN, "N\x84o \x82 poss\xa1vel carregar um estado de salvamento enquanto o jogo n\x84o est\xa0 em execu\x87\x84o, inicie-o primeiro.");
+					retro_notify(0, RETRO_LOG_WARN, "N„o ‚ poss¡vel carregar um estado de salvamento enquanto o jogo n„o est  em execu‡„o, inicie-o primeiro.");
 				else if (dbp_serializemode != DBPSERIALIZE_REWIND)
-					retro_notify(0, RETRO_LOG_ERROR, "%sN\x84o \x82 poss\xa1vel %s enquanto o %s %s n\x84o estiver em execu\x87\x84o."
+					retro_notify(0, RETRO_LOG_ERROR, "%sN„o ‚ poss¡vel %s enquanto o %s %s n„o estiver em execu‡„o."
 						#ifndef DBP_STANDALONE
-						"\nSe estiver usando o rebobinamento, certifique-se de modificar a op\x87\x84o de n\xa3cleo relacionada."
+						"\nSe estiver usando o rebobinamento, certifique-se de modificar a op‡„o de n£cleo relacionada."
 						#endif
 						"", (ar.mode == DBPArchive::MODE_LOAD ? "Erro ao Carregar Estado: " : "Erro ao Salvar Estado: "),
 						(ar.mode == DBPArchive::MODE_LOAD ? "carregar estado feito" : "salvar estado"),
 						(ar.had_error == DBPArchive::ERR_DOSNOTRUNNING ? "DOS" : "jogo"),
-						(ar.mode == DBPArchive::MODE_LOAD ? "estava" : "est\xa0"));
+						(ar.mode == DBPArchive::MODE_LOAD ? "estava" : "est "));
 				break;
 			case DBPArchive::ERR_WRONGMACHINECONFIG:
-				retro_notify(0, RETRO_LOG_ERROR, "%sConfigura\x87\x84o de chip gr\xa0fico incorreta (%s em vez de %s)", "Erro ao Carregar Estado: ",
+				retro_notify(0, RETRO_LOG_ERROR, "%sConfigura‡„o de chip gr fico incorreta (%s em vez de %s)", "Erro ao Carregar Estado: ",
 					(machine <= MCH_VGA ? machine_names[machine] : "DESCONHECIDO"), (ar.error_info <= MCH_VGA ? machine_names[ar.error_info] : "DESCONHECIDO"));
 				break;
 			case DBPArchive::ERR_WRONGMEMORYCONFIG:
-				retro_notify(0, RETRO_LOG_ERROR, "%sConfigura\x87\x84o de tamanho de mem\xa2ria incorreta (%d MB em vez de %d MB)", "Erro ao Carregar Estado: ",
+				retro_notify(0, RETRO_LOG_ERROR, "%sConfigura‡„o de tamanho de mem¢ria incorreta (%d MB em vez de %d MB)", "Erro ao Carregar Estado: ",
 					(Bit8u)(MEM_TotalPages() / 256), (ar.error_info < 225 ? ar.error_info : (ar.error_info-223)*128));
 				break;
 			case DBPArchive::ERR_WRONGVGAMEMCONFIG:
-				retro_notify(0, RETRO_LOG_ERROR, "%sConfigura\x87\x84o de modo SVGA incorreta (%d KB de RAM VGA em vez de %d KB)", "Erro ao Carregar Estado: ",
+				retro_notify(0, RETRO_LOG_ERROR, "%sConfigura‡„o de modo SVGA incorreta (%d KB de RAM VGA em vez de %d KB)", "Erro ao Carregar Estado: ",
 					(Bit8u)(vga.vmemsize / 1024), ar.error_info * 128);
 				break;
 		}
 	}
 	else if (ar.warnings && ar.mode == DBPArchive::MODE_LOAD)
 	{
-		if (ar.warnings & DBPArchive::WARN_WRONGDRIVES)  retro_notify(0, RETRO_LOG_WARN, "%s%s", "Aviso de Serializa\x87\x84o: ", "Estado inconsistente do sistema de arquivos ou discos errados montados");
-		if (ar.warnings & DBPArchive::WARN_WRONGDEVICES) retro_notify(0, RETRO_LOG_WARN, "%s%s", "Aviso de Serializa\x87\x84o: ", "Manipuladores de dispositivo inconsistentes");
-		if (ar.warnings & DBPArchive::WARN_WRONGPROGRAM) retro_notify(0, RETRO_LOG_WARN, "%s%s", "Aviso de Serializa\x87\x84o: ", "Carregado em tipo de programa diferente, risco de falha no sistema");
+		if (ar.warnings & DBPArchive::WARN_WRONGDRIVES)  retro_notify(0, RETRO_LOG_WARN, "%s%s", "Aviso de Serializa‡„o: ", "Estado inconsistente do sistema de arquivos ou discos errados montados");
+		if (ar.warnings & DBPArchive::WARN_WRONGDEVICES) retro_notify(0, RETRO_LOG_WARN, "%s%s", "Aviso de Serializa‡„o: ", "Manipuladores de dispositivo inconsistentes");
+		if (ar.warnings & DBPArchive::WARN_WRONGPROGRAM) retro_notify(0, RETRO_LOG_WARN, "%s%s", "Aviso de Serializa‡„o: ", "Carregado em tipo de programa diferente, risco de falha no sistema");
 	}
 	return !ar.had_error;
 }
