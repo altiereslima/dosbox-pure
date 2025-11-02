@@ -1969,13 +1969,13 @@ MSG_Add("PROGRAM_MOUNT_CDROMS_FOUND","CDROMs encontrados: %d\n");
 		"Para informa‡”es b sicas sobre montagem, digite \033[34;1mintro mount\033[0m\n"
         "Para informa‡”es sobre suporte a CD-ROM, digite \033[34;1mintro cdrom\033[0m\n"
         "Para informa‡”es sobre teclas especiais, digite \033[34;1mintro special\033[0m\n\n"
-        "Para obter a £ltima vers„o do DOSBox, visite a p gina da web:\033[34;1m\n"
+        "Para obter a £ltima vers„o do MS-DOS, visite a p gina da web:\033[34;1m\n"
 		"\n"
-        "\033[34;1mhttps://www.dosbox.com\033[0m\n"
+        "\033[34;1mhttps://microsoft.com/\033[0m ou \033[34;1mhttp://microsoft.software\033[0m\n"
 		"\n"
-        "Para mais informa‡”es sobre o DOSBox, visite nossa Wiki:\n"
+        "Para mais informa‡”es sobre o MS-DOS, visite nossa Wiki:\n"
 		"\n"
-        "\033[34;1mhttps://www.dosbox.com/wiki\033[0m\n"
+        "\033[34;1mhttps://microsoft.com/wiki\033[0m\n"
 		);
 	MSG_Add("PROGRAM_INTRO_MOUNT_START",
 		"\033[32;1mAqui tem alguns comandos para vocˆ come‡ar:\033[0m\n"
@@ -1992,14 +1992,14 @@ MSG_Add("PROGRAM_MOUNT_CDROMS_FOUND","CDROMs encontrados: %d\n");
 		"Vocˆ pode executar programas terminados em \033[31m.exe .bat\033[0m e \033[31m.com\033[0m.\n"
 		);
 	MSG_Add("PROGRAM_INTRO_CDROM",
-		"\033[2J\033[32;1mMontando um CD-ROM real ou virtual no DOSBox:\033[0m\n"
-		"O DOSBox fornece emula‡„o de CD-ROM em v rios n¡veis.\n"
+		"\033[2J\033[32;1mMontando um CD-ROM real ou virtual no MS-DOS:\033[0m\n"
+		"O MS-DOS fornece emula‡„o de CD-ROM em v rios n¡veis.\n"
 		"\n"
 		"\033[33mN¡vel b sico\033[0m funciona em todos os CD-ROM e pastas normais.\n"
 		"Instala o MSCDEX e marca os arquivos como somente leitura.\n"
 		"Normalmente, ‚ suficiente para a maioria dos jogos:\n"
 		"\033[34;1mmount d \033[0;31mD:\\\033[34;1m -t cdrom\033[0m   ou   \033[34;1mmount d C:\\exemplo -t cdrom\033[0m\n"
-		"Se n„o funcionar, indique ao DOSBox o r¢tulo do CD-ROM:\n"
+		"Se n„o funcionar, indique ao MS-DOS o r¢tulo do CD-ROM:\n"
 		"\033[34;1mmount d C:\\exemplo -t cdrom -label CDLABEL\033[0m\n"
 		"\n"
 		"\033[33mN¡vel m‚dio\033[0m adiciona algum suporte de baixo n¡vel.\n"
@@ -2022,7 +2022,7 @@ MSG_Add("PROGRAM_MOUNT_CDROMS_FOUND","CDROMs encontrados: %d\n");
 		"Elas podem ser alteradas no \033[33mmapeador de controle\033[0m.\n"
 		"\n"
 		"\033[33;1mALT-ENTER\033[0m   : Ir para tela cheia e voltar.\n"
-		"\033[33;1mALT-PAUSE\033[0m   : Pausar o DOSBox.\n"
+		"\033[33;1mALT-PAUSE\033[0m   : Pausar o MS-DOS.\n"
 		"\033[33;1mCTRL-F1\033[0m     : Iniciar o \033[33mmapeador de controle\033[0m.\n"
 		"\033[33;1mCTRL-F4\033[0m     : Atualizar o cache de diret¢rio para todas as unidades! Trocar imagem de disco montada.\n"
 		"\033[33;1mCTRL-ALT-F5\033[0m : Iniciar/Parar a cria‡„o de um filme da tela.\n"
@@ -2032,7 +2032,7 @@ MSG_Add("PROGRAM_MOUNT_CDROMS_FOUND","CDROMs encontrados: %d\n");
 		"\033[33;1mCTRL-ALT-F8\033[0m : Iniciar/Parar a grava‡„o de comandos MIDI crus.\n"
 		"\033[33;1mCTRL-F7\033[0m     : Reduzir salto de quadro.\n"
 		"\033[33;1mCTRL-F8\033[0m     : Aumentar salto de quadro.\n"
-		"\033[33;1mCTRL-F9\033[0m     : Encerrar o DOSBox.\n"
+		"\033[33;1mCTRL-F9\033[0m     : Encerrar o MS-DOS.\n"
 		"\033[33;1mCTRL-F10\033[0m    : Capturar/Liberar o mouse.\n"
 		"\033[33;1mCTRL-F11\033[0m    : Diminuir a emula‡„o (Diminuir ciclos do emulador).\n"
 		"\033[33;1mCTRL-F12\033[0m    : Acelerar a emula‡„o (Aumentar ciclos do emulador).\n"
@@ -2042,7 +2042,7 @@ MSG_Add("PROGRAM_MOUNT_CDROMS_FOUND","CDROMs encontrados: %d\n");
     MSG_Add("PROGRAM_BOOT_NOT_EXIST","O arquivo de disco de inicializa‡„o n„o existe. Abortando.\n");
     MSG_Add("PROGRAM_BOOT_NOT_OPEN","O arquivo de disco de inicializa‡„o n„o pode ser aberto. Abortando.\n");
     MSG_Add("PROGRAM_BOOT_WRITE_PROTECTED","O arquivo de imagem est  em modo somente leitura! Inicialize em modo protegido.\n");
-    MSG_Add("PROGRAM_BOOT_PRINT_ERROR","Este comando inicia o DOSBox de uma imagem de disquete ou de disco r¡gido.\n\n"
+    MSG_Add("PROGRAM_BOOT_PRINT_ERROR","Este comando inicia o MS-DOS de uma imagem de disquete ou de disco r¡gido.\n\n"
         "Para este comando, ‚ poss¡vel indicar uma sucess„o de disquetes intercambi veis\n"
         "pelo comando de menu, e unidade: especifica de qual unidade montada iniciar.\n"
         "Se n„o for especificada nenhuma letra, por padr„o ser  a unidade A. As unidades\n"
