@@ -148,7 +148,7 @@ struct DBP_PadMapping
 
 	static const char* GetPresetName(EPreset preset)
 	{
-		static const char* presets[] = { "Generic Keyboard", "Mouse w/ Left Analog", "Mouse w/ Right Analog", "Gravis Gamepad (4 Buttons)", "First 2 Button Joystick", "Second 2 Button Joystick", "Thrustmaster Flight Stick", "Both DOS Joysticks", "Custom Mapping" };
+		static const char* presets[] = { "Teclado Generico", "Mouse c/ Analogico Esq.", "Mouse c/ Analogico Dir.", "Gravis Gamepad (4 Butoes)", "Primeiro Joystick de 2 Botoes", "Segundo Joystick de 2 Botoes", "Manche Thrustmaster", "Ambos os Joysticks DOS", "Mapeamento Personalizado" };
 		return (preset == PRESET_AUTOMAPPED ? dbp_auto_mapping_title : preset <= PRESET_CUSTOM ? presets[preset - 2] : NULL);
 	}
 
