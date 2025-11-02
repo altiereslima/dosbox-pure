@@ -729,7 +729,7 @@ struct DBP_MapperMenuState final : DBP_MenuState
 		}
 		else
 		{
-			list.emplace_back(IT_NONE, 0, "Predefinição: ");
+			list.emplace_back(IT_NONE, 0, "Predefini‡„o: ");
 			list.emplace_back(IT_PRESET, 0, "  "); list.back().str += DBP_PadMapping::GetPortPresetName(bind_port);
 			list.emplace_back(IT_NONE, 2);
 
