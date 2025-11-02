@@ -44,7 +44,7 @@ using namespace std;
 #define MAX_FILENAME_LENGTH 256
 
 #ifdef C_DBP_SUPPORT_CDROM_MOUNT_DOSFILE
-CDROM_Interface_Image::TrackFile::TrackFile(const char *filename, bool &error, const char *relative_to) : dos_file(NULL), dos_end(0), dos_ofs(0)
+CDROM_Interface_Image::TrackFile::TrackFile(const char *filename, bool &error, const char *relative_to) : dos_file(NULL), dos_ofs(0), dos_end(0)
 {
 	dos_file = FindAndOpenDosFile(filename, NULL, NULL, relative_to);
 	if (!dos_file) { error = true; return; }
@@ -343,7 +343,7 @@ bool CDROM_Interface_Image::SetDevice(char* path, int /*forceCD*/)
 	
 	// print error message on dosbox console
 	char buf[MAX_LINE_LENGTH];
-	snprintf(buf, MAX_LINE_LENGTH, "N„o foi poss¡vel carregar o arquivo de imagem: %s\r\n", path);
+	snprintf(buf, MAX_LINE_LENGTH, "N\x84o foi poss�vel carregar o arquivo de imagem: %s\r\n", path);
 	Bit16u size = (Bit16u)strlen(buf);
 	DOS_WriteFile(STDOUT, (Bit8u*)buf, &size);
 	return false;

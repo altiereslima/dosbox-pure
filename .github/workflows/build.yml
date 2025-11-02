@@ -1,0 +1,43 @@
+name: Compilação para Windows (x64)
+
+on:
+  # Executa quando você faz um push para o repositório
+  push:
+    branches: [ "main" ]
+  # Permite que você execute este workflow manualmente na aba "Actions" do GitHub
+  workflow_dispatch:
+
+jobs:
+  build-windows-x64:
+    runs-on: windows-latest
+
+    steps:
+    # 1. Baixa o código do seu repositório
+    - name: Checkout do código
+      uses: actions/checkout@v4
+
+    # 2. Configura o ambiente de compilação MSBuild (Visual Studio)
+    - name: Configurar MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    # 3. (MELHORIA) Gera uma string de versão única para cada compilação
+    #    Isso modifica o arquivo `dosbox_pure_ver.h` para incluir o ID do commit.
+    #    Ex: "0.9.5" vira "0.9.5-a1b2c3d"
+    - name: Gerar String de Versão
+      run: perl -i -pe "s/\"(.*)\"/\"\1-${GITHUB_SHA::7}\"/g" dosbox_pure_ver.h
+      shell: bash
+      
+    # 4. Compila o projeto para Windows 64-bit em modo Release
+    #    Este comando agora mira diretamente no arquivo de projeto `.vcxproj`
+    - name: Compilar o projeto
+      run: msbuild dosbox_pure_libretro.vcxproj /p:Configuration=Release /p:Platform=x64
+
+    # 5. Faz o upload do arquivo .dll compilado como um "artefato" do GitHub
+    #    O arquivo estará disponível para download na página da execução do workflow.
+    - name: Fazer upload do artefato
+      uses: actions/upload-artifact@v4
+      with:
+        # Nome do arquivo .zip que será gerado para download
+        name: dosbox_pure_windows_x64
+        # Caminho direto para o arquivo que deve ser incluído no .zip
+        path: build/Release_64bit/dosbox_pure_libretro.dll

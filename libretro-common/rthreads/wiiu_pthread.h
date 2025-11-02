@@ -154,4 +154,5 @@ static inline int pthread_cond_destroy(pthread_cond_t *cond)
    OSYieldThread();
    return 0;
 }*/
+
 #endif

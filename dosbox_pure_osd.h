@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2020-2024 Bernhard Schelling
+ *  Copyright (C) 2020-2025 Bernhard Schelling
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,8 +16,15 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-enum DBP_OSDMode { DBPOSD_MAIN, DBPOSD_OSK, DBPOSD_MAPPER, _DBPOSD_COUNT, DBPOSD_CLOSED };
-static void DBP_StartOSD(DBP_OSDMode mode, struct DBP_PureMenuState* in_main = NULL);
+#ifndef DBP_STANDALONE
+enum DBP_OSDMode { DBPOSD_MAIN, DBPOSD_OSK, DBPOSD_MAPPER, _DBPOSD_COUNT, _DBPOSD_OPEN, _DBPOSD_CLOSE };
+#else
+enum DBP_OSDMode { DBPOSD_MAIN, DBPOSD_OSK, DBPOSD_MAPPER, DBPOSD_SYSTEM, _DBPOSD_COUNT, _DBPOSD_OPEN, _DBPOSD_CLOSE };
+#include "dosbox_pure_sta.h"
+static void (*dbps_emu_thread_func)();
+static DBP_Buffer dbp_osdbuf[3] = {{0,DBPS_OSD_WIDTH,DBPS_OSD_HEIGHT,0,0,0,0,(float)DBPS_OSD_WIDTH/DBPS_OSD_HEIGHT},{0,DBPS_OSD_WIDTH,DBPS_OSD_HEIGHT,0,0,0,0,(float)DBPS_OSD_WIDTH/DBPS_OSD_HEIGHT},{0,DBPS_OSD_WIDTH,DBPS_OSD_HEIGHT,0,0,0,0,(float)DBPS_OSD_WIDTH/DBPS_OSD_HEIGHT}};
+#endif
+static void DBP_StartOSD(DBP_OSDMode mode = _DBPOSD_OPEN, struct DBP_PureMenuState* in_main = NULL);
 static void DBP_CloseOSD();
 static bool DBP_FullscreenOSD;
 static bool DBP_MenuInterceptorRefreshSystem;
@@ -55,8 +62,13 @@ struct DBP_BufferDrawing : DBP_Buffer
 		DBP_ASSERT(y >= 0 && y < (int)height);
 		const Bit8u* fnt = (lh == 8 ? int10_font_08 : int10_font_14);
 		const int ch = (lh == 8 ? 8 : 14);
-		for (const char* p = msg, *pEnd = p + (maxw / CW); *p && p != pEnd; p++)
-			DrawChar(fnt, ch, x+CW*(int)(p - msg), y, *p, col);
+		for (const char* p = msg, *pEnd = p + (maxw / CW); *p && p != pEnd; x += CW)
+		{
+			unsigned char c = *(p++);
+			if (c >= 128) { c = (unsigned char)15; } // substitute and show each UTF8 byte
+			//if (c >= 192) { p++; if (c >= 224 && p != pEnd) p++; if (c >= 240 && p != pEnd) p++; c = (unsigned char)15; } // show UTF8 code points as one character
+			DrawChar(fnt, ch, x, y, (char)c, col);
+		}
 	}
 
 	void DrawChar(const Bit8u* fnt, int ch, int x, int y, int c, Bit32u col = 0xFFFFFFFF)
@@ -158,31 +170,37 @@ struct DBP_BufferDrawing : DBP_Buffer
 	}
 
 	bool DrawButtonAt(Bit32u blend, int btny, int lh, int padu, int padd, int btnx, int btnr, bool on, const struct DBP_MenuMouse& m, const char* txt, Bit32u blendtxt = 0xFF000000);
-	INLINE bool DrawButton(Bit32u blend, int btny, int lh, int i, int n, int mrgn, bool on, const struct DBP_MenuMouse& m, const char* txt, Bit32u blendtxt = 0xFF000000)
-		{ int w = width-mrgn*2; return DrawButtonAt(blend, btny, lh, 4, 4, (!i ? mrgn : mrgn + (w*i/n + 2)), (i == (n-1) ? mrgn + w : mrgn + (w*(i+1)/n - 2)), on, m, txt, blendtxt); }
+	INLINE bool DrawButton(Bit32u blend, int btny, int lh, int i, int j, int n, int mrgn, bool on, const struct DBP_MenuMouse& m, const char* txt, Bit32u blendtxt = 0xFF000000)
+		{ int w = width-mrgn*2; return DrawButtonAt(blend, btny, lh, 4, 4, (!i ? mrgn : mrgn + (w*i/n + 2)), (j == n ? mrgn + w : mrgn + (w*j/n - 2)), on, m, txt, blendtxt); }
 };
 DBP_STATIC_ASSERT(sizeof(DBP_BufferDrawing) == sizeof(DBP_Buffer)); // drawing is just for function expansions, we're just casting one to the other
 
 struct DBP_MenuMouse
 {
-	float x, y, jx, jy; Bit16u bw, bh; Bit16s mx, my; Bit8s kx, ky, mspeed; Bit8u realmouse : 1, left_pressed : 1, left_up : 1, right_up : 1, wheel_down : 1, wheel_up : 1, ignoremove : 1;
+	float x, y, jx1, jy1, jx2, jy2; Bit16u bw, bh; Bit16s mx, my; Bit8s kx, ky, mspeed; Bit8u realmouse : 1, left_pressed : 1, click : 1, right_up : 1, wheel_down : 1, wheel_up : 1, ignoremove : 1;
 	DBP_MenuMouse() { memset(this, 0, sizeof(*this)); }
-	void Reset() { mspeed = 2; left_pressed = false; if (realmouse) mx = dbp_mouse_x, my = dbp_mouse_y; }
+	void Reset() { mspeed = 2; left_pressed = false; if (realmouse) Input(DBPET_MOUSEMOVE, 0, 0, false); }
 
-	void Input(DBP_Event_Type type, int val, int val2)
+	void Input(DBP_Event_Type type, int val, int val2, bool joykbd)
 	{
 		switch (type)
 		{
 			case DBPET_MOUSEUP:
-				if (val == 0) left_pressed = false, left_up = true; //left
+				if (val == 0) left_pressed = false, click = true; //left
 				if (val == 1) right_up = true; //right
 				break;
 			case DBPET_MOUSEDOWN:
 				if (val == 0) left_pressed = true; //left
+				else break;
+				x = 99999999.f; // force update menu selection on left click
 				/* fall through */
 			case DBPET_MOUSEMOVE:
+				#ifndef DBP_STANDALONE
 				mx = dbp_mouse_x;
 				my = dbp_mouse_y;
+				#else
+				DBPS_GetMouse(mx, my, true);
+				#endif
 				break;
 			case DBPET_KEYDOWN:
 				switch ((KBD_KEYS)val)
@@ -198,12 +216,18 @@ struct DBP_MenuMouse
 			case DBPET_KEYUP:
 				switch ((KBD_KEYS)val)
 				{
-					case KBD_left:  case KBD_kp4: case KBD_right: case KBD_kp6: kx = 0; break;
-					case KBD_up:    case KBD_kp8: case KBD_down:  case KBD_kp2: ky = 0; break;
+					case KBD_left:  case KBD_kp4: if (kx == -1) kx = 0; break;
+					case KBD_right: case KBD_kp6: if (kx ==  1) kx = 0; break;
+					case KBD_up:    case KBD_kp8: if (ky == -1) ky = 0; break;
+					case KBD_down:  case KBD_kp2: if (ky ==  1) ky = 0; break;
+					case KBD_enter: case KBD_kpenter: case KBD_space: if (joykbd) { click = true; } break;
 				}
 				break;
-			case DBPET_JOY1X: case DBPET_JOY2X: case DBPET_JOYMX: jx = DBP_GET_JOY_ANALOG_VALUE(val); break;
-			case DBPET_JOY1Y: case DBPET_JOY2Y: case DBPET_JOYMY: jy = DBP_GET_JOY_ANALOG_VALUE(val); break;
+			case DBPET_JOY1X: jx1 = DBP_GET_JOY_ANALOG_VALUE(val); break;
+			case DBPET_JOY1Y: jy1 = DBP_GET_JOY_ANALOG_VALUE(val); break;
+			case DBPET_JOY2X: jx2 = DBP_GET_JOY_ANALOG_VALUE(val); break;
+			case DBPET_JOY2Y: jy2 = DBP_GET_JOY_ANALOG_VALUE(val); break;
+			case DBPET_JOY2DOWN: if (joykbd) { click = true; } break;
 			case DBPET_MOUSESETSPEED: mspeed = (val > 0 ? 4 : 1); break;
 			case DBPET_MOUSERESETSPEED: mspeed = 2; break;
 		}
@@ -211,8 +235,6 @@ struct DBP_MenuMouse
 
 	bool Update(DBP_BufferDrawing& buf, bool joykbd)
 	{
-		float oldmx = x, oldmy = y;
-		Bit32u newres = buf.width * buf.height;
 		if (bw != buf.width || bh != buf.height)
 		{
 			x = (bw ? (x * buf.width / bw) : (buf.width * .5f));
@@ -225,17 +247,17 @@ struct DBP_MenuMouse
 			float newx = (float)(mx+0x7fff)*buf.width/0xFFFE, newy = (float)(my+0x7fff)*buf.height/0xFFFE;
 			mx = my = 0;
 			realmouse = true;
-			if (newx == x && newy == y) return false;
+			if (newx == x && newy == y) { if (ignoremove) ignoremove = false; return false; }
 			x = newx, y = newy;
 		}
-		else if (jx || kx || jy || ky)
+		else if (jx1 || jx2 || kx || jy1 || jy2 || ky)
 		{
 			realmouse = false;
-			if (!joykbd) return false;
-			x += (jx + kx) * mspeed * buf.width / 320;
-			y += (jy + ky) * mspeed * buf.height / 240;
+			if (!joykbd) { if (ignoremove) ignoremove = false; return false; }
+			x += (jx1 + jx2 + kx) * mspeed * buf.width / 320;
+			y += (jy1 + jy2 + ky) * mspeed * buf.height / 240;
 		}
-		else return false;
+		else { if (ignoremove) ignoremove = false; return false; }
 		if (x <            1) x = (float)1;
 		if (x >  buf.width-2) x = (float)(buf.width-2);
 		if (y <            1) y = (float)1;
@@ -247,7 +269,7 @@ struct DBP_MenuMouse
 	void Draw(DBP_BufferDrawing& buf, bool joykbd)
 	{
 		// Draw white mouse cursor with black outline
-		left_up = right_up = wheel_up = wheel_down = false;
+		click = right_up = wheel_up = wheel_down = false;
 		if (!realmouse && !joykbd) return;
 		for (Bit32u thick = buf.GetThickness(), midc = 6*thick, maxc = 8*thick, *v = buf.video, w = buf.width, h = buf.height, i = 0; i != 9; i++)
 		{
@@ -279,14 +301,13 @@ struct DBP_MenuState
 {
 	enum ItemType : Bit8u { IT_NONE, _IT_CUSTOM, };
 	enum Result : Bit8u { RES_NONE, RES_OK, RES_CANCEL, RES_CLOSESCREENKEYBOARD, RES_CHANGEMOUNTS, RES_REFRESHSYSTEM };
-	bool refresh_mousesel, scroll_unlocked, hide_sel, show_popup;
-	int sel, scroll, joyx, joyy, scroll_jump, click_sel;
-	Bit32u open_ticks;
-	DBP_Event_Type held_event; KBD_KEYS held_key; Bit32u held_ticks;
+	int sel, scroll, joyx, joyy, scroll_jump, mouse_sel, click_sel;
+	bool refresh_mousesel, scroll_unlocked, hide_sel, show_popup, toggleosd_down;
+	DBP_Event_Type held_event; KBD_KEYS held_key; Bit32u held_ticks, open_ticks;
 	struct Item { Bit8u type, pad; Bit16s info; std::string str; INLINE Item() {} INLINE Item(Bit8u t, Bit16s i = 0, const char* s = "") : type(t), info(i), str(s) {} };
 	std::vector<Item> list;
 
-	DBP_MenuState() : refresh_mousesel(true), scroll_unlocked(false), hide_sel(false), show_popup(false), sel(0), scroll(-1), joyx(0), joyy(0), scroll_jump(0), click_sel(-1), open_ticks(DBP_GetTicks()), held_event(_DBPET_MAX) { }
+	DBP_MenuState() : sel(0), scroll(-1), joyx(0), joyy(0), scroll_jump(0), mouse_sel(-1), click_sel(-1), refresh_mousesel(true), scroll_unlocked(false), hide_sel(false), show_popup(false), toggleosd_down(false), held_event(_DBPET_MAX), open_ticks(DBP_GetTicks()) { }
 
 	void Input(DBP_Event_Type type, int val, int val2)
 	{
@@ -305,6 +326,16 @@ struct DBP_MenuState
 					case KBD_pagedown: sel_change +=    12; break;
 					case KBD_home:     sel_change -= 99999; break;
 					case KBD_end:      sel_change += 99999; break;
+					default: if (val <= KBD_m)
+					{
+						int lckey = (DBP_KBDNAMES[val][0] | 0x20), first = -1;
+						for (const Item& it : list)
+							if ((it.str.c_str()[0] | 0x20) == lckey)
+								{ int i = (int)(&it - &list[0]); if (i > sel) { sel_change = i - sel; break; } else if (first == -1) { first = i; } }
+						if (!sel_change && first != -1) sel_change = first - sel;
+						type = _DBPET_MAX; // prevent held
+						hide_sel = false; // show immediately
+					}
 				}
 				break;
 			case DBPET_KEYUP:
@@ -315,17 +346,18 @@ struct DBP_MenuState
 				}
 				if (held_event == DBPET_KEYDOWN) held_event = _DBPET_MAX;
 				break;
-			case DBPET_ONSCREENKEYBOARDUP: res = RES_CLOSESCREENKEYBOARD; break;
+			case DBPET_TOGGLEOSD: toggleosd_down = true; break;
+			case DBPET_TOGGLEOSDUP: if (toggleosd_down) { res = RES_CLOSESCREENKEYBOARD; toggleosd_down = false; } break;
 			case DBPET_CHANGEMOUNTS: res = RES_CHANGEMOUNTS; break;
 			case DBPET_REFRESHSYSTEM: res = RES_REFRESHSYSTEM; break;
 			case DBPET_MOUSEMOVE:
 				scroll_unlocked = true;
 				break;
 			case DBPET_MOUSEDOWN:
-				if (val == 0) click_sel = (hide_sel ? -1 : sel);
+				if (val == 0) click_sel = mouse_sel; // can be different than sel
 				break;
 			case DBPET_MOUSEUP:
-				if (val == 0 && click_sel == sel) res = RES_OK; // left
+				if (val == 0 && (click_sel == sel || show_popup)) res = RES_OK; // left
 				if (val == 1) res = RES_CANCEL; // right
 				break;
 			case DBPET_JOY1X: case DBPET_JOY2X:
@@ -347,7 +379,7 @@ struct DBP_MenuState
 		if (res && (DBP_GetTicks() - open_ticks) < 200U)
 			res = RES_NONE; // ignore already pressed buttons when opening
 
-		if (sel_change || x_change)
+		if ((sel_change || x_change) && type != _DBPET_MAX)
 		{
 			if (held_event == _DBPET_MAX) { held_event = type; held_ticks = DBP_GetTicks() + 300; }
 			if      (sel_change ==  -1) held_key = KBD_up;
@@ -357,20 +389,20 @@ struct DBP_MenuState
 			else if (x_change   ==  -1) held_key = KBD_left;
 			else if (x_change   ==   1) held_key = KBD_right;
 			else held_event = _DBPET_MAX;
-			scroll_unlocked = false;
 		}
 
 		DBP_ASSERT(list.size());
 		for (int count = (int)list.size(); !res && sel_change && !show_popup;)
 		{
-			if (hide_sel) { hide_sel = false; break; }
+			scroll_unlocked = false;
+			if (hide_sel) { hide_sel = false; if (list[sel].type != RES_NONE) { break; } }
 			sel += sel_change;
 			if (sel >= 0 && sel < count) { }
 			else if (sel_change > 1) sel = count - 1;
 			else if (sel_change == -1) sel = count - 1;
 			else sel = scroll = 0;
 			if (list[sel].type != RES_NONE) break;
-			sel_change = (sel_change == -1 ? -1 : 1);
+			sel_change = ((sel_change == -1 || sel_change > 1) ? -1 : 1);
 		}
 
 		if (hide_sel && res != RES_CANCEL && res != RES_CLOSESCREENKEYBOARD && res != RES_CHANGEMOUNTS && res != RES_REFRESHSYSTEM) return;
@@ -387,32 +419,32 @@ struct DBP_MenuState
 
 	virtual void DoInput(Result res, Bit8u ok_type, int x_change) = 0;
 
-	int DrawMenuBase(DBP_BufferDrawing& buf, Bit32u blend, int lh, int rows, const DBP_MenuMouse& m, bool mouseMoved, int menul, int menur, int menuu, bool centerv = false)
+	int DrawMenuBase(DBP_BufferDrawing& buf, Bit32u blend, const int lh, const int rows, const DBP_MenuMouse& m, bool mouseMoved, int menul, int menur, int menuu, bool centerv = false)
 	{
-		int count = (int)list.size(), xtra = (lh == 8 ? 0 : 1), scrx = menur - 11, menuh = rows * lh + xtra;
-		bool scrollbar = (count > rows);
+		const int count = (int)list.size(), xtra = (lh == 8 ? 0 : 1), scrx = menur - 11, menuh = rows * lh + xtra;
+		const bool scrollbar = (count > rows);
 		int listu = menuu + ((centerv && rows > count) ? ((rows - count) * lh) / 3 : 0);
+
+		// Update Scroll
+		if (scroll == -1)
+		{
+			scroll = sel - rows/2;
+			scroll = ((scroll < 0 || count <= rows) ? 0 : scroll > count - rows ? count - rows : scroll);
+			if (!show_popup && m.realmouse) mouseMoved = refresh_mousesel; // refresh when switching tab
+		}
+		else if (count <= rows) scroll = 0;
 
 		if (!show_popup)
 		{
-			if (scrollbar && m.left_pressed && (m.x >= scrx || click_sel == -2) && m.y >= menuu && m.y < menuu+menuh && scroll != -1)
+			if (scrollbar)
 			{
-				int scrollh = menuh * rows / count / 2;
-				scroll_jump = (((count - rows) * ((int)m.y - menuu - scrollh) / (menuh-scrollh-scrollh)) - scroll);
-				click_sel = -2;
-			}
+				if (m.left_pressed && (m.x >= scrx || click_sel == -2) && m.y >= menuu && m.y < menuu+menuh && scroll != -1)
+				{
+					int scrollh = menuh * rows / count / 2;
+					scroll_jump = (((count - rows) * ((int)m.y - menuu - scrollh) / (menuh-scrollh-scrollh)) - scroll);
+					click_sel = -2;
+				}
 
-			if (scroll == -1 && m.realmouse) mouseMoved = refresh_mousesel; // refresh when switching tab
-
-			// Update Scroll
-			if (count <= rows) scroll = 0;
-			else if (scroll == -1)
-			{
-				scroll = sel - rows/2;
-				scroll = (scroll < 0 ? 0 : scroll > count - rows ? count - rows : scroll);
-			}
-			else
-			{
 				if (m.realmouse && m.y >= menuu && m.y < menuu+menuh)
 				{
 					if (m.wheel_up)   { scroll_unlocked = true; scroll_jump -= 4; }
@@ -434,10 +466,12 @@ struct DBP_MenuState
 				}
 			}
 
+			int my = (int)(m.y+0.499f);
+			mouse_sel = scroll + (((int)my - listu) / lh);
 			if (mouseMoved)
 			{
-				int my = (int)(m.y+0.499f), mx = (int)(m.x+0.499f);
-				sel = scroll + (((int)my - listu) / lh);
+				int mx = (int)(m.x+0.499f);
+				sel = mouse_sel;
 				if (my < listu) { sel = scroll; hide_sel = true; }
 				else if (sel >= count) { sel = count - 1; hide_sel = true; }
 				else if (mx >= scrx && scrollbar) { hide_sel = true; }
@@ -449,7 +483,7 @@ struct DBP_MenuState
 
 		buf.DrawBox(menul, menuu - 3, menur - menul, menuh + 6, buf.BGCOL_MENU | blend, buf.COL_LINEBOX);
 
-		if (list[sel].type != IT_NONE && !hide_sel)
+		if (list[sel].type != IT_NONE && !hide_sel && sel >= scroll && (sel - scroll) < rows)
 			buf.AlphaBlendFillRect(menul+3, listu + (sel - scroll)*lh, menur - menul - 6 - (scrollbar ? 10 : 0), lh + xtra, buf.BGCOL_SELECTION | blend);
 
 		if (scrollbar)
@@ -469,14 +503,171 @@ struct DBP_MenuState
 		held_ticks = (t - held_ticks > 120 ? t : held_ticks + 60);
 		Input(DBPET_KEYDOWN, (int)held_key, 1);
 	}
+
+	void AddWrappedText(int lineLength, const char* prefix, const char* str, Bit16s info = 0)
+	{
+		for (const char* line = str, *p, *pmax, *lastspace; *line; line = (*lastspace ? lastspace + 1 : lastspace))
+		{
+			for (lastspace = NULL, p = line, pmax = p + lineLength; *p && p != pmax;) { if (*(++p) <= ' ' && *(lastspace = p) == '\n') break; }
+			if (*line == '\n' && !line[1]) break;
+			list.emplace_back(IT_NONE, info, prefix);
+			list.back().str.append(line, (size_t)(*line == '\n' ? 0 : (lastspace - line)));
+		}
+	}
 };
 
-static const Bit8u DBP_MapperJoypadNums[] = { RETRO_DEVICE_ID_JOYPAD_UP, RETRO_DEVICE_ID_JOYPAD_DOWN, RETRO_DEVICE_ID_JOYPAD_LEFT, RETRO_DEVICE_ID_JOYPAD_RIGHT, RETRO_DEVICE_ID_JOYPAD_A, RETRO_DEVICE_ID_JOYPAD_B, RETRO_DEVICE_ID_JOYPAD_X, RETRO_DEVICE_ID_JOYPAD_Y, RETRO_DEVICE_ID_JOYPAD_SELECT, RETRO_DEVICE_ID_JOYPAD_START, RETRO_DEVICE_ID_JOYPAD_L, RETRO_DEVICE_ID_JOYPAD_R, RETRO_DEVICE_ID_JOYPAD_L2, RETRO_DEVICE_ID_JOYPAD_R2, RETRO_DEVICE_ID_JOYPAD_L3, RETRO_DEVICE_ID_JOYPAD_R3 };
-static const char* DBP_MapperJoypadNames[] = { "Cima", "Baixo", "Esquerda", "Direita", "B", "A", "Y", "X", "SELECT", "START", "L", "R", "L2", "R2", "L3", "R3" };
-
-struct DBP_MapperMenuState : DBP_MenuState
+#ifdef DBP_STANDALONE
+struct DBP_SystemMenuState final : DBP_MenuState
 {
+	enum ItemType : Bit8u { IT_CANCEL = _IT_CUSTOM, IT_CATEGORIES, IT_CATEGORY, IT_OPTION, IT_TOGGLE, IT_VALUE };
+	Bit8u curmenu;
+	DBP_SystemMenuState() { menu(IT_CATEGORIES); }
+	void menu(Bit8u menu_type)
+	{
+		int setsel = 0;
+		Bit16s topinfo    = (     list.size() <= 0   ? 0 : list[0].info);
+		Bit16s secondinfo = (     list.size() <= 1   ? 0 : list[1].info);
+		Bit16s selinfo    = ((int)list.size() <= sel ? 0 : list[sel].info);
+		list.clear();
+		if (menu_type == IT_CATEGORIES)
+		{
+			for (const retro_core_option_v2_category& oc : option_cats)
+			{
+				if (!oc.key) break;
+				if (curmenu == IT_CATEGORY && topinfo == (Bit16s)(&oc - option_cats)) setsel = (int)list.size();
+				list.emplace_back(IT_CATEGORY, (Bit16s)(&oc - option_cats), oc.desc);
+				AddWrappedText(66, "  ", oc.info);
+				list.emplace_back(IT_NONE);
+			}
+		}
+		else if (menu_type == IT_CATEGORY)
+		{
+			const retro_core_option_v2_category& oc = option_cats[curmenu == IT_CATEGORIES ? selinfo : topinfo];
+			list.emplace_back(IT_NONE, (curmenu == IT_CATEGORIES ? selinfo : topinfo), oc.desc);
+			AddWrappedText(66, "  ", oc.info);
+			for (const retro_core_option_v2_definition& od : option_defs)
+			{
+				if (od.category_key != oc.key || DBP_Option::GetHidden(od)) continue;
+				if ((Bit16s)(&od - option_defs) == (curmenu == IT_CATEGORIES ? 0 : secondinfo)) setsel = (int)(list.size() + 1);
+				list.emplace_back(IT_NONE);
+				list.emplace_back((od.values[2].value ? IT_OPTION : IT_TOGGLE), (Bit16s)(&od - option_defs), od.desc);
+				if (od.info) AddWrappedText(66, "  ", od.info);
+			}
+			if (curmenu == IT_CATEGORY) setsel = sel;
+		}
+		else if (menu_type == IT_OPTION)
+		{
+			const retro_core_option_v2_definition& od = option_defs[selinfo];
+			list.emplace_back(IT_NONE, topinfo, od.desc);
+			if (od.info) AddWrappedText(66, "  ", od.info, selinfo);
+			list.emplace_back(IT_NONE, selinfo);
+			retro_variable var = { od.key, od.default_value };
+			environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var);
+			for (const retro_core_option_value& ov : od.values)
+			{
+				if (!ov.value) break;
+				if (!strcmp(var.value, ov.value)) setsel = (int)list.size();
+				list.emplace_back(IT_VALUE, (Bit16s)(&ov - od.values), (setsel != (int)list.size() ? "( ) " : "(\x7) "));
+				list.back().str.append(ov.label ? ov.label : ov.value);
+			}
+		}
+		curmenu = menu_type;
+		ResetSel(setsel, (menu_type == IT_CATEGORIES));
+	};
+	virtual void DoInput(Result res, Bit8u ok_type, int x_change)
+	{
+		if (res == RES_CANCEL) ok_type = IT_CANCEL;
+		if      (ok_type == IT_CATEGORY) menu(IT_CATEGORY);
+		else if (ok_type == IT_OPTION) menu(IT_OPTION);
+		else if ((ok_type == IT_NONE && curmenu == IT_CATEGORY && x_change && (list[sel].type == IT_OPTION || list[sel].type == IT_TOGGLE)) || ok_type == IT_TOGGLE)
+		{
+			if (ok_type == IT_TOGGLE) x_change = 1;
+			const retro_core_option_v2_definition& od = option_defs[list[sel].info];
+			retro_variable var = { od.key, od.default_value };
+			environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var);
+			for (const retro_core_option_value& ov : od.values)
+			{
+				if (ov.value) { if (!strcmp(var.value, ov.value)) { x_change += (int)(&ov - od.values); } continue; }
+				var.value = (x_change < 0 ? (&ov)[-1] : od.values[(od.values + x_change) >= &ov ? 0 : x_change]).value;
+				if (!strcmp(var.value, od.default_value)) var.value = NULL;
+				environ_cb(RETRO_ENVIRONMENT_SET_VARIABLE, &var);
+				break;
+			}
+		}
+		else if (ok_type == IT_VALUE)
+		{
+			Item& itsel = list[sel];
+			const retro_core_option_v2_definition& od = option_defs[list[1].info];
+			retro_variable var = { od.key, od.values[itsel.info].value };
+			if (!strcmp(var.value, od.default_value)) var.value = NULL;
+			environ_cb(RETRO_ENVIRONMENT_SET_VARIABLE, &var);
+			for (Item& it : list)
+				if (it.type == IT_VALUE)
+					it.str[1] = (it.info == itsel.info ? '\x7' : ' ');
+		}
+		else if (ok_type == IT_CANCEL && curmenu == IT_OPTION) menu(IT_CATEGORY);
+		else if (ok_type == IT_CANCEL && curmenu == IT_CATEGORY) menu(IT_CATEGORIES);
+		else if ((ok_type == IT_CANCEL || res == RES_CLOSESCREENKEYBOARD) && !DBP_FullscreenOSD)
+		{
+			DBP_CloseOSD();
+		}
+	}
+	void DrawMenu(DBP_BufferDrawing& buf, Bit32u blend, int lh, int w, int h, int ftr, bool mouseMoved, const DBP_MenuMouse& m)
+	{
+		UpdateHeld();
+		if (curmenu == IT_CATEGORY)
+		{
+			Bit16s topinfo = list[0].info;
+			const Item *plist = &list[0], *plistend = plist + list.size();
+			const retro_core_option_v2_category& oc = option_cats[topinfo];
+			for (const retro_core_option_v2_definition& od : option_defs)
+			{
+				if (od.category_key && (od.category_key != oc.key || DBP_Option::GetHidden(od))) continue;
+				while (plist != plistend && (plist->type != IT_OPTION && plist->type != IT_TOGGLE)) plist++;
+				if (od.category_key ? (plist != plistend && plist->info == (Bit16s)(&od - option_defs)) : plist == plistend) { plist++; continue; }
+				menu(IT_CATEGORY); // visibility changed, refresh
+				break;
+			}
+		}
+		int hdr = lh*2, rows = (h - hdr - ftr) / lh, count = (int)list.size(), l = 30, r = w-30;
+		if (l < 0) { l = 0, r = w; }
+		buf.DrawBox(l + 60, hdr-6-lh, r-l-120, lh+4, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
+		buf.PrintCenteredOutlined(lh, 0, w, hdr-lh-4, "DOSBox Pure System Menu", buf.COL_MENUTITLE);
+		DrawMenuBase(buf, blend, lh, rows, m, mouseMoved, l, r, hdr);
+		for (int i = scroll, maxw = r-l-27; i != count && i != (scroll + rows); i++)
+		{
+			Bit8u itype = list[i].type;
+			if (itype == IT_OPTION || itype == IT_TOGGLE)
+			{
+				const retro_core_option_v2_definition& od = option_defs[list[i].info];
+				retro_variable var = { od.key, od.default_value };
+				environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var);
+				for (const retro_core_option_value& ov : od.values)
+				{
+					if (!ov.value) break;
+					if (strcmp(var.value, ov.value)) continue;
+					buf.Print(lh, l+16 + maxw-130, hdr + (i - scroll)*lh, "\x1D", buf.COL_HEADER, 120);
+					buf.Print(lh, l+16 + maxw-120, hdr + (i - scroll)*lh, ov.label, buf.COL_NORMAL, 120);
+					break;
+				}
+				buf.Print(lh, l+16, hdr + (i - scroll)*lh, list[i].str.c_str(), buf.COL_NORMAL, maxw - 140);
+			}
+			else
+				buf.Print(lh, l+16, hdr + (i - scroll)*lh, list[i].str.c_str(), (itype != IT_NONE ? buf.COL_NORMAL : buf.COL_HEADER), maxw);
+		}
+	}
+};
+#endif
+static const Bit8u DBP_MapperJoypadNums[] = { RETRO_DEVICE_ID_JOYPAD_UP, RETRO_DEVICE_ID_JOYPAD_DOWN, RETRO_DEVICE_ID_JOYPAD_LEFT, RETRO_DEVICE_ID_JOYPAD_RIGHT, RETRO_DEVICE_ID_JOYPAD_B, RETRO_DEVICE_ID_JOYPAD_A, RETRO_DEVICE_ID_JOYPAD_Y, RETRO_DEVICE_ID_JOYPAD_X, RETRO_DEVICE_ID_JOYPAD_SELECT, RETRO_DEVICE_ID_JOYPAD_START, RETRO_DEVICE_ID_JOYPAD_L, RETRO_DEVICE_ID_JOYPAD_R, RETRO_DEVICE_ID_JOYPAD_L2, RETRO_DEVICE_ID_JOYPAD_R2, RETRO_DEVICE_ID_JOYPAD_L3, RETRO_DEVICE_ID_JOYPAD_R3 };
+static const char* DBP_MapperJoypadNames[] = { "Cima", "Baixo", "Esquerda", "Direita", "B (Baixo)", "A (Direita)", "Y (Esquerda)", "X (Cima)", "SELECT", "START", "L", "R", "L2", "R2", "L3", "R3" };
+
+struct DBP_MapperMenuState final : DBP_MenuState
+{
+	#ifndef DBP_STANDALONE
 	enum ItemType : Bit8u { IT_CANCEL = _IT_CUSTOM, IT_PRESET, IT_SELECT, IT_EDIT, IT_ADD, IT_DEL, IT_DEVICE, IT_DIVIDER };
+	#else
+	enum ItemType : Bit8u { IT_CANCEL = _IT_CUSTOM, IT_PRESET, IT_SELECT, IT_EDIT, IT_ADD, IT_DEL, IT_DEVICE, IT_DIVIDER, IT_BINDJOY };
+	#endif
 	enum EditMode : Bit8u { NOT_EDITING, EDIT_EXISTING, EDIT_NEW, EDIT_ADDITIONAL };
 	int main_sel = 0;
 	Bit16s edit_info;
@@ -528,24 +719,16 @@ struct DBP_MapperMenuState : DBP_MenuState
 		list.clear();
 		if (DBP_PadMapping::CalcPortMode(bind_port) != DBP_PadMapping::MODE_MAPPER)
 		{
-			// Forçar a ativação do mapeador para a porta 1
-			if (bind_port == 0) // Port 1 is index 0
-			{
-                DBP_PadMapping::SetPortMode(bind_port, DBP_PadMapping::MODE_MAPPER);
-			}
-			else
-			{
 			list.emplace_back(IT_NONE);
-			list.emplace_back(IT_NONE, 11, "    O Mapeador est  desativado");
+			list.emplace_back(IT_NONE, 11, "    O Mapeador de Controle est\xa0 desativado");
 			list.emplace_back(IT_NONE, 11, "    para esta porta do controle");
 			list.emplace_back(IT_NONE);
-			list.emplace_back(IT_NONE, 11, "    Configure 'Usar Mapeador de");
-			list.emplace_back(IT_NONE, 11, "    Controle' no menu de Controles");
-            }
+			list.emplace_back(IT_NONE, 11, "    Configure 'Usar Mapeador de Controle'");
+			list.emplace_back(IT_NONE, 11, "    no menu de Controles");
 		}
 		else
 		{
-			list.emplace_back(IT_NONE, 0, "Predefini‡„o: ");
+			list.emplace_back(IT_NONE, 0, "Predefini\x87\x84o: ");
 			list.emplace_back(IT_PRESET, 0, "  "); list.back().str += DBP_PadMapping::GetPortPresetName(bind_port);
 			list.emplace_back(IT_NONE, 2);
 
@@ -557,23 +740,23 @@ struct DBP_MapperMenuState : DBP_MenuState
 				const Bit32u padpdii = PORT_DEVICE_INDEX_ID(pad);
 				list.emplace_back(IT_NONE);
 				if (!a) list.back().str = DBP_MapperJoypadNames[i];
-				else  ((list.back().str = DBP_MapperJoypadNames[2+pad.index]) += " Alavanca ") += DBP_MapperJoypadNames[(i-JOYPAD_MAX)%4];
+				else  ((list.back().str = DBP_MapperJoypadNames[2+pad.index]) += " Anal\xa2gico ") += DBP_MapperJoypadNames[(i-JOYPAD_MAX)%4];
 
 				size_t numBefore = list.size();
 				for (const DBP_InputBind& b : dbp_input_binds)
 					if (PORT_DEVICE_INDEX_ID(b) == padpdii)
 						Add(b, (Bit16s)(((&b - &dbp_input_binds[0])<<1)|apart), apart, &boundActionWheel);
-				if (list.size() - numBefore == 0) list.emplace_back(IT_ADD, i, "  [Criar associa‡„o]");
+				if (list.size() - numBefore == 0) list.emplace_back(IT_ADD, i, "  [Criar Associa\x87\x84o]");
 
 				if (const char* action = DBP_PadMapping::GetBoundAutoMapButtonLabel(padpdii, a))
 				{
-					list.emplace_back(IT_NONE, 1, "    Fun‡”es: ");
+					list.emplace_back(IT_NONE, 1, "    Fun\x87\x84o: ");
 					list.back().str.append(action);
 				}
 			}
 
 			list.emplace_back(IT_NONE, 2);
-			list.emplace_back(IT_NONE, 0, "Op‡”es da roda: ");
+			list.emplace_back(IT_NONE, 0, "Op\x87\x94es da Roda: ");
 			for (const DBP_WheelItem& it : dbp_wheelitems)
 			{
 				if (it.port != bind_port) continue;
@@ -585,25 +768,25 @@ struct DBP_MapperMenuState : DBP_MenuState
 				}
 				if (const char* action = DBP_PadMapping::GetWheelAutoMapButtonLabel(it))
 				{
-					list.emplace_back(IT_NONE, 1, "    Fun‡„o: ");
+					list.emplace_back(IT_NONE, 1, "    Fun\x87\x84o: ");
 					list.back().str.append(action);
 				}
 				list.emplace_back(IT_NONE, 0);
 				haveWheelOptions = true;
 			}
-			list.emplace_back(IT_ADD, -1, "  Adicionar op‡„o");
+			list.emplace_back(IT_ADD, -1, "  Adicionar Op\x87\x84o");
 			if (haveWheelOptions != boundActionWheel)
 			{
 				list.emplace_back(IT_NONE, 0, "Aviso:");
-				list.emplace_back(IT_NONE, -1, "  A roda est  inacess¡vel porque");
-				list.emplace_back(IT_NONE, -1, (haveWheelOptions ? "  nenhum bot„o foi vinculado … ela" : "  nenhuma op‡„o foi definida"));
+				list.emplace_back(IT_NONE, -1, "  A roda est\xa0 inacess\xa1vel porque");
+				list.emplace_back(IT_NONE, -1, (haveWheelOptions ? "  nenhum bot\x84o foi vinculado \x85 Roda de A\x87\x84o" : "  nenhuma op\x87\x84o foi definida"));
 			}
 			list.emplace_back(IT_NONE, 0);
 		}
 		if (!DBP_FullscreenOSD)
 		{
 			list.emplace_back(IT_NONE);
-			list.emplace_back(IT_CANCEL, 0, "    Fechar mapeador");
+			list.emplace_back(IT_CANCEL, 0, "    Fechar Mapeador");
 		}
 		if (main_sel >= (int)list.size()) main_sel = (int)list.size()-1;
 		while (main_sel && list[main_sel].type == IT_NONE) main_sel--;
@@ -631,19 +814,19 @@ struct DBP_MapperMenuState : DBP_MenuState
 		bool have_add = false;
 		for (Item& it : list) { if (it.type == IT_ADD) { have_add = true; break; } }
 		list.clear();
-		list.emplace_back(IT_NONE, 22, "Selecionar predefini‡„o");
+		list.emplace_back(IT_NONE, 22, "Selecionar Predefini\x87\x84o");
 		list.emplace_back(IT_NONE);
 		Bit16s off = (dbp_auto_mapping ? 0 : 1), n = 1 + off;
 		for (const char* p; (p = DBP_PadMapping::GetPresetName((DBP_PadMapping::EPreset)n)) != NULL;) list.emplace_back(IT_PRESET, n++, p);
 		if (have_add)
 		{
 			list.emplace_back(IT_NONE);
-			list.emplace_back(IT_PRESET, 9999, "Preencher n„o associados com teclas gen‚ricas");
+			list.emplace_back(IT_PRESET, 9999, "Preencher N\x84o Associados com Teclas Gen\x82ricas");
 		}
 		if (DBP_PadMapping::IsCustomized(bind_port))
 		{
 			list.emplace_back(IT_NONE);
-			list.emplace_back(IT_DEL, 0, "[Redefinir o mapeamento]");
+			list.emplace_back(IT_DEL, 0, "[Redefinir Mapeamento]");
 		}
 		ResetSel(2 + DBP_PadMapping::GetPreset(bind_port) - 1 - off);
 	}
@@ -663,7 +846,7 @@ struct DBP_MapperMenuState : DBP_MenuState
 		else if (ok_type == IT_ADD)
 		{
 			edit_mode = EDIT_ADDITIONAL;
-			(list[1].str = " >") += "  [Associa‡„o adicional]";
+			(list[1].str = " >") += "  [Associa\x87\x84o Adicional]";
 		}
 		list.resize(2);
 		list.emplace_back(IT_NONE);
@@ -672,7 +855,7 @@ struct DBP_MapperMenuState : DBP_MenuState
 		list.emplace_back(IT_DEVICE,   3, "  "); list.back().str += DBPDEV_Joystick;
 		for (const DBP_SpecialMapping& sm : DBP_SpecialMappings)
 		{
-			if (sm.dev || (sm.evt != DBPET_ONSCREENKEYBOARD && edit_info < 0)) continue; // no wheel no port shift as wheel options
+			if (sm.dev || (sm.evt != DBPET_TOGGLEOSD && edit_info < 0)) continue; // no wheel no port shift as wheel options
 			if (sm.evt == DBPET_SHIFTPORT && sm.meta == bind_port) continue;
 			list.emplace_back(IT_SELECT, (Bit16s)(DBP_SPECIALMAPPINGS_KEY + (&sm - DBP_SpecialMappings)), "  ");
 			list.back().str += sm.name;
@@ -680,7 +863,7 @@ struct DBP_MapperMenuState : DBP_MenuState
 		if (edit_mode == EDIT_EXISTING)
 		{
 			list.emplace_back(IT_NONE);
-			list.emplace_back(IT_DEL, 0, "  [Remover associa‡„o]");
+			list.emplace_back(IT_DEL, 0, "  [Remover Associa\x87\x84o]");
 			int count = 0;
 			if (edit_info >= 0) // editing bind
 			{
@@ -696,9 +879,24 @@ struct DBP_MapperMenuState : DBP_MenuState
 			if (count < 4)
 			{
 				list.emplace_back(IT_NONE);
-				list.emplace_back(IT_ADD, 0, "  [Associa‡„o adicional]");
+				list.emplace_back(IT_ADD, 0, "  [Associa\x87\x84o Adicional]");
 			}
 		}
+		#ifdef DBP_STANDALONE
+		if (edit_info >= 0 && edit_mode != EDIT_ADDITIONAL && DBPS_HaveJoy()) // editing bind (not wheel)
+		{
+			DBP_InputBind bnd = (edit_mode == EDIT_NEW ? BindFromPadNum((Bit8u)edit_info) : dbp_input_binds[edit_info>>1]);
+			list.emplace_back(IT_NONE);
+			list.emplace_back(IT_BINDJOY, 0, "  [ Alterar Entrada do Controle ]");
+			list.emplace_back(IT_NONE);
+			list.emplace_back(IT_NONE);
+			if (!DBPS_GetJoyBind(bnd.port, bnd.device, bnd.index, bnd.id, (bool)(edit_info&1), list[list.size()-2].str, list[list.size()-1].str, "  "))
+			{
+				list.resize(list.size() - 2);
+				list.back().str.assign("  [ Atribuir Entrada do Controle ]");
+			}
+		}
+		#endif
 		list.emplace_back(IT_NONE);
 		list.emplace_back(IT_CANCEL, 0, "Cancelar");
 
@@ -710,7 +908,7 @@ struct DBP_MapperMenuState : DBP_MenuState
 	void menu_keys()
 	{
 		bind_dev = (Bit8u)list[sel].info;
-		(list[2].str = "   > ")  += list[sel].str;
+		(list[2].str = "   >")  += list[sel].str;
 		list.resize(3);
 		list.emplace_back(IT_NONE);
 		if (bind_dev == 1) for (Bit8u i = KBD_NONE + 1; i != KBD_LAST; i++)
@@ -727,7 +925,7 @@ struct DBP_MapperMenuState : DBP_MenuState
 
 			if (const char* mapname = DBP_PadMapping::GetKeyAutoMapButtonLabel(key))
 			{
-				list.emplace_back(IT_NONE, 0, "    Fun‡„o: ");
+				list.emplace_back(IT_NONE, 0, "    Fun\x87\x84o: ");
 				list.back().str += mapname;
 				list.emplace_back(IT_NONE, 0);
 			}
@@ -801,6 +999,25 @@ struct DBP_MapperMenuState : DBP_MenuState
 		{
 			menu_keys();
 		}
+		#ifdef DBP_STANDALONE
+		else if (ok_type == IT_BINDJOY)
+		{
+			DBP_InputBind bnd = (edit_mode == EDIT_NEW ? BindFromPadNum((Bit8u)edit_info) : dbp_input_binds[edit_info>>1]);
+			DBPS_StartCaptureJoyBind(bnd.port, bnd.device, bnd.index, bnd.id, (bool)(edit_info&1));
+			list.resize(2);
+			list.emplace_back(IT_NONE, 99, "   >  Atribuir Nova Entrada");
+			list.emplace_back(IT_NONE);
+			list.emplace_back(IT_NONE, 0, "  Pressione uma entrada no controle");
+			list.emplace_back(IT_NONE);
+			list.emplace_back(IT_CANCEL, 0, "Cancelar");
+			ResetSel(2);
+		}
+		else if (ok_type == IT_CANCEL && list.size() >= 3 && list[2].info == 99)
+		{
+			sel = main_sel;
+			menu_devices(ok_type);
+		}
+		#endif
 		else if (ok_type == IT_CANCEL && bind_dev)
 		{
 			menu_devices(ok_type);
@@ -837,10 +1054,10 @@ struct DBP_MapperMenuState : DBP_MenuState
 		int hdr = lh*3, rows = (h - hdr - ftr) / lh-1, count = (int)list.size(), l = w/2 - 150, r = w/2 + 150, xtra = (lh == 8 ? 0 : 1), wide = edit_mode == NOT_EDITING && !is_presets_menu() && w > 500;
 		if (l < 0) { l = 0, r = w; }
 		buf.DrawBox(l, hdr-7-lh*2, r-l, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
-		buf.PrintCenteredOutlined(lh, 0, w, hdr-lh*2-5, "Mapeador de controle", buf.COL_MENUTITLE);
+		buf.PrintCenteredOutlined(lh, 0, w, hdr-lh*2-5, "Mapeador de Controle", buf.COL_MENUTITLE);
 
 		char num[32];
-		sprintf(num, "Controle da porta %d", bind_port + 1);
+		sprintf(num, "Controle da Porta %d", bind_port + 1);
 		buf.DrawBox(l-(wide?50:0), hdr-5-lh, r-l+(wide?100:0), lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
 		buf.PrintCenteredOutlined(lh, 0, w, hdr-lh-3, num, buf.COL_CONTENT);
 		
@@ -860,7 +1077,6 @@ struct DBP_MapperMenuState : DBP_MenuState
 					if (list[sel].type != IT_NONE && !hide_sel && sel > ihdr && sel < inxt)
 						buf.AlphaBlendFillRect(l-97, y, 195, lh+xtra, buf.BGCOL_SELECTION | blend);
 					buf.Print(lh, l-84, y, list[ihdr].str.c_str(), buf.COL_HEADER);
-					ihdr = ihdr;
 				}
 				buf.Print(lh, l+100, y, list[i].str.c_str(), ((i == se || itype == IT_NONE) ? buf.COL_HIGHLIGHT : itype == IT_ADD ? buf.COL_DIM : buf.COL_NORMAL), maxw);
 				if (itype == IT_NONE && list[i].info == 2) // draw separator line
@@ -888,8 +1104,8 @@ struct DBP_MapperMenuState : DBP_MenuState
 		if (edit_mode == NOT_EDITING && !is_presets_menu())
 		{
 			int x_change = 0, x1 = l-(wide?50:0), x2 = r-25+(wide?50:0);
-			if (buf.DrawButtonAt(blend, hdr-lh-6, lh, 3, 2, x1, x1+25, false, m, "\x1B") && m.left_up) x_change = -1;
-			if (buf.DrawButtonAt(blend, hdr-lh-6, lh, 3, 2, x2, x2+25, false, m, "\x1A") && m.left_up) x_change = 1;
+			if (buf.DrawButtonAt(blend, hdr-lh-6, lh, 3, 2, x1, x1+25, false, m, "\x1B") && m.click) x_change = -1;
+			if (buf.DrawButtonAt(blend, hdr-lh-6, lh, 3, 2, x2, x2+25, false, m, "\x1A") && m.click) x_change = 1;
 			if (x_change) menu_top(x_change);
 
 			if (m.y >= 0 && m.y <= hdr)
@@ -940,7 +1156,7 @@ struct DBP_OnScreenKeyboardState
 		int oskx = (int)(buf.width / fx / 2) - (KWIDTH / 2);
 		int osky = (mo.y && mo.y < (buf.height / 2) ? 3 : (int)(buf.height / fy) - 3 - 85);
 
-		if (pressed_key && (DBP_GetTicks() - pressed_time) > 500 && pressed_key != KBD_LAST)
+		if (pressed_key && (int)(DBP_GetTicks() - pressed_time) > 500 && pressed_key != KBD_LAST)
 		{
 			held[pressed_key] = true;
 			pressed_key = KBD_NONE;
@@ -1006,9 +1222,24 @@ struct DBP_OnScreenKeyboardState
 		switch (type)
 		{
 			case DBPET_MOUSEDOWN:
-				if (val != 0) break; // only left mouse button
-				/* fall through */
-			case DBPET_JOY1DOWN: case DBPET_JOY2DOWN: case_ADDKEYDOWN:
+				if (val == 0) goto case_ADDKEYDOWN; // only left mouse button
+				break;
+			case DBPET_MOUSEUP:
+				if (val == 0) goto case_ADDKEYUP; // only left mouse button
+				break;
+			case DBPET_JOY1DOWN:
+				if (val == 0 && pressed_key == KBD_NONE) // left face button presses backspace
+				{
+					pressed_time = DBP_GetTicks() + 10000000u; // don't hold if pressed for 500 milliseconds
+					pressed_key = KBD_backspace;
+					KEYBOARD_AddKey(KBD_backspace, true);
+				}
+				else if (val == 1) // top face button toggles shift
+				{
+					KEYBOARD_AddKey(KBD_leftshift, (held[KBD_leftshift] ^= true));
+				}
+				break;
+			case DBPET_JOY2DOWN: case_ADDKEYDOWN:
 				if (pressed_key == KBD_NONE && hovered_key != KBD_NONE)
 				{
 					if (held[hovered_key])
@@ -1029,9 +1260,6 @@ struct DBP_OnScreenKeyboardState
 					}
 				}
 				break;
-			case DBPET_MOUSEUP:
-				if (val != 0) break; // only left mouse button
-				/* fall through */
 			case DBPET_JOY1UP: case DBPET_JOY2UP: case_ADDKEYUP:
 				if (pressed_key != KBD_NONE && pressed_key != KBD_LAST)
 				{
@@ -1057,7 +1285,7 @@ struct DBP_OnScreenKeyboardState
 					case KBD_esc: goto case_CLOSEOSK;
 				}
 				break;
-			case DBPET_ONSCREENKEYBOARD: case_CLOSEOSK:
+			case DBPET_TOGGLEOSD: case_CLOSEOSK:
 				pressed_key = KBD_NONE;
 				memset(held, 0, sizeof(held));
 				DBP_CloseOSD();
@@ -1066,17 +1294,21 @@ struct DBP_OnScreenKeyboardState
 	}
 };
 
-struct DBP_PureMenuState : DBP_MenuState
+struct DBP_PureMenuState final : DBP_MenuState
 {
-	enum ItemType : Bit8u { IT_RUN = _IT_CUSTOM, IT_MOUNT, IT_BOOTIMG, IT_BOOTIMG_MACHINE, IT_BOOTOSLIST, IT_BOOTOS, IT_INSTALLOSSIZE, IT_INSTALLOS, IT_SHELLLIST, IT_RUNSHELL, _IT_NO_AUTOBOOT, IT_MAINMENU, IT_COMMANDLINE, IT_CLOSEOSD, IT_VARIANTLIST, IT_VARIANTTOGGLE, IT_VARIANTRUN, IT_SYSTEMREFRESH };
+	#ifndef DBP_STANDALONE
+	enum ItemType : Bit8u { IT_RUN = _IT_CUSTOM, IT_MOUNT, IT_BOOTIMG, IT_BOOTIMG_MACHINE, IT_BOOTOSLIST, IT_BOOTOS, IT_INSTALLOSSIZE, IT_INSTALLOS, IT_SHELLLIST, IT_RUNSHELL, _IT_NO_AUTOBOOT, IT_MAINMENU, IT_COMMANDLINE, IT_CLOSEOSD, IT_VARIANTLIST, IT_VARIANTTOGGLE, IT_VARIANTRUN, IT_VARIANTRUN_RESET_CONFLICTS, IT_VARIANTRUN_KEEP_CONFLICTS, IT_SYSTEMREFRESH };
+	#else
+	enum ItemType : Bit8u { IT_RUN = _IT_CUSTOM, IT_MOUNT, IT_BOOTIMG, IT_BOOTIMG_MACHINE, IT_BOOTOSLIST, IT_BOOTOS, IT_INSTALLOSSIZE, IT_INSTALLOS, IT_SHELLLIST, IT_RUNSHELL, _IT_NO_AUTOBOOT, IT_MAINMENU, IT_COMMANDLINE, IT_CLOSEOSD, IT_VARIANTLIST, IT_VARIANTTOGGLE, IT_VARIANTRUN, IT_VARIANTRUN_RESET_CONFLICTS, IT_VARIANTRUN_KEEP_CONFLICTS, IT_SYSTEMREFRESH, IT_FILEBROWSE, IT_SAVELOAD };
+	#endif
 	enum { INFO_HEADER = 0x0A, INFO_WARN = 0x0B, INFO_DIM = 0xC };
 
-	int exe_count, fs_rows;
+	int exe_count, fs_rows, windowlinelength;
 	bool multidrive;
 	Bit8u popupsel;
 	ItemType listmode;
 
-	DBP_PureMenuState(bool isBoot = false) : exe_count(0), fs_rows(0), multidrive(false), popupsel(0)
+	DBP_PureMenuState() : exe_count(0), fs_rows(0), windowlinelength(60), multidrive(false), popupsel(0)
 	{
 		if (dbp_game_running) INT10_SetCursorShape(0x1e, 0); // hide blinking cursor
 		RefreshList(IT_MAINMENU); // always read exe_count and fs_rows, even if switching menu below
@@ -1105,12 +1337,13 @@ struct DBP_PureMenuState : DBP_MenuState
 		buf.DrawBox( w/10, 5, w-w/5, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
 		buf.DrawBox( 8, lh+7, w-16, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
 
-		buf.PrintCenteredOutlined(lh, 0, w, 7, "MENU INICIAL DO MSDOS", buf.COL_MENUTITLE);
-		buf.PrintCenteredOutlined(lh, 0, w, 7+lh+2, (!dbp_content_name.empty() ? dbp_content_name.c_str() : "nenhum conte£do carregado!"), buf.COL_CONTENT);
+		buf.PrintCenteredOutlined(lh, 0, w, 7, "MENU INICIAL DO DOSBOX PURE", buf.COL_MENUTITLE);
+		buf.PrintCenteredOutlined(lh, 0, w, 7+lh+2, (!dbp_content_name.empty() ? dbp_content_name.c_str() : "- Nenhum Conte\xa3do Carregado -"), buf.COL_CONTENT);
 
 		int inforow = (w > 319), hdr = lh*2+12, rows = (h - hdr - ftr) / lh - inforow, count = (int)list.size(), bot = hdr + rows * lh + 3 - (lh == 8 ? 1 : 0);
 		int listu = DrawMenuBase(buf, blend, lh, rows, m, mouseMoved, 8, w - 8, hdr, (list[0].type == IT_NONE));
-		bool autoboot_show = (DBP_Run::autoboot.use && listmode != IT_VARIANTLIST && (list[sel].type < _IT_NO_AUTOBOOT || hide_sel));
+		bool autoboot_show = (DBP_Run::autoboot.use && listmode != IT_VARIANTLIST && (list[sel].type < _IT_NO_AUTOBOOT || hide_sel) && first_shell);
+		windowlinelength = (w - 80) / buf.CW;
 
 		for (int i = scroll, se = (hide_sel ? -1 : sel); i != count && i != (scroll + rows); i++)
 		{
@@ -1120,7 +1353,7 @@ struct DBP_PureMenuState : DBP_MenuState
 			{
 				bool mounted = dbp_images[item.info].mounted;
 				int xdiff = (w - buf.CW*(strlen + 7)), mntx = (xdiff >= 0 ? xdiff / 2 : w - (buf.CW*9)), strx = (xdiff >= 0 ? mntx + (buf.CW*7) : xdiff - (buf.CW*3));
-				buf.Print(lh, mntx + ((mounted && xdiff >= 0) ? buf.CW : 0), y, (mounted ? "EJETAR-" : "INSERIR-"), (i == se ? buf.COL_HIGHLIGHT : buf.COL_NORMAL));
+				buf.Print(lh, mntx + ((mounted && xdiff >= 0) ? buf.CW : 0), y, (mounted ? "EJETAR" : "INSERIR"), (i == se ? buf.COL_HIGHLIGHT : buf.COL_NORMAL));
 				buf.Print(lh, strx, y, item.str.c_str(), (i == se ? buf.COL_HIGHLIGHT : buf.COL_NORMAL));
 			}
 			else if (item.type == IT_RUN || item.type == IT_BOOTOS || item.type == IT_BOOTIMG_MACHINE || item.type == IT_RUNSHELL)
@@ -1130,7 +1363,7 @@ struct DBP_PureMenuState : DBP_MenuState
 				if (i != se) continue;
 				buf.Print(lh, lblx - buf.CW*(2      ), y, "*", buf.COL_WHITE);
 				buf.Print(lh, lblx + buf.CW*(len + 1), y, "*", buf.COL_WHITE);
-				if (autoboot_show) buf.Print(lh, lblx + buf.CW*(len + 1), y, "* [AUTO INICIAR]", buf.COL_WHITE);
+				if (autoboot_show) buf.Print(lh, lblx + buf.CW*(len + 1), y, "* [DEFINIR AUTO-INICIAR]", buf.COL_WHITE);
 			}
 			else buf.Print(lh, (w - buf.CW*strlen) / 2, y, item.str.c_str(), (item.type != IT_NONE ? (i == se ? buf.COL_HIGHLIGHT : buf.COL_NORMAL) : (item.info == INFO_HEADER ? buf.COL_HEADER : (item.info == INFO_WARN ? buf.COL_WARN : (item.info == INFO_DIM ? buf.COL_DIM : buf.COL_NORMAL)))));
 		}
@@ -1139,9 +1372,13 @@ struct DBP_PureMenuState : DBP_MenuState
 		{
 			char skiptext[38];
 			if (!autoboot_show) skiptext[0] = '\0';
-			else if (DBP_Run::autoboot.skip == -1) snprintf(skiptext, sizeof(skiptext), "N„o exibir console de texto");
-			else if (DBP_Run::autoboot.skip) snprintf(skiptext, sizeof(skiptext), "N„o exibir os primeiros %d quadros", DBP_Run::autoboot.skip);
+			else if (DBP_Run::autoboot.skip == -1) snprintf(skiptext, sizeof(skiptext), "N\x84o exibir console de texto");
+			else if (DBP_Run::autoboot.skip) snprintf(skiptext, sizeof(skiptext), "N\x84o exibir os primeiros %d quadros", DBP_Run::autoboot.skip);
+			#ifndef DBP_STANDALONE
 			else snprintf(skiptext, sizeof(skiptext), "SHIFT/L2/R2 + Reiniciar para voltar");
+			#else
+			else snprintf(skiptext, sizeof(skiptext), "Auto-iniciar Ativado");
+			#endif
 
 			if (w > 639)
 			{
@@ -1164,13 +1401,13 @@ struct DBP_PureMenuState : DBP_MenuState
 				buf.DrawBox(w-217, bot, 150, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
 				buf.DrawBox(w-312, bot, 96, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
 				buf.PrintCenteredOutlined(lh, w-68, 60, bot+2, "\x7 Executar", buf.COL_BTNTEXT);
-				buf.PrintCenteredOutlined(lh, w-217, 150, bot+2, "\x1A\x1B Auto-in¡cio", buf.COL_BTNTEXT);
+				buf.PrintCenteredOutlined(lh, w-217, 150, bot+2, "\x1A\x1B Definir Auto-iniciar", buf.COL_BTNTEXT);
 				buf.PrintCenteredOutlined(lh, w-312, 96, bot+2, "\x18\x19 Rolar", buf.COL_BTNTEXT);
 			}
 
 			if (m.y >= bot && m.y <= bot+lh+3)
 			{
-				if (m.left_up || m.wheel_up) DoInput(RES_NONE, IT_NONE, 1);
+				if (m.click || m.wheel_up) DoInput(RES_NONE, IT_NONE, 1);
 				if (m.right_up || m.wheel_down) DoInput(RES_NONE, IT_NONE, -1);
 			}
 		}
@@ -1179,20 +1416,21 @@ struct DBP_PureMenuState : DBP_MenuState
 		{
 			int halfw = w/2, boxw = (w < 640 ? halfw-16 : halfw/2+8);
 			buf.DrawBox(halfw-boxw, h/2-lh*3, boxw*2, lh*6+8, buf.BGCOL_HEADER | 0xFF000000, buf.COL_LINEBOX);
-			buf.PrintCenteredOutlined(lh, 0, w, h/2-lh*2, (w < 320 ? "Deseja reiniciar o DOS" : "Deseja reiniciar o DOS para"), buf.COL_BTNTEXT);
-			buf.PrintCenteredOutlined(lh, 0, w, h/2-lh+2, (w < 320 ? "iniciar isso?" : "iniciar o programa selecionado?"), buf.COL_BTNTEXT);
+			buf.PrintCenteredOutlined(lh, 0, w, h/2-lh*2, (w < 320 ? "Deseja reiniciar o DOS para" : "Tem certeza que deseja reiniciar o DOS"), buf.COL_BTNTEXT);
+			buf.PrintCenteredOutlined(lh, 0, w, h/2-lh+2, (w < 320 ? "iniciar isso?" : "para iniciar o programa selecionado?"), buf.COL_BTNTEXT);
 			if (m.realmouse) popupsel = 0;
-			if (buf.DrawButton(0x80000000, h/2+lh*1, lh, 1, 4, 0, !m.realmouse && popupsel == 1, m, "OK"))     popupsel = 1;
-			if (buf.DrawButton(0x80000000, h/2+lh*1, lh, 2, 4, 0, !m.realmouse && popupsel == 2, m, "CANCELAR")) popupsel = 2;
+			if (buf.DrawButton(0x80000000, h/2+lh*1, lh, 1, 2, 4, 0, !m.realmouse && popupsel == 1, m, "OK"))     popupsel = 1;
+			if (buf.DrawButton(0x80000000, h/2+lh*1, lh, 2, 3, 4, 0, !m.realmouse && popupsel == 2, m, "CANCELAR")) popupsel = 2;
 		}
 	}
 
-	void GoToSubMenu(ItemType mode, ItemType subtype, int find_info = -1, std::string* find_string = nullptr)
+	bool GoToSubMenu(ItemType mode, ItemType subtype, int find_info = -1, std::string* find_string = nullptr)
 	{
 		if (mode != listmode) RefreshList(mode);
 		for (const Item& it : list)
 			if (it.type == subtype && (find_string ? (it.str == *find_string) : (it.info == find_info)))
-				{ ResetSel((int)(&it - &list[0])); return; }
+				{ ResetSel((int)(&it - &list[0])); return true; }
+		return false;
 	}
 
 	static const char* GetVariantSection(const std::string& v, int get_sec, int& out_len, int& out_total_secs)
@@ -1218,7 +1456,7 @@ struct DBP_PureMenuState : DBP_MenuState
 		for (size_t i = str.find('#'), j; i != std::string::npos; i = str.find('#', j))
 		{
 			for (j = i; j && str[j-1] >= '0' && str[j-1] <= '9';) j--;
-			if (j != i) str.erase(j, i-j+1);
+			if (j != i) str.erase(j, i-j+1); else j++;
 		}
 	}
 
@@ -1227,12 +1465,22 @@ struct DBP_PureMenuState : DBP_MenuState
 		int old_sel = sel, setsel = 0;
 		listmode = mode;
 		list.clear();
+		#ifndef DBP_STANDALONE
 		if (!DBP_FullscreenOSD && mode != IT_MAINMENU && dbp_images.size())
+		#else
+		if (!DBP_FullscreenOSD && mode != IT_MAINMENU && mode != IT_FILEBROWSE && dbp_images.size())
+		#endif
 		{
 			for (DBP_Image& image : dbp_images) list.emplace_back(IT_MOUNT, (Bit16s)(&image - &dbp_images[0]), DBP_Image_Label(image));
 			list.emplace_back(IT_NONE);
 		}
-		if (mode == IT_MAINMENU)
+		if (!first_shell) // Show menu after DOS crashed
+		{
+			list.emplace_back(IT_NONE, INFO_HEADER, "DOS Travou");
+			list.emplace_back(IT_NONE);
+			list.emplace_back(IT_MAINMENU, 0, "Reiniciar");
+		}
+		else if (mode == IT_MAINMENU)
 		{
 			int cd_count = 0, hd_count = 0, boot_rows = 0; bool bootimg = false;
 
@@ -1250,12 +1498,17 @@ struct DBP_PureMenuState : DBP_MenuState
 			if (!dbp_strict_mode && dbp_shellzips.size()) AddFSRow(IT_SHELLLIST,     0, "[ Executar Shell do Sistema ]",                      (!boot_rows++));
 			if (!dbp_strict_mode && bootinstall)          AddFSRow(IT_INSTALLOSSIZE, 0, "[ Inicializar e Instalar Novo Sistema Operacional ]", (!boot_rows++));
 
+			#ifdef DBP_STANDALONE
+			AddFSRow(IT_FILEBROWSE,    0, "[ Carregar Conte\xa3do ]",     (!boot_rows++));
+			if (dbp_game_running) AddFSRow(IT_SAVELOAD,  0, "[ Salvar & Carregar ]", (!boot_rows++));
+			#endif
+
 			if (patchDrive::variants.Len())
 			{
-				AddFSRow(IT_NONE, INFO_WARN, "Configura‡„o ativa: ", true);
-				list.back().str.append(!DBP_Run::patch.enabled_variant ? "Padr„o" : patchDrive::variants.GetStorage()[DBP_Run::patch.enabled_variant - 1].c_str());
+				AddFSRow(IT_NONE, INFO_WARN, "Configura\x87\x84o Ativa: ", true);
+				list.back().str.append(!DBP_Run::patch.enabled_variant ? "Padr\x84o" : patchDrive::variants.GetStorage()[DBP_Run::patch.enabled_variant - 1].c_str());
 				if (DBP_Run::patch.enabled_variant) ClearSortOrderPrefix(list.back().str);
-				AddFSRow(IT_VARIANTLIST, 0, "[ Selecionar configura‡„o do jogo ]");
+				AddFSRow(IT_VARIANTLIST, 0, "[ Selecionar Configura\x87\x84o do Jogo ]");
 			}
 
 			if (fs_rows) { list.emplace_back(IT_NONE); fs_rows++; }
@@ -1273,16 +1526,15 @@ struct DBP_PureMenuState : DBP_MenuState
 			if (exe_count) list.emplace_back(IT_NONE);
 
 			if (DBP_FullscreenOSD || (cd_count + hd_count) <= 1) setsel = (patchDrive::variants.Len() ? (fs_rows - 2) : (exe_count ? fs_rows : (int)dbp_images.size()));
-			if (!exe_count) { list.emplace_back(IT_NONE, INFO_DIM, "Nenhum arquivo execut vel encontrado"); list.emplace_back(IT_NONE); }
+			if (!exe_count) { list.emplace_back(IT_NONE, INFO_DIM, "Nenhum arquivo execut\xa0vel encontrado"); list.emplace_back(IT_NONE); }
 
-			if (DBP_FullscreenOSD && !dbp_strict_mode) list.emplace_back(IT_CLOSEOSD, 0, "Ir para a Linha de Comando");
-			else if (dbp_game_running && !dbp_strict_mode) list.emplace_back(IT_COMMANDLINE, 0, "Ir para a Linha de Comando");
-			if (!DBP_FullscreenOSD) list.emplace_back(IT_CLOSEOSD, 0, "Fechar menu");
+			if (!dbp_strict_mode) list.emplace_back(IT_COMMANDLINE, 0, "Ir para a Linha de Comando");
+			if (!DBP_FullscreenOSD) list.emplace_back(IT_CLOSEOSD, 0, "Fechar Menu");
 			if (list.back().type == IT_NONE) list.pop_back();
 		}
 		else if (mode == IT_BOOTIMG)
 		{
-			list.emplace_back(IT_NONE, INFO_HEADER, "Selecionar Modo de Inicializa‡„o do Sistema");
+			list.emplace_back(IT_NONE, INFO_HEADER, "Selecionar Modo de Inicializa\x87\x84o do Sistema");
 			list.emplace_back(IT_NONE);
 			for (const char* it : DBP_MachineNames) list.emplace_back(IT_BOOTIMG_MACHINE, (Bit16s)(it[0]|0x20), it);
 			list.emplace_back(IT_NONE);
@@ -1296,26 +1548,26 @@ struct DBP_PureMenuState : DBP_MenuState
 		{
 			const char* filename;
 			std::string osimg = DBP_GetSaveFile(SFT_NEWOSIMAGE, &filename);
-			list.emplace_back(IT_NONE, INFO_HEADER, "Tamanho do Disco R¡gido para Instala‡„o");
+			list.emplace_back(IT_NONE, INFO_HEADER, "Tamanho do Disco R\xa1gido para Instala\x87\x84o");
 			list.emplace_back(IT_NONE);
-			list.emplace_back(IT_NONE, INFO_WARN, "Criar uma nova imagem de disco r¡gido na seguinte localiza‡„o:");
+			list.emplace_back(IT_NONE, INFO_WARN, "Criar uma nova imagem de disco r\xa1gido na seguinte localiza\x87\x84o:");
 			if (filename > &osimg[0]) { list.emplace_back(IT_NONE, INFO_WARN); list.back().str.assign(&osimg[0], filename - &osimg[0]); }
 			list.emplace_back(IT_NONE, INFO_WARN, filename);
 			list.emplace_back(IT_NONE);
 			char buf[128];
 			for (Bit16s sz = 16/8; sz <= 64*1024/8; sz += (sz < 4096/8 ? sz : (sz < 32*1024/8 ? 4096/8 : 8192/8)))
 			{
-				list.emplace_back(IT_INSTALLOS, sz, (sprintf(buf, "%3d %cB Disco R¡gido", (sz < 1024/8 ? sz*8 : sz*8/1024), (sz < 1024/8 ? 'M' : 'G')),buf));
+				list.emplace_back(IT_INSTALLOS, sz, (sprintf(buf, "%3d %cB Disco R\xa1gido", (sz < 1024/8 ? sz*8 : sz*8/1024), (sz < 1024/8 ? 'M' : 'G')),buf));
 				if (sz == 2048/8)
 				{
 					list.emplace_back(IT_NONE);
-					list.emplace_back(IT_NONE, INFO_WARN, "Imagens de disco r¡gido acima de 2GB ser„o formatadas com FAT32");
-					list.emplace_back(IT_NONE, INFO_WARN, "NOTA: FAT32 ‚ suportado apenas no Windows 95C e vers”es mais novas");
+					list.emplace_back(IT_NONE, INFO_WARN, "Imagens de disco r\xa1gido acima de 2GB ser\x84o formatadas com FAT32");
+					list.emplace_back(IT_NONE, INFO_WARN, "NOTA: FAT32 \x82 suportado apenas no Windows 95C e vers\x94es mais novas");
 					list.emplace_back(IT_NONE);
 				}
 			}
 			list.emplace_back(IT_NONE);
-			list.emplace_back(IT_INSTALLOS, 0, "[ Iniciar Somente Sem Criar Imagem de Disco R¡gido ]");
+			list.emplace_back(IT_INSTALLOS, 0, "[ Iniciar Somente Sem Criar Imagem de Disco R\xa1gido ]");
 			setsel = (filename > &osimg[0] ? 11 : 10);
 		}
 		else if (mode == IT_BOOTOSLIST)
@@ -1324,34 +1576,39 @@ struct DBP_PureMenuState : DBP_MenuState
 			list.emplace_back(IT_NONE);
 			for (const std::string& im : dbp_osimages)
 				{ list.emplace_back(IT_BOOTOS, (Bit16s)(&im - &dbp_osimages[0])); list.back().str.assign(im.c_str(), im.size()-4); }
-			if (dbp_system_cached) { list.emplace_back(IT_NONE); list.emplace_back(IT_SYSTEMREFRESH, 0, "[ Atualizar lista ]"); }
-			char ramdisk = retro_get_variable("dosbox_pure_bootos_ramdisk", "false")[0];
+			if (dbp_system_cached) { list.emplace_back(IT_NONE); list.emplace_back(IT_SYSTEMREFRESH, 0, "[ Atualizar Lista ]"); }
+			char ramdisk = DBP_Option::Get(DBP_Option::bootos_ramdisk)[0];
 			if (ramdisk == 't')
 			{
 				list.emplace_back(IT_NONE);
-				list.emplace_back(IT_NONE, INFO_WARN, "As altera‡”es feitas na unidade C: ser„o descartadas");
+				list.emplace_back(IT_NONE, INFO_WARN, "As altera\x87\x94es feitas na unidade C: ser\x84o descartadas");
 			}
 			else if (ramdisk == 'd')
 			{
 				const char *save_c_name; std::string save_c = DBP_GetSaveFile(SFT_DIFFDISK, &save_c_name);
 				list.emplace_back(IT_NONE);
-				list.emplace_back(IT_NONE, INFO_WARN, "As altera‡”es feitas na unidade C: ser„o armazenadas no seguinte local:");
+				list.emplace_back(IT_NONE, INFO_WARN, "As altera\x87\x94es feitas na unidade C: ser\x84o armazenadas no seguinte local:");
 				if (save_c_name > &save_c[0]) { list.emplace_back(IT_NONE, INFO_WARN); list.back().str.assign(&save_c[0], save_c_name - &save_c[0]); }
 				list.emplace_back(IT_NONE, INFO_WARN, save_c_name);
 			}
 			list.emplace_back(IT_NONE);
-			const char* dfreespace = retro_get_variable("dosbox_pure_bootos_dfreespace", "1024"); // can also be "discard" or "hide"
-			if (atoi(dfreespace))
+			const char* dfreespace = DBP_Option::Get(DBP_Option::bootos_dfreespace); // can also be "discard" or "hide"
+			extern const char* RunningProgram;
+			bool mountedHDIMage = false;
+			for (DBP_Image& i : dbp_images) { if (!DBP_Image_IsCD(i)) { mountedHDIMage = true; break; } }
+			if (mountedHDIMage && (imageDiskList['D'-'A'] || imageDiskList['E'-'A'] || (strcmp(RunningProgram, "BOOT") && imageDiskList['C'-'A'])))
+				list.emplace_back(IT_NONE, INFO_WARN, "D: ser\xa0 baseado no arquivo .IMG carregado");
+			else if (atoi(dfreespace))
 			{
 				const char *save_d_name; std::string save_d = DBP_GetSaveFile(SFT_VIRTUALDISK, &save_d_name);
-				list.emplace_back(IT_NONE, INFO_WARN, "As altera‡”es feitas na unidade D: ser„o armazenadas no seguinte local:");
+				list.emplace_back(IT_NONE, INFO_WARN, "As altera\x87\x94es feitas na unidade D: ser\x84o armazenadas no seguinte local:");
 				if (save_d_name > &save_d[0]) { list.emplace_back(IT_NONE, INFO_WARN); list.back().str.assign(&save_d[0], save_d_name - &save_d[0]); }
 				list.emplace_back(IT_NONE, INFO_WARN, save_d_name);
 			}
-			else if (dfreespace && dfreespace[0] != 'h')
-				list.emplace_back(IT_NONE, INFO_WARN, "Changes made to the D: drive will be discarded");
+			else if (dfreespace[0] != 'h')
+				list.emplace_back(IT_NONE, INFO_WARN, "As altera\x87\x94es feitas na unidade D: ser\x84o descartadas");
 			else
-				list.emplace_back(IT_NONE, INFO_WARN, "As altera‡”es feitas na unidade D: ser„o descartadas");
+				list.emplace_back(IT_NONE, INFO_WARN, "O disco r\xa1gido D: foi desativado, use apenas CDs montados");
 		}
 		else if (mode == IT_SHELLLIST)
 		{
@@ -1363,7 +1620,13 @@ struct DBP_PureMenuState : DBP_MenuState
 		}
 		else if (mode == IT_VARIANTLIST)
 		{
-			list.emplace_back(IT_NONE, INFO_HEADER, "Selecionar Configura‡‡o do Jogo");
+			#ifdef DBP_STANDALONE
+			list.emplace_back(IT_FILEBROWSE, 0, "[ Carregar Conte\xa3do ]");
+			list.emplace_back(IT_SAVELOAD, 0, "[ Salvar & Carregar ]");
+			list.emplace_back(IT_NONE);
+			#endif
+
+			list.emplace_back(IT_NONE, INFO_HEADER, "Selecionar Configura\x87\x84o do Jogo");
 			list.emplace_back(IT_NONE);
 			const std::vector<std::string>& vars = patchDrive::variants.GetStorage();
 			int list_base = (int)list.size(), max_secs = 1, sec, secbegin, secend, i, enabled_var = DBP_Run::patch.enabled_variant, expect_vars = 1;
@@ -1425,15 +1688,83 @@ struct DBP_PureMenuState : DBP_MenuState
 			}
 			else if (DBP_Run::patch.show_default)
 			{
-				list.emplace(list.begin() + secbegin, IT_VARIANTRUN, 0, "Padr„o"); // no sections, add default start
+				list.emplace(list.begin() + secbegin, IT_VARIANTRUN, 0, "Padr\x84o"); // no sections, add default start
 				setsel = (setsel ? (setsel + 1) : secbegin); // fix for added row
 			}
 			list.emplace_back(IT_NONE);
 			list.emplace_back(IT_MAINMENU, 0, "Executar Outro Programa");
 			list.emplace_back(IT_NONE);
-			list.emplace_back(IT_NONE, INFO_DIM, "A configura‡„o pode ser trocada com o Teclado na Tela");
-			list.emplace_back(IT_NONE, INFO_DIM, "ou segurando shift ou L2/R2 ao reiniciar o n£cleo");
+			list.emplace_back(IT_NONE, INFO_DIM, "A configura\x87\x84o pode ser trocada com o Teclado na Tela");
+			list.emplace_back(IT_NONE, INFO_DIM, "ou segurando shift ou L2/R2 ao reiniciar o n\xa3cleo");
 		}
+		#ifdef DBP_STANDALONE
+		else if (mode == IT_FILEBROWSE)
+		{
+			struct retro_vfs_interface_info vfs = { 3, NULL };
+			environ_cb(RETRO_ENVIRONMENT_GET_VFS_INTERFACE, &vfs);
+
+			#ifdef WIN32
+			if (DBPS_BrowsePath.length() == 1 && *DBPS_BrowsePath.c_str() == '$') // Windows drive selection
+			{
+				char drvpath[4] = { 'C', ':', '\\', 0 };
+				for (unsigned drives = GetLogicalDrives(); *drvpath <= 'Z'; (*drvpath)++)
+				{
+					if (!(drives & (1 << (*drvpath - 'A')))) continue;
+					list.emplace_back(IT_FILEBROWSE, -2); list.back().str.assign(drvpath, 2);
+				}
+			}
+			else
+			#endif
+			{
+				retro_system_info info;
+				retro_get_system_info(&info);
+				const char* validexts = info.valid_extensions;
+				std::string strext;
+
+				if (DBPS_BrowsePath.empty()) Cross::MakePathAbsolute(DBPS_BrowsePath);
+				else Cross::NormalizePath(DBPS_BrowsePath);
+				struct retro_vfs_dir_handle *dir = vfs.iface->opendir((DBPS_BrowsePath.empty() ? "." : DBPS_BrowsePath.c_str()), false);
+				bool have_up = false;
+				setsel = -1;
+				while (dir && vfs.iface->readdir(dir))
+				{
+					const char* name = vfs.iface->dirent_get_name(dir), *ext, *valid;
+					size_t ln = strlen(name);
+					bool go_up;
+					Bit16s info;
+					if (vfs.iface->dirent_is_dir(dir) && (ln != 1 || *name != '.'))
+						{ have_up |= (go_up = !strcmp(name, "..")); info = (go_up ? 1 : 2); if (go_up) { name = "[ Voltar ]"; } }
+					else if ((ext = strrchr(name, '.')) != NULL && (valid = strstr(validexts, lowcase(&strext.assign(ext + 1)[0]))) != NULL && (valid == validexts || valid[-1] == '|') && (valid[strext.size()] == '|' || valid[strext.size()] == '\0'))
+						info = ((setsel == -1 && ext - name == dbp_content_name.size() && !strncasecmp(name, dbp_content_name.c_str(), dbp_content_name.size())) ? 4 : 3);
+					else continue;
+					int insert_index = (int)list.size();
+					for (const Item& it : list) { if (it.info > info || (it.info == info && strcasecmp(it.str.c_str(), name) > 0)) { insert_index = (int)(&it - &list[0]); break; } }
+					list.emplace(list.begin() + insert_index, IT_FILEBROWSE, (info == 4 ? 3 : info), name);
+					if (info == 4) setsel = insert_index; else if (setsel >= insert_index) setsel++;
+				}
+				if (dir) vfs.iface->closedir(dir);
+				#ifdef WIN32
+				if (!have_up && DBPS_BrowsePath.length() != 1) list.emplace(list.begin(), IT_FILEBROWSE, -1, "[ Voltar ]"); // go to drive selection
+				#endif
+				if (setsel == -1) setsel = 1;
+				list.emplace_back(IT_FILEBROWSE, 4, "[ Carregar esta pasta como conte\xa3do ]");
+			}
+			if (list.empty()) list.emplace_back(IT_NONE, INFO_HEADER, "Nenhum arquivo");
+		}
+		else if (mode == IT_SAVELOAD)
+		{
+			bool have = DBPS_HaveSaveSlot();
+			list.emplace_back(IT_NONE, INFO_HEADER, "Salvar e Carregar");
+			list.emplace_back(IT_NONE);
+			list.emplace_back(IT_NONE, INFO_DIM, "Nome do Save: "); list.back().str.append(dbp_content_name);
+			list.emplace_back(IT_SAVELOAD, 2, "Slot de Save: "); list.back().str += '0' + DBPS_SaveSlotIndex;
+			list.emplace_back(IT_NONE);
+			list.emplace_back(IT_SAVELOAD, 3, "Salvar");
+			list.emplace_back((have ? (Bit8u)IT_SAVELOAD : (Bit8u)IT_NONE), (have ? 4 : INFO_DIM), "Carregar");
+			list.emplace_back(IT_NONE);
+			list.emplace_back(IT_MAINMENU, 0, "Voltar");
+		}
+		#endif
 		else { DBP_ASSERT(false); }
 
 		if (keep_sel_pos && old_sel < (int)list.size()) sel = old_sel;
@@ -1480,18 +1811,89 @@ struct DBP_PureMenuState : DBP_MenuState
 			if (skip < -1) { DBP_Run::autoboot.use = false; skip = 0; }
 		}
 
-		if (ok_type == IT_MOUNT)
+		if (!first_shell) // Show menu after DOS crashed
+		{
+			if (ok_type) { DBP_CloseOSD(); DBP_ForceReset(true); return; }
+		}
+		else if (ok_type == IT_MOUNT)
 		{
 			if (dbp_images[item.info].mounted)
 				DBP_Unmount(dbp_images[item.info].drive);
 			else
-				DBP_Mount((unsigned)item.info, true);
+				DBP_Mount((unsigned)item.info);
 			RefreshList(listmode, true);
 		}
 		else if (ok_type == IT_INSTALLOSSIZE || ok_type == IT_BOOTOSLIST || ok_type == IT_SHELLLIST || ok_type == IT_VARIANTLIST)
 		{
 			RefreshList((ItemType)ok_type);
 		}
+		#ifdef DBP_STANDALONE
+		else if (ok_type == IT_FILEBROWSE)
+		{
+			#ifdef WIN32
+			if      (item.info == -1) DBPS_BrowsePath.assign("$"); // Windows drive selection
+			else if (item.info == -2) DBPS_BrowsePath.assign(item.str); // Windows drive root
+			else if (item.info == 1 && DBPS_BrowsePath.length() == 2 && DBPS_BrowsePath[1] == ':') DBPS_BrowsePath.assign("$"); // Root of mapped network drive
+			else
+			#endif
+			if      (item.info == 1) // parent dir
+			{
+				DBPS_BrowsePath.append((DBPS_BrowsePath.empty() ? 0 : 1), CROSS_FILESPLIT).append("..");
+			}
+			else if (item.info == 2) // subdir
+			{
+				DBPS_BrowsePath.append((DBPS_BrowsePath.empty() ? 0 : 1), CROSS_FILESPLIT).append(item.str);
+			}
+			else if (item.info >= 3) // file or current directory
+			{
+				const char* fname = (item.info >= 5 ? list[1] : item).str.c_str(), *fext;
+				if (item.info == 5) // mount cd/disk image
+				{
+					std::string imgpath; imgpath.assign(DBPS_BrowsePath).append((DBPS_BrowsePath.empty() ? 0 : 1), CROSS_FILESPLIT).append(fname);
+					DBP_Mount(DBP_AppendImage(imgpath.c_str(), false));
+					RefreshList(IT_MAINMENU);
+				}
+				else if (item.info != 6 && !dbp_content_name.empty() && (fext = strrchr(fname, '.'))++ && (!strcasecmp(fext, "ISO") || !strcasecmp(fext, "CHD") || !strcasecmp(fext, "CUE") || !strcasecmp(fext, "INS") || !strcasecmp(fext, "IMG") || !strcasecmp(fext, "IMA") || !strcasecmp(fext, "VHD") || !strcasecmp(fext, "JRC")))
+				{
+					std::string fname; fname.swap(item.str);
+					list.clear();
+					list.emplace_back(IT_NONE);
+					list.emplace_back(IT_NONE, INFO_WARN); fname.swap(list.back().str);
+					list.emplace_back(IT_NONE);
+					list.emplace_back(IT_FILEBROWSE, 5, "[ Montar como Imagem de CD/Disco ]");
+					list.emplace_back(IT_FILEBROWSE, 6, "[ Carregar como Conte\xa3do ]");
+					ResetSel(3);
+				}
+				else
+				{
+					if (!show_popup && (dbp_game_running || (first_shell->bf && !first_shell->bf->IsAutoexec()))) { popupsel = 0; show_popup = true; return; } // confirm
+					if (item.info == 3 || item.info == 6) // load file
+						dbp_content_path.assign(DBPS_BrowsePath).append((DBPS_BrowsePath.empty() ? 0 : 1), CROSS_FILESPLIT).append(fname);
+					else // load current directory
+						dbp_content_path.assign(DBPS_BrowsePath.empty() ? "." : DBPS_BrowsePath);
+					dbp_wasloaded = false; // signal new content to init_dosbox
+					DBP_OnBIOSReboot();
+				}
+				return;
+			}
+			RefreshList(IT_FILEBROWSE);
+		}
+		else if (ok_type == IT_SAVELOAD)
+		{
+			if (item.info == 2) // save slot selection
+				DBPS_SaveSlotIndex = (DBPS_SaveSlotIndex + 1) % 10;
+			else if (item.info == 3) // save
+				{ DBPS_RequestSaveLoad(true, false); DBP_CloseOSD(); return; }
+			else if (item.info == 4) // load
+				{ DBPS_RequestSaveLoad(false, true); DBP_CloseOSD(); return; }
+			RefreshList(IT_SAVELOAD, (listmode == IT_SAVELOAD));
+		}
+		else if (listmode == IT_SAVELOAD && auto_change)
+		{
+			DBPS_SaveSlotIndex = (DBPS_SaveSlotIndex + 10000 + auto_change) % 10;
+			RefreshList(IT_SAVELOAD, true);
+		}
+		#endif
 		else if (ok_type == IT_BOOTIMG)
 		{
 			// Machine property was fixed by dbp_reboot_machine or DOSBOX.CONF and cannot be modified here, so automatically boot the image as is
@@ -1526,7 +1928,7 @@ struct DBP_PureMenuState : DBP_MenuState
 		{
 			DBP_MenuInterceptorRefreshSystem = true;
 		}
-		else if (res == RES_REFRESHSYSTEM)
+		else if (res == RES_REFRESHSYSTEM || (res == RES_CANCEL && list.back().type == IT_VARIANTLIST))
 		{
 			RefreshList(listmode);
 		}
@@ -1540,19 +1942,34 @@ struct DBP_PureMenuState : DBP_MenuState
 			// Go to top menu (if in submenu) or refresh list
 			RefreshList(IT_MAINMENU);
 		}
+		else if (ok_type == IT_VARIANTRUN)
+		{
+			Bit16s variant = item.info; // store before clear
+			std::vector<std::string> conflicts = patchDrive::VariantConflictFiles(variant, false);
+			if (conflicts.empty()) goto handle_result;
+
+			list.clear();
+			AddWrappedText(windowlinelength, "", "A configura\x87\x84o selecionada n\x84o pode ser aplicada porque as configura\x87\x94es nos arquivos abaixo foram personalizadas:", INFO_WARN);
+			list.emplace_back(IT_NONE);
+			for (const std::string& path : conflicts) list.emplace_back(IT_NONE, 0, path.c_str());
+			list.emplace_back(IT_NONE);
+			AddWrappedText(windowlinelength, "", "Para usar a configura\x87\x84o como pretendido, os arquivos precisam ser redefinidos, mas quaisquer altera\x87\x94es feitas por voc\x88 ser\x84o perdidas.", INFO_DIM);
+			list.emplace_back(IT_NONE);
+			list.emplace_back(IT_VARIANTRUN_RESET_CONFLICTS, variant, "[ Sim, redefinir estes arquivos ]");
+			list.emplace_back(IT_VARIANTRUN_KEEP_CONFLICTS, variant, "[ N\x84o, manter meus arquivos personalizados como est\x84o ]");
+			list.emplace_back(IT_VARIANTLIST, 0, "[ Cancelar ]");
+			ResetSel((int)list.size() - 2);
+		}
 		else if (ok_type)
 		{
 			handle_result:
 			if (dbp_strict_mode && (ok_type == IT_BOOTOS || ok_type == IT_INSTALLOS || ok_type == IT_RUNSHELL || ok_type == IT_COMMANDLINE || (ok_type == IT_CLOSEOSD && DBP_FullscreenOSD))) return;
 			if (ok_type != IT_CLOSEOSD)
 			{
-				DBP_ASSERT(item.type == ok_type && (ok_type == IT_RUN || ok_type == IT_BOOTIMG || ok_type == IT_BOOTIMG_MACHINE || ok_type == IT_BOOTOS || ok_type == IT_INSTALLOS || ok_type == IT_RUNSHELL || ok_type == IT_COMMANDLINE || ok_type == IT_VARIANTRUN));
-				if (!show_popup && dbp_game_running)
-				{
-					popupsel = 0;
-					show_popup = true;
-					return;
-				}
+				DBP_ASSERT(item.type == ok_type && (ok_type == IT_RUN || ok_type == IT_BOOTIMG || ok_type == IT_BOOTIMG_MACHINE || ok_type == IT_BOOTOS || ok_type == IT_INSTALLOS || ok_type == IT_RUNSHELL || ok_type == IT_COMMANDLINE || ok_type == IT_VARIANTRUN || ok_type == IT_VARIANTRUN_RESET_CONFLICTS || ok_type == IT_VARIANTRUN_KEEP_CONFLICTS));
+				if (!show_popup && (dbp_game_running || (first_shell->bf && !first_shell->bf->IsAutoexec()))) { popupsel = 0; show_popup = true; return; } // confirm
+				if (ok_type == IT_VARIANTRUN_RESET_CONFLICTS) { ok_type = IT_VARIANTRUN; patchDrive::VariantConflictFiles(item.info, true); }
+				if (ok_type == IT_VARIANTRUN_KEEP_CONFLICTS) { ok_type = IT_VARIANTRUN; }
 
 				if (!DBP_Run::Run(
 					ok_type == IT_RUN             ? DBP_Run::RUN_EXEC :
@@ -1594,7 +2011,7 @@ struct DBP_MenuInterceptor : DBP_Interceptor
 			{ 0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_MIDDLE, DBPET_MOUSEDOWN, 2 },
 			{ 0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_WHEELUP,   DBPET_KEYDOWN, KBD_kpminus },
 			{ 0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_WHEELDOWN, DBPET_KEYDOWN, KBD_kpplus  },
-			{ 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L3, DBPET_ONSCREENKEYBOARD },
+			{ 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L3, DBPET_TOGGLEOSD },
 			{ 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_UP,    DBPET_KEYDOWN, KBD_up },
 			{ 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_DOWN,  DBPET_KEYDOWN, KBD_down },
 			{ 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_LEFT,  DBPET_KEYDOWN, KBD_left },
@@ -1635,9 +2052,9 @@ struct DBP_MenuInterceptor : DBP_Interceptor
 			{
 				if (!input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, dbp_keymap_dos2retro[i])) continue;
 				warned_game_focus = true;
-				retro_notify(10000, RETRO_LOG_WARN,
-					"Detected keyboard and joypad being pressed at the same time.\n"
-					"To freely use the keyboard without hotkeys enable 'Game Focus' (Scroll Lock key by default) if available.");
+				emuthread_notify(10000, LOG_WARN,
+					"Teclado e joypad detectados pressionados ao mesmo tempo.\n"
+					"Para usar o teclado livremente sem teclas de atalho, ative o 'Foco no Jogo' (tecla Scroll Lock por padr\x84o), se dispon\xa1vel.");
 				break;
 			}
 		}
@@ -1664,7 +2081,7 @@ struct DBP_MenuInterceptor : DBP_Interceptor
 	{
 		// Get latest values (without emitting events) when leaving intercepted screen
 		for (DBP_InputBind& b : dbp_input_binds)
-			b.lastval = input_state_cb(b.port, b.device, b.index, b.id);
+			b.lastval = input_state_cb(b.port, b.device, b.index, b->id);
 
 		// Release all keys when switching between key event intercepting
 		DBP_ReleaseKeyEvents(false);
@@ -1674,7 +2091,12 @@ struct DBP_MenuInterceptor : DBP_Interceptor
 struct DBP_OnScreenDisplay : DBP_MenuInterceptor
 {
 	DBP_OSDMode mode;
+	char last_map, default_shown;
+	#ifndef DBP_STANDALONE
 	union { DBP_PureMenuState* main; DBP_OnScreenKeyboardState* osk; DBP_MapperMenuState* mapper; void* _all; } ptr;
+	#else
+	union { DBP_PureMenuState* main; DBP_OnScreenKeyboardState* osk; DBP_MapperMenuState* mapper; DBP_SystemMenuState* system; void* _all; } ptr;
+	#endif
 	DBP_MenuMouse mouse;
 
 	void SetMode(DBP_OSDMode in_mode, DBP_PureMenuState* in_main = NULL)
@@ -1684,19 +2106,26 @@ struct DBP_OnScreenDisplay : DBP_MenuInterceptor
 			case DBPOSD_MAIN:     delete ptr.main; break;
 			case DBPOSD_OSK:      delete ptr.osk; break;
 			case DBPOSD_MAPPER:   delete ptr.mapper; break;
+			#ifdef DBP_STANDALONE
+			case DBPOSD_SYSTEM:   delete ptr.system; break;
+			#endif
 		}
+		if (in_mode != _DBPOSD_OPEN && in_mode != _DBPOSD_CLOSE) { mode = in_mode; if (!ptr._all) default_shown = 0; }
+		else if (in_mode == _DBPOSD_OPEN && (!default_shown || last_map != dbp_map_osd)) { mode = ((last_map = dbp_map_osd) == 'k' ? DBPOSD_OSK : DBPOSD_MAIN); default_shown = true; }
 		ptr._all = NULL;
-		mode = in_mode;
 		StartIntercept();
-		switch (mode)
+		switch (in_mode == _DBPOSD_CLOSE ? _DBPOSD_CLOSE : mode)
 		{
 			case DBPOSD_MAIN:
 				ptr.main = (in_main ? in_main : new DBP_PureMenuState());
 				if (!ptr.main->refresh_mousesel) mouse.ignoremove = true;
 				break;
-			case DBPOSD_OSK:      ptr.osk = new DBP_OnScreenKeyboardState(); break;
-			case DBPOSD_MAPPER:   ptr.mapper = new DBP_MapperMenuState(); break;
-			case DBPOSD_CLOSED:
+			case DBPOSD_OSK: ptr.osk = new DBP_OnScreenKeyboardState(); break;
+			case DBPOSD_MAPPER: ptr.mapper = new DBP_MapperMenuState(); break;
+			#ifdef DBP_STANDALONE
+			case DBPOSD_SYSTEM: ptr.system = new DBP_SystemMenuState(); break;
+			#endif
+			case _DBPOSD_CLOSE:
 				EndIntercept();
 				break;
 		}
@@ -1712,17 +2141,28 @@ struct DBP_OnScreenDisplay : DBP_MenuInterceptor
 
 		if (1) // now always show button bar, was (DBP_FullscreenOSD || !isOSK) before
 		{
-			int btny = h - 13 - lh, btnmrgn = (w >= 296 ? 34 : 8), ydist = (isOSK ? (int)(127 - (btny - mouse.y) / (h*0.0005f)) : 0xFF);
-			Bit32u btnblend = (DBP_FullscreenOSD ? 0xFF000000 : ((ydist > dbp_alphablend_base ? dbp_alphablend_base : (ydist < 20 ? 20 : ydist)) << 24));
-			Bit32u txtblend = (DBP_FullscreenOSD ? 0xFF000000 : ((ydist*2 > 0xFF ? 0xFF : (ydist < 20 ? 20 : ydist*2)) << 24));
-			int osk = (int)!DBP_FullscreenOSD, n = (int)_DBPOSD_COUNT - (osk ? 0 : 1), m = 0;
+			int btny = h - 13 - lh, btnmrgn = (w >= 296 ? 34 : 8), ydist = (isOSK ? (int)(127 - (btny - mouse.y) / (h*0.001f)) : 0xFF);
+			Bit32u btnblend = (DBP_FullscreenOSD ? 0xFF000000 : ((ydist > dbp_alphablend_base ? dbp_alphablend_base : (ydist < 30 ? 30 : ydist)) << 24));
+			Bit32u txtblend = (DBP_FullscreenOSD ? 0xFF000000 : ((ydist*2 > 0xFF ? 0xFF : (ydist < 30 ? 30 : ydist*2)) << 24));
+			Bit8u orgrealmouse = mouse.realmouse;
+			mouse.realmouse |= isOSK; // allow button presses with joystick in OSK
 			if (DBP_FullscreenOSD) buf.FillRect(0, 0, w, h, buf.BGCOL_STARTMENU);
-			if (w >= 296 && buf.DrawButtonAt(btnblend, btny, lh, 4, 4, 8, 30, false,       mouse, "L",                                                    txtblend) && mouse.left_up) evnt(DBPET_KEYUP, KBD_grave, 0);
-			if (       buf.DrawButton(btnblend, btny, lh, m++, n, btnmrgn, mode == DBPOSD_MAIN,     mouse, (w < 500 ? "INICIAR"    : "MENU INICIAL"),         txtblend) && mouse.left_up) SetMode(DBPOSD_MAIN);
-			if (osk && buf.DrawButton(btnblend, btny, lh, m++, n, btnmrgn, mode == DBPOSD_OSK,      mouse, (w < 500 ? "TECLADO" : "TECLADO NA TELA"), txtblend) && mouse.left_up) SetMode(DBPOSD_OSK);
-			if (       buf.DrawButton(btnblend, btny, lh, m++, n, btnmrgn, mode == DBPOSD_MAPPER,   mouse, (w < 500 ? "CONTROLES" : "MAPEADOR DE CONTROLER"),  txtblend) && mouse.left_up) SetMode(DBPOSD_MAPPER);
-			if (w >= 296 && buf.DrawButtonAt(btnblend, btny, lh, 4, 4, w-30, w-8, false,   mouse, "R",                                                    txtblend) && mouse.left_up) evnt(DBPET_KEYUP, KBD_tab, 0);
+			if (w >= 296 && buf.DrawButtonAt(btnblend, btny, lh, 4, 4, 8, 30, false,                   mouse, "L",                                         txtblend) && mouse.click) evnt(DBPET_KEYUP, KBD_grave, 0);
+			#ifndef DBP_STANDALONE
+			int osk = (int)(first_shell && !DBP_FullscreenOSD), mpr = (int)!!first_shell, n = 1+osk+mpr;
+			if (       buf.DrawButton(btnblend, btny, lh,   0, 1, n, btnmrgn, mode == DBPOSD_MAIN,   mouse, (w < 500 ? "INICIAR"    : "MENU INICIAL"),         txtblend) && mouse.click) SetMode(DBPOSD_MAIN);
+			if (osk && buf.DrawButton(btnblend, btny, lh,   1, 2, n, btnmrgn, mode == DBPOSD_OSK,    mouse, (w < 500 ? "TECLADO" : "TECLADO NA TELA"), txtblend) && mouse.click) SetMode(DBPOSD_OSK);
+			if (mpr && buf.DrawButton(btnblend, btny, lh, n-1, n, n, btnmrgn, mode == DBPOSD_MAPPER, mouse, (w < 500 ? "CONTROLES" : "MAPEADOR DE CONTROLE"),  txtblend) && mouse.click) SetMode(DBPOSD_MAPPER);
+			#else
+			int osk = 3*(int)(first_shell && !DBP_FullscreenOSD), mpr = 3*(int)!!first_shell, n = 4+osk+mpr;
+			if (       buf.DrawButton(btnblend, btny, lh,   0,   2, n, btnmrgn, mode == DBPOSD_MAIN,   mouse, "MENU INICIAL",                             txtblend) && mouse.click) SetMode(DBPOSD_MAIN);
+			if (osk && buf.DrawButton(btnblend, btny, lh,   2,   5, n, btnmrgn, mode == DBPOSD_OSK,    mouse, "TECLADO NA TELA",                       txtblend) && mouse.click) SetMode(DBPOSD_OSK);
+			if (mpr && buf.DrawButton(btnblend, btny, lh, n-5, n-2, n, btnmrgn, mode == DBPOSD_MAPPER, mouse, "MAPEADOR DE CONTROLE",                         txtblend) && mouse.click) SetMode(DBPOSD_MAPPER);
+			if (       buf.DrawButton(btnblend, btny, lh, n-2, n  , n, btnmrgn, mode == DBPOSD_SYSTEM, mouse, "SISTEMA",                                 txtblend) && mouse.click) SetMode(DBPOSD_SYSTEM);
+			#endif
+			if (w >= 296 && buf.DrawButtonAt(btnblend, btny, lh, 4, 4, w-30, w-8, false,               mouse, "R",                                         txtblend) && mouse.click) evnt(DBPET_KEYUP, KBD_tab, 0);
 			if (mouse.y >= btny && (mouse.wheel_up || mouse.wheel_down)) evnt(DBPET_KEYUP, (mouse.wheel_down ? KBD_grave : KBD_tab), 0);
+			mouse.realmouse = orgrealmouse;
 		}
 
 		Bit32u menublend = (DBP_FullscreenOSD ? 0xFF000000 : 0x00000000);
@@ -1731,6 +2171,9 @@ struct DBP_OnScreenDisplay : DBP_MenuInterceptor
 			case DBPOSD_MAIN:     ptr.main->DrawMenu(buf, menublend, lh, w, h, ftr, mouseMoved, mouse); break;
 			case DBPOSD_OSK:      ptr.osk->GFX(buf, mouse); break;
 			case DBPOSD_MAPPER:   ptr.mapper->DrawMenu(buf, menublend, lh, w, h, ftr, mouseMoved, mouse); break;
+			#ifdef DBP_STANDALONE
+			case DBPOSD_SYSTEM:   ptr.system->DrawMenu(buf, menublend, lh, w, h, ftr, mouseMoved, mouse); break;
+			#endif
 		}
 
 		mouse.Draw(buf, isOSK);
@@ -1738,17 +2181,21 @@ struct DBP_OnScreenDisplay : DBP_MenuInterceptor
 
 	virtual bool evnt(DBP_Event_Type type, int val, int val2) override
 	{
-		mouse.Input(type, val, val2);
+		mouse.Input(type, val, val2, (mode == DBPOSD_OSK));
 		switch (mode)
 		{
 			case DBPOSD_MAIN:     ptr.main->Input(type, val, val2); break;
 			case DBPOSD_OSK:      ptr.osk->Input(type, val, val2); break;
 			case DBPOSD_MAPPER:   ptr.mapper->Input(type, val, val2); break;
+			#ifdef DBP_STANDALONE
+			case DBPOSD_SYSTEM:   ptr.system->Input(type, val, val2); break;
+			#endif
 		}
 		if (type == DBPET_KEYUP && ((KBD_KEYS)val == KBD_tab || (KBD_KEYS)val == KBD_grave))
 		{
 			int add = (((KBD_KEYS)val == KBD_tab && !DBP_IsKeyDown(KBD_leftshift) && !DBP_IsKeyDown(KBD_rightshift)) ? 1 : -1), next = (int)mode;
-			do { next = (next + (int)_DBPOSD_COUNT + add) % _DBPOSD_COUNT; } while (DBP_FullscreenOSD && next == DBPOSD_OSK);
+			int skip1 = ((first_shell && !DBP_FullscreenOSD) ? -1 : DBPOSD_OSK), skip2 = (first_shell ? -1 : DBPOSD_MAPPER);
+			do { next = (next + (int)_DBPOSD_COUNT + add) % _DBPOSD_COUNT; } while (next == skip1 || next == skip2);
 			SetMode((DBP_OSDMode)next);
 		}
 		return true;
@@ -1765,7 +2212,7 @@ static void DBP_StartOSD(DBP_OSDMode mode, DBP_PureMenuState* in_main)
 
 static void DBP_CloseOSD()
 {
-	DBP_OSD.SetMode(DBPOSD_CLOSED);
+	DBP_OSD.SetMode(_DBPOSD_CLOSE);
 }
 
 static void DBP_PureMenuProgram(Program** make)
@@ -1812,7 +2259,7 @@ static void DBP_PureMenuProgram(Program** make)
 				if (msgType == 1 && (DBP_GetTicks() - opentime) > ((Bit32u)dbp_menu_time * 1000)) first_shell->exit = true;
 			}
 			EndIntercept();
-			INT10_ReloadFont();
+			INT10_SetVideoMode(0x3);
 			return !first_shell->exit;
 		}
 	} interceptor;
@@ -1827,7 +2274,7 @@ static void DBP_PureMenuProgram(Program** make)
 				return;
 
 			DBP_FullscreenOSD = true;
-			DBP_PureMenuState* ms = new DBP_PureMenuState(m == M_BOOT);
+			DBP_PureMenuState* ms = new DBP_PureMenuState();
 			bool runsoloexe = (ms->exe_count == 1 && ms->fs_rows <= (int)(dbp_images.size() + 1) && !patchDrive::variants.Len());
 
 			#ifndef STATIC_LINKING
@@ -1846,10 +2293,15 @@ static void DBP_PureMenuProgram(Program** make)
 				m = M_NORMAL;
 			}
 
-			if (m == M_BOOT && runsoloexe && dbp_menu_time != (char)-1)
+			if (m == M_BOOT && runsoloexe && dbp_menu_time != (signed char)-1)
+			{
 				ms->DoInput(DBP_MenuState::RES_OK, ms->list[ms->sel].type, 0);
+				delete ms;
+			}
 			else if (m != M_BOOT || ms->exe_count != 0 || ms->fs_rows != 0 || patchDrive::variants.Len() || Drives['C'-'A'] || Drives['A'-'A'] || Drives['D'-'A'])
 				DBP_StartOSD(DBPOSD_MAIN, ms);
+			else
+				delete ms;
 		}
 	};
 	*make = new Menu;
@@ -1967,7 +2419,7 @@ static void DBP_WheelShiftOSD(Bit8u _port, bool _on, Bit8u _shift_port = (Bit8u)
 			if (Flags & FLAG_OPENWHEEL) { SetState(port, STATE_OPEN); Flags &= ~FLAG_OPENWHEEL; }
 			if (Flags & FLAG_CLOSEWHEEL) { SetState(port, STATE_CLOSING_PRESSED); Flags &= ~FLAG_CLOSEWHEEL; }
 			if (State == STATE_CLOSING_PRESSED && (DBP_GetTicks() - Tick) > 70) SetState(port, STATE_CLOSING_RELEASED);
-			if (State == STATE_CLOSING_RELEASED && (DBP_GetTicks() - Tick) > 250) SetState(port, STATE_CLOSED);
+			if (State == STATE_CLOSING_RELEASED && (DBP_GetTicks() - Tick) > 300) SetState(port, STATE_CLOSED);
 			if (State != STATE_OPEN && State != STATE_OPEN_PRESSED) return;
 
 			const Bit8u aw = dbp_actionwheel_inputs;
@@ -2025,7 +2477,10 @@ static void DBP_WheelShiftOSD(Bit8u _port, bool _on, Bit8u _shift_port = (Bit8u)
 				if (port == 0 && (dbp_actionwheel_inputs & 8)) dbp_mouse_input = 'f';
 			}
 			if (newstate == STATE_CLOSED && port == 0 && (dbp_actionwheel_inputs & 8))
-				dbp_mouse_input = retro_get_variable("dosbox_pure_mouse_input", "true")[0];
+			{
+				dbp_mouse_input = DBP_Option::Get(DBP_Option::mouse_input)[0];
+				if (dbp_mouse_input == 't' && dbp_yml_directmouse) dbp_mouse_input = 'd';
+			}
 
 			if (newstate != STATE_CLOSING_PRESSED || State != STATE_OPEN_PRESSED)
 			{
@@ -2120,7 +2575,7 @@ static void DBP_WheelShiftOSD(Bit8u _port, bool _on, Bit8u _shift_port = (Bit8u)
 						if (aval) val = aval; else val = (val ? (Bit16s)32767 : (Bit16s)0); // old frontend fallback
 					}
 
-					if (val && (wheel.State == Wheel::STATE_OPEN || wheel.State == Wheel::STATE_OPEN_PRESSED || wheel.State == Wheel::STATE_CLOSING_PRESSED) && b.evt != DBPET_ACTIONWHEEL && (
+					if (val && (wheel.State == Wheel::STATE_OPEN || wheel.State == Wheel::STATE_OPEN_PRESSED || wheel.State == Wheel::STATE_CLOSING_PRESSED || wheel.State == Wheel::STATE_CLOSING_RELEASED) && b.evt != DBPET_ACTIONWHEEL && (
 						(b.device == RETRO_DEVICE_ANALOG && ((b.index == RETRO_DEVICE_INDEX_ANALOG_LEFT && (dbp_actionwheel_inputs&1)) || (b.index == RETRO_DEVICE_INDEX_ANALOG_RIGHT && (dbp_actionwheel_inputs&2))))  || 
 						(b.device == RETRO_DEVICE_JOYPAD && (b.id == RETRO_DEVICE_ID_JOYPAD_B || ((b.id == RETRO_DEVICE_ID_JOYPAD_UP || b.id == RETRO_DEVICE_ID_JOYPAD_DOWN || b.id == RETRO_DEVICE_ID_JOYPAD_LEFT || b.id == RETRO_DEVICE_ID_JOYPAD_RIGHT) && (dbp_actionwheel_inputs&4)))) || 
 						(b.device == RETRO_DEVICE_MOUSE && (dbp_actionwheel_inputs&8))))
@@ -2152,3 +2607,50 @@ static void DBP_WheelShiftOSD(Bit8u _port, bool _on, Bit8u _shift_port = (Bit8u)
 	}
 	DBP_SetIntercept(&interceptor);
 }
+
+#ifdef DBP_STANDALONE
+void DBPS_ToggleOSD()
+{
+	DBP_QueueEvent(DBPET_TOGGLEOSD, 0);
+	DBP_QueueEvent(DBPET_TOGGLEOSDUP, 0);
+}
+
+bool DBPS_IsGameRunning()
+{
+	return (dbp_game_running || (first_shell && first_shell->bf && !first_shell->bf->IsAutoexec()));
+}
+
+bool DBPS_IsShowingOSD()
+{
+	return (dbp_intercept && dbp_intercept->usegfx());
+}
+
+void DBPS_OpenContent(const char* path)
+{
+	DBPS_BrowsePath.assign(path);
+	struct Local { static void Do()
+	{
+		const char *path = DBPS_BrowsePath.c_str(), *path_fs = strrchr(path, '/'), *path_bs = strrchr(path, '\\'), *path_s = (path_bs > path_fs ? path_bs : path_fs);
+		if (!path_s) return;
+		std::string fname = DBPS_BrowsePath.substr((size_t)(path_s + 1 - path));
+		DBPS_BrowsePath.erase((size_t)(path_s - path));
+		if (fname.size() > 5 && !strncasecmp(&fname[fname.size()-5], ".dosc", 5)) fname[fname.size()-1] = 'Z' | (fname[fname.size()-1] & 0x20);
+		if (DBP_OSD.ptr._all) { DBP_OSD.SetMode(DBPOSD_MAIN, NULL); } else { DBP_StartOSD(DBPOSD_MAIN); }
+		if (DBP_OSD.ptr.main->GoToSubMenu(DBP_PureMenuState::IT_FILEBROWSE, DBP_PureMenuState::IT_FILEBROWSE, -1, &fname))
+			DBP_OSD.ptr.main->DoInput(DBP_MenuState::RES_OK, DBP_PureMenuState::IT_FILEBROWSE, 0);
+		else
+			emuthread_notify(0, LOG_WARN, "Unsupported file type %s", fname.c_str());
+	}};
+	dbps_emu_thread_func = Local::Do;
+}
+
+void DBPS_AddDisc(const char* path)
+{
+	DBP_Mount(DBP_AppendImage(path, false), false);
+}
+
+const std::string& DBPS_GetContentName()
+{
+	return dbp_content_name;
+}
+#endif
