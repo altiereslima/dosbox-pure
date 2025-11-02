@@ -721,7 +721,7 @@ struct DBP_MapperMenuState final : DBP_MenuState
 		if (DBP_PadMapping::CalcPortMode(bind_port) != DBP_PadMapping::MODE_MAPPER)
 		{
 			list.emplace_back(IT_NONE);
-			list.emplace_back(IT_NONE, 11, "    O Mapeador de Controle est† desativado");
+			list.emplace_back(IT_NONE, 11, "    O Mapeador de Controle est¬† desativado");
 			list.emplace_back(IT_NONE, 11, "    para esta porta do controle");
 			list.emplace_back(IT_NONE);
 			list.emplace_back(IT_NONE, 11, "    Configure 'Usar Mapeador de Controle'");
@@ -729,7 +729,7 @@ struct DBP_MapperMenuState final : DBP_MenuState
 		}
 		else
 		{
-			list.emplace_back(IT_NONE, 0, "PredefiniÁ„o: ");
+			list.emplace_back(IT_NONE, 0, "Predefini√ß√£o: ");
 			list.emplace_back(IT_PRESET, 0, "  "); list.back().str += DBP_PadMapping::GetPortPresetName(bind_port);
 			list.emplace_back(IT_NONE, 2);
 
@@ -741,23 +741,23 @@ struct DBP_MapperMenuState final : DBP_MenuState
 				const Bit32u padpdii = PORT_DEVICE_INDEX_ID(pad);
 				list.emplace_back(IT_NONE);
 				if (!a) list.back().str = DBP_MapperJoypadNames[i];
-				else  ((list.back().str = DBP_MapperJoypadNames[2+pad.index]) += " AnalÛg. ") += DBP_MapperJoypadNames[(i-JOYPAD_MAX)%4];
+				else  ((list.back().str = DBP_MapperJoypadNames[2+pad.index]) += " Anal√≥g. ") += DBP_MapperJoypadNames[(i-JOYPAD_MAX)%4];
 
 				size_t numBefore = list.size();
 				for (const DBP_InputBind& b : dbp_input_binds)
 					if (PORT_DEVICE_INDEX_ID(b) == padpdii)
 						Add(b, (Bit16s)(((&b - &dbp_input_binds[0])<<1)|apart), apart, &boundActionWheel);
-				if (list.size() - numBefore == 0) list.emplace_back(IT_ADD, i, "  [Criar AssociaáÑo]");
+				if (list.size() - numBefore == 0) list.emplace_back(IT_ADD, i, "  [Criar Associa‚Ä°‚Äûo]");
 
 				if (const char* action = DBP_PadMapping::GetBoundAutoMapButtonLabel(padpdii, a))
 				{
-					list.emplace_back(IT_NONE, 1, "    FunáÑo: ");
+					list.emplace_back(IT_NONE, 1, "    Fun‚Ä°‚Äûo: ");
 					list.back().str.append(action);
 				}
 			}
 
 			list.emplace_back(IT_NONE, 2);
-			list.emplace_back(IT_NONE, 0, "Opáîes da Roda: ");
+			list.emplace_back(IT_NONE, 0, "Op‚Ä°‚Äùes da Roda: ");
 			for (const DBP_WheelItem& it : dbp_wheelitems)
 			{
 				if (it.port != bind_port) continue;
@@ -769,18 +769,18 @@ struct DBP_MapperMenuState final : DBP_MenuState
 				}
 				if (const char* action = DBP_PadMapping::GetWheelAutoMapButtonLabel(it))
 				{
-					list.emplace_back(IT_NONE, 1, "    FunáÑo: ");
+					list.emplace_back(IT_NONE, 1, "    Fun‚Ä°‚Äûo: ");
 					list.back().str.append(action);
 				}
 				list.emplace_back(IT_NONE, 0);
 				haveWheelOptions = true;
 			}
-			list.emplace_back(IT_ADD, -1, "  Adicionar OpáÑo");
+			list.emplace_back(IT_ADD, -1, "  Adicionar Op‚Ä°‚Äûo");
 			if (haveWheelOptions != boundActionWheel)
 			{
 				list.emplace_back(IT_NONE, 0, "Aviso:");
-				list.emplace_back(IT_NONE, -1, "  A roda est† inacess°vel porque");
-				list.emplace_back(IT_NONE, -1, (haveWheelOptions ? "  nenhum botÑo foi vinculado Ö Roda de AáÑo" : "  nenhuma opáÑo foi definida"));
+				list.emplace_back(IT_NONE, -1, "  A roda est¬† inacess¬°vel porque");
+				list.emplace_back(IT_NONE, -1, (haveWheelOptions ? "  nenhum bot‚Äûo foi vinculado ‚Ä¶ Roda de A‚Ä°‚Äûo" : "  nenhuma op‚Ä°‚Äûo foi definida"));
 			}
 			list.emplace_back(IT_NONE, 0);
 		}
@@ -815,14 +815,14 @@ struct DBP_MapperMenuState final : DBP_MenuState
 		bool have_add = false;
 		for (Item& it : list) { if (it.type == IT_ADD) { have_add = true; break; } }
 		list.clear();
-		list.emplace_back(IT_NONE, 22, "Selecionar PredefiniÁ„o");
+		list.emplace_back(IT_NONE, 22, "Selecionar Predefini√ß√£o");
 		list.emplace_back(IT_NONE);
 		Bit16s off = (dbp_auto_mapping ? 0 : 1), n = 1 + off;
 		for (const char* p; (p = DBP_PadMapping::GetPresetName((DBP_PadMapping::EPreset)n)) != NULL;) list.emplace_back(IT_PRESET, n++, p);
 		if (have_add)
 		{
 			list.emplace_back(IT_NONE);
-			list.emplace_back(IT_PRESET, 9999, "Preencher NÑo Associados com Teclas GenÇricas");
+			list.emplace_back(IT_PRESET, 9999, "Preencher N‚Äûo Associados com Teclas Gen‚Äöricas");
 		}
 		if (DBP_PadMapping::IsCustomized(bind_port))
 		{
@@ -847,7 +847,7 @@ struct DBP_MapperMenuState final : DBP_MenuState
 		else if (ok_type == IT_ADD)
 		{
 			edit_mode = EDIT_ADDITIONAL;
-			(list[1].str = " >") += "  [AssociaáÑo Adicional]";
+			(list[1].str = " >") += "  [Associa‚Ä°‚Äûo Adicional]";
 		}
 		list.resize(2);
 		list.emplace_back(IT_NONE);
@@ -864,7 +864,7 @@ struct DBP_MapperMenuState final : DBP_MenuState
 		if (edit_mode == EDIT_EXISTING)
 		{
 			list.emplace_back(IT_NONE);
-			list.emplace_back(IT_DEL, 0, "  [Remover AssociaáÑo]");
+			list.emplace_back(IT_DEL, 0, "  [Remover Associa‚Ä°‚Äûo]");
 			int count = 0;
 			if (edit_info >= 0) // editing bind
 			{
@@ -880,7 +880,7 @@ struct DBP_MapperMenuState final : DBP_MenuState
 			if (count < 4)
 			{
 				list.emplace_back(IT_NONE);
-				list.emplace_back(IT_ADD, 0, "  [AssociaáÑo Adicional]");
+				list.emplace_back(IT_ADD, 0, "  [Associa‚Ä°‚Äûo Adicional]");
 			}
 		}
 		#ifdef DBP_STANDALONE
@@ -926,7 +926,7 @@ struct DBP_MapperMenuState final : DBP_MenuState
 
 			if (const char* mapname = DBP_PadMapping::GetKeyAutoMapButtonLabel(key))
 			{
-				list.emplace_back(IT_NONE, 0, "    FunáÑo: ");
+				list.emplace_back(IT_NONE, 0, "    Fun‚Ä°‚Äûo: ");
 				list.back().str += mapname;
 				list.emplace_back(IT_NONE, 0);
 			}
@@ -1339,7 +1339,7 @@ struct DBP_PureMenuState final : DBP_MenuState
 		buf.DrawBox( 8, lh+7, w-16, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
 
 		buf.PrintCenteredOutlined(lh, 0, w, 7, "MENU INICIAL DO DOSBOX PURE", buf.COL_MENUTITLE);
-		buf.PrintCenteredOutlined(lh, 0, w, 7+lh+2, (!dbp_content_name.empty() ? dbp_content_name.c_str() : "- Nenhum Conte£do Carregado -"), buf.COL_CONTENT);
+		buf.PrintCenteredOutlined(lh, 0, w, 7+lh+2, (!dbp_content_name.empty() ? dbp_content_name.c_str() : "- Nenhum Conte¬£do Carregado -"), buf.COL_CONTENT);
 
 		int inforow = (w > 319), hdr = lh*2+12, rows = (h - hdr - ftr) / lh - inforow, count = (int)list.size(), bot = hdr + rows * lh + 3 - (lh == 8 ? 1 : 0);
 		int listu = DrawMenuBase(buf, blend, lh, rows, m, mouseMoved, 8, w - 8, hdr, (list[0].type == IT_NONE));
@@ -1354,7 +1354,7 @@ struct DBP_PureMenuState final : DBP_MenuState
 			{
 				bool mounted = dbp_images[item.info].mounted;
 				int xdiff = (w - buf.CW*(strlen + 7)), mntx = (xdiff >= 0 ? xdiff / 2 : w - (buf.CW*9)), strx = (xdiff >= 0 ? mntx + (buf.CW*7) : xdiff - (buf.CW*3));
-				buf.Print(lh, mntx + ((mounted && xdiff >= 0) ? buf.CW : 0), y, (mounted ? "EJETAR" : "INSERIR"), (i == se ? buf.COL_HIGHLIGHT : buf.COL_NORMAL));
+				buf.Print(lh, mntx + ((mounted && xdiff >= 0) ? buf.CW : 0), y, (mounted ? "EJETAR " : "INSERIR "), (i == se ? buf.COL_HIGHLIGHT : buf.COL_NORMAL));
 				buf.Print(lh, strx, y, item.str.c_str(), (i == se ? buf.COL_HIGHLIGHT : buf.COL_NORMAL));
 			}
 			else if (item.type == IT_RUN || item.type == IT_BOOTOS || item.type == IT_BOOTIMG_MACHINE || item.type == IT_RUNSHELL)
@@ -1373,8 +1373,8 @@ struct DBP_PureMenuState final : DBP_MenuState
 		{
 			char skiptext[38];
 			if (!autoboot_show) skiptext[0] = '\0';
-			else if (DBP_Run::autoboot.skip == -1) snprintf(skiptext, sizeof(skiptext), "NÑo exibir console de texto");
-			else if (DBP_Run::autoboot.skip) snprintf(skiptext, sizeof(skiptext), "NÑo exibir os primeiros %d quadros", DBP_Run::autoboot.skip);
+			else if (DBP_Run::autoboot.skip == -1) snprintf(skiptext, sizeof(skiptext), "N‚Äûo exibir console de texto");
+			else if (DBP_Run::autoboot.skip) snprintf(skiptext, sizeof(skiptext), "N‚Äûo exibir os primeiros %d quadros", DBP_Run::autoboot.skip);
 			#ifndef DBP_STANDALONE
 			else snprintf(skiptext, sizeof(skiptext), "SHIFT/L2/R2 + Reiniciar para voltar");
 			#else
@@ -1500,16 +1500,16 @@ struct DBP_PureMenuState final : DBP_MenuState
 			if (!dbp_strict_mode && bootinstall)          AddFSRow(IT_INSTALLOSSIZE, 0, "[ Inicializar e Instalar Novo Sistema Operacional ]", (!boot_rows++));
 
 			#ifdef DBP_STANDALONE
-			AddFSRow(IT_FILEBROWSE,    0, "[ Carregar Conte£do ]",     (!boot_rows++));
+			AddFSRow(IT_FILEBROWSE,    0, "[ Carregar Conte¬£do ]",     (!boot_rows++));
 			if (dbp_game_running) AddFSRow(IT_SAVELOAD,  0, "[ Salvar & Carregar ]", (!boot_rows++));
 			#endif
 
 			if (patchDrive::variants.Len())
 			{
-				AddFSRow(IT_NONE, INFO_WARN, "ConfiguraáÑo Ativa: ", true);
-				list.back().str.append(!DBP_Run::patch.enabled_variant ? "PadrÑo" : patchDrive::variants.GetStorage()[DBP_Run::patch.enabled_variant - 1].c_str());
+				AddFSRow(IT_NONE, INFO_WARN, "Configura‚Ä°‚Äûo Ativa: ", true);
+				list.back().str.append(!DBP_Run::patch.enabled_variant ? "Padr‚Äûo" : patchDrive::variants.GetStorage()[DBP_Run::patch.enabled_variant - 1].c_str());
 				if (DBP_Run::patch.enabled_variant) ClearSortOrderPrefix(list.back().str);
-				AddFSRow(IT_VARIANTLIST, 0, "[ Selecionar ConfiguraáÑo do Jogo ]");
+				AddFSRow(IT_VARIANTLIST, 0, "[ Selecionar Configura‚Ä°‚Äûo do Jogo ]");
 			}
 
 			if (fs_rows) { list.emplace_back(IT_NONE); fs_rows++; }
@@ -1527,7 +1527,7 @@ struct DBP_PureMenuState final : DBP_MenuState
 			if (exe_count) list.emplace_back(IT_NONE);
 
 			if (DBP_FullscreenOSD || (cd_count + hd_count) <= 1) setsel = (patchDrive::variants.Len() ? (fs_rows - 2) : (exe_count ? fs_rows : (int)dbp_images.size()));
-			if (!exe_count) { list.emplace_back(IT_NONE, INFO_DIM, "Nenhum arquivo execut†vel encontrado"); list.emplace_back(IT_NONE); }
+			if (!exe_count) { list.emplace_back(IT_NONE, INFO_DIM, "Nenhum arquivo execut¬†vel encontrado"); list.emplace_back(IT_NONE); }
 
 			if (!dbp_strict_mode) list.emplace_back(IT_COMMANDLINE, 0, "Ir para a Linha de Comando");
 			if (!DBP_FullscreenOSD) list.emplace_back(IT_CLOSEOSD, 0, "Fechar Menu");
@@ -1535,7 +1535,7 @@ struct DBP_PureMenuState final : DBP_MenuState
 		}
 		else if (mode == IT_BOOTIMG)
 		{
-			list.emplace_back(IT_NONE, INFO_HEADER, "Selecionar Modo de InicializaáÑo do Sistema");
+			list.emplace_back(IT_NONE, INFO_HEADER, "Selecionar Modo de Inicializa‚Ä°‚Äûo do Sistema");
 			list.emplace_back(IT_NONE);
 			for (const char* it : DBP_MachineNames) list.emplace_back(IT_BOOTIMG_MACHINE, (Bit16s)(it[0]|0x20), it);
 			list.emplace_back(IT_NONE);
@@ -1549,26 +1549,26 @@ struct DBP_PureMenuState final : DBP_MenuState
 		{
 			const char* filename;
 			std::string osimg = DBP_GetSaveFile(SFT_NEWOSIMAGE, &filename);
-			list.emplace_back(IT_NONE, INFO_HEADER, "Tamanho do Disco R°gido para InstalaáÑo");
+			list.emplace_back(IT_NONE, INFO_HEADER, "Tamanho do Disco R¬°gido para Instala‚Ä°‚Äûo");
 			list.emplace_back(IT_NONE);
-			list.emplace_back(IT_NONE, INFO_WARN, "Criar uma nova imagem de disco r°gido na seguinte localizaáÑo:");
+			list.emplace_back(IT_NONE, INFO_WARN, "Criar uma nova imagem de disco r¬°gido na seguinte localiza‚Ä°‚Äûo:");
 			if (filename > &osimg[0]) { list.emplace_back(IT_NONE, INFO_WARN); list.back().str.assign(&osimg[0], filename - &osimg[0]); }
 			list.emplace_back(IT_NONE, INFO_WARN, filename);
 			list.emplace_back(IT_NONE);
 			char buf[128];
 			for (Bit16s sz = 16/8; sz <= 64*1024/8; sz += (sz < 4096/8 ? sz : (sz < 32*1024/8 ? 4096/8 : 8192/8)))
 			{
-				list.emplace_back(IT_INSTALLOS, sz, (sprintf(buf, "%3d %cB Disco R°gido", (sz < 1024/8 ? sz*8 : sz*8/1024), (sz < 1024/8 ? 'M' : 'G')),buf));
+				list.emplace_back(IT_INSTALLOS, sz, (sprintf(buf, "%3d %cB Disco R¬°gido", (sz < 1024/8 ? sz*8 : sz*8/1024), (sz < 1024/8 ? 'M' : 'G')),buf));
 				if (sz == 2048/8)
 				{
 					list.emplace_back(IT_NONE);
-					list.emplace_back(IT_NONE, INFO_WARN, "Imagens de disco r°gido acima de 2GB serÑo formatadas com FAT32");
-					list.emplace_back(IT_NONE, INFO_WARN, "NOTA: FAT32 Ç suportado apenas no Windows 95C e versîes mais novas");
+					list.emplace_back(IT_NONE, INFO_WARN, "Imagens de disco r¬°gido acima de 2GB ser‚Äûo formatadas com FAT32");
+					list.emplace_back(IT_NONE, INFO_WARN, "NOTA: FAT32 ‚Äö suportado apenas no Windows 95C e vers‚Äùes mais novas");
 					list.emplace_back(IT_NONE);
 				}
 			}
 			list.emplace_back(IT_NONE);
-			list.emplace_back(IT_INSTALLOS, 0, "[ Iniciar Somente Sem Criar Imagem de Disco R°gido ]");
+			list.emplace_back(IT_INSTALLOS, 0, "[ Iniciar Somente Sem Criar Imagem de Disco R¬°gido ]");
 			setsel = (filename > &osimg[0] ? 11 : 10);
 		}
 		else if (mode == IT_BOOTOSLIST)
@@ -1582,13 +1582,13 @@ struct DBP_PureMenuState final : DBP_MenuState
 			if (ramdisk == 't')
 			{
 				list.emplace_back(IT_NONE);
-				list.emplace_back(IT_NONE, INFO_WARN, "As alteraáîes feitas na unidade C: serÑo descartadas");
+				list.emplace_back(IT_NONE, INFO_WARN, "As altera‚Ä°‚Äùes feitas na unidade C: ser‚Äûo descartadas");
 			}
 			else if (ramdisk == 'd')
 			{
 				const char *save_c_name; std::string save_c = DBP_GetSaveFile(SFT_DIFFDISK, &save_c_name);
 				list.emplace_back(IT_NONE);
-				list.emplace_back(IT_NONE, INFO_WARN, "As alteraáîes feitas na unidade C: serÑo armazenadas no seguinte local:");
+				list.emplace_back(IT_NONE, INFO_WARN, "As altera‚Ä°‚Äùes feitas na unidade C: ser‚Äûo armazenadas no seguinte local:");
 				if (save_c_name > &save_c[0]) { list.emplace_back(IT_NONE, INFO_WARN); list.back().str.assign(&save_c[0], save_c_name - &save_c[0]); }
 				list.emplace_back(IT_NONE, INFO_WARN, save_c_name);
 			}
@@ -1598,18 +1598,18 @@ struct DBP_PureMenuState final : DBP_MenuState
 			bool mountedHDIMage = false;
 			for (DBP_Image& i : dbp_images) { if (!DBP_Image_IsCD(i)) { mountedHDIMage = true; break; } }
 			if (mountedHDIMage && (imageDiskList['D'-'A'] || imageDiskList['E'-'A'] || (strcmp(RunningProgram, "BOOT") && imageDiskList['C'-'A'])))
-				list.emplace_back(IT_NONE, INFO_WARN, "D: ser† baseado no arquivo .IMG carregado");
+				list.emplace_back(IT_NONE, INFO_WARN, "D: ser¬† baseado no arquivo .IMG carregado");
 			else if (atoi(dfreespace))
 			{
 				const char *save_d_name; std::string save_d = DBP_GetSaveFile(SFT_VIRTUALDISK, &save_d_name);
-				list.emplace_back(IT_NONE, INFO_WARN, "As alteraáîes feitas na unidade D: serÑo armazenadas no seguinte local:");
+				list.emplace_back(IT_NONE, INFO_WARN, "As altera‚Ä°‚Äùes feitas na unidade D: ser‚Äûo armazenadas no seguinte local:");
 				if (save_d_name > &save_d[0]) { list.emplace_back(IT_NONE, INFO_WARN); list.back().str.assign(&save_d[0], save_d_name - &save_d[0]); }
 				list.emplace_back(IT_NONE, INFO_WARN, save_d_name);
 			}
 			else if (dfreespace[0] != 'h')
-				list.emplace_back(IT_NONE, INFO_WARN, "As alteraáîes feitas na unidade D: serÑo descartadas");
+				list.emplace_back(IT_NONE, INFO_WARN, "As altera‚Ä°‚Äùes feitas na unidade D: ser‚Äûo descartadas");
 			else
-				list.emplace_back(IT_NONE, INFO_WARN, "O disco r°gido D: foi desativado, use apenas CDs montados");
+				list.emplace_back(IT_NONE, INFO_WARN, "O disco r¬°gido D: foi desativado, use apenas CDs montados");
 		}
 		else if (mode == IT_SHELLLIST)
 		{
@@ -1622,12 +1622,12 @@ struct DBP_PureMenuState final : DBP_MenuState
 		else if (mode == IT_VARIANTLIST)
 		{
 			#ifdef DBP_STANDALONE
-			list.emplace_back(IT_FILEBROWSE, 0, "[ Carregar Conte£do ]");
+			list.emplace_back(IT_FILEBROWSE, 0, "[ Carregar Conte¬£do ]");
 			list.emplace_back(IT_SAVELOAD, 0, "[ Salvar & Carregar ]");
 			list.emplace_back(IT_NONE);
 			#endif
 
-			list.emplace_back(IT_NONE, INFO_HEADER, "Selecionar ConfiguraáÑo do Jogo");
+			list.emplace_back(IT_NONE, INFO_HEADER, "Selecionar Configura‚Ä°‚Äûo do Jogo");
 			list.emplace_back(IT_NONE);
 			const std::vector<std::string>& vars = patchDrive::variants.GetStorage();
 			int list_base = (int)list.size(), max_secs = 1, sec, secbegin, secend, i, enabled_var = DBP_Run::patch.enabled_variant, expect_vars = 1;
@@ -1689,14 +1689,14 @@ struct DBP_PureMenuState final : DBP_MenuState
 			}
 			else if (DBP_Run::patch.show_default)
 			{
-				list.emplace(list.begin() + secbegin, IT_VARIANTRUN, 0, "PadrÑo"); // no sections, add default start
+				list.emplace(list.begin() + secbegin, IT_VARIANTRUN, 0, "Padr‚Äûo"); // no sections, add default start
 				setsel = (setsel ? (setsel + 1) : secbegin); // fix for added row
 			}
 			list.emplace_back(IT_NONE);
 			list.emplace_back(IT_MAINMENU, 0, "Executar Outro Programa");
 			list.emplace_back(IT_NONE);
-			list.emplace_back(IT_NONE, INFO_DIM, "A configuraáÑo pode ser trocada com o Teclado na Tela");
-			list.emplace_back(IT_NONE, INFO_DIM, "ou segurando shift ou L2/R2 ao reiniciar o n£cleo");
+			list.emplace_back(IT_NONE, INFO_DIM, "A configura‚Ä°‚Äûo pode ser trocada com o Teclado na Tela");
+			list.emplace_back(IT_NONE, INFO_DIM, "ou segurando shift ou L2/R2 ao reiniciar o n¬£cleo");
 		}
 		#ifdef DBP_STANDALONE
 		else if (mode == IT_FILEBROWSE)
@@ -1748,7 +1748,7 @@ struct DBP_PureMenuState final : DBP_MenuState
 				if (!have_up && DBPS_BrowsePath.length() != 1) list.emplace(list.begin(), IT_FILEBROWSE, -1, "[ Voltar ]"); // go to drive selection
 				#endif
 				if (setsel == -1) setsel = 1;
-				list.emplace_back(IT_FILEBROWSE, 4, "[ Carregar esta pasta como conte£do ]");
+				list.emplace_back(IT_FILEBROWSE, 4, "[ Carregar esta pasta como conte¬£do ]");
 			}
 			if (list.empty()) list.emplace_back(IT_NONE, INFO_HEADER, "Nenhum arquivo");
 		}
@@ -1862,7 +1862,7 @@ struct DBP_PureMenuState final : DBP_MenuState
 					list.emplace_back(IT_NONE, INFO_WARN); fname.swap(list.back().str);
 					list.emplace_back(IT_NONE);
 					list.emplace_back(IT_FILEBROWSE, 5, "[ Montar como Imagem de CD/Disco ]");
-					list.emplace_back(IT_FILEBROWSE, 6, "[ Carregar como Conte£do ]");
+					list.emplace_back(IT_FILEBROWSE, 6, "[ Carregar como Conte¬£do ]");
 					ResetSel(3);
 				}
 				else
@@ -1950,14 +1950,14 @@ struct DBP_PureMenuState final : DBP_MenuState
 			if (conflicts.empty()) goto handle_result;
 
 			list.clear();
-			AddWrappedText(windowlinelength, "", "A configuraáÑo selecionada nÑo pode ser aplicada porque as configuraáîes nos arquivos abaixo foram personalizadas:", INFO_WARN);
+			AddWrappedText(windowlinelength, "", "A configura‚Ä°‚Äûo selecionada n‚Äûo pode ser aplicada porque as configura‚Ä°‚Äùes nos arquivos abaixo foram personalizadas:", INFO_WARN);
 			list.emplace_back(IT_NONE);
 			for (const std::string& path : conflicts) list.emplace_back(IT_NONE, 0, path.c_str());
 			list.emplace_back(IT_NONE);
-			AddWrappedText(windowlinelength, "", "Para usar a configuraáÑo como pretendido, os arquivos precisam ser redefinidos, mas quaisquer alteraáîes feitas por vocà serÑo perdidas.", INFO_DIM);
+			AddWrappedText(windowlinelength, "", "Para usar a configura‚Ä°‚Äûo como pretendido, os arquivos precisam ser redefinidos, mas quaisquer altera‚Ä°‚Äùes feitas por vocÀÜ ser‚Äûo perdidas.", INFO_DIM);
 			list.emplace_back(IT_NONE);
 			list.emplace_back(IT_VARIANTRUN_RESET_CONFLICTS, variant, "[ Sim, redefinir estes arquivos ]");
-			list.emplace_back(IT_VARIANTRUN_KEEP_CONFLICTS, variant, "[ NÑo, manter meus arquivos personalizados como estÑo ]");
+			list.emplace_back(IT_VARIANTRUN_KEEP_CONFLICTS, variant, "[ N‚Äûo, manter meus arquivos personalizados como est‚Äûo ]");
 			list.emplace_back(IT_VARIANTLIST, 0, "[ Cancelar ]");
 			ResetSel((int)list.size() - 2);
 		}
@@ -2055,7 +2055,7 @@ struct DBP_MenuInterceptor : DBP_Interceptor
 				warned_game_focus = true;
 				emuthread_notify(10000, LOG_WARN,
 					"Teclado e joypad detectados pressionados ao mesmo tempo.\n"
-					"Para usar o teclado livremente sem teclas de atalho, ative o 'Foco no Jogo' (tecla Scroll Lock por padrÑo), se dispon°vel.");
+					"Para usar o teclado livremente sem teclas de atalho, ative o 'Foco no Jogo' (tecla Scroll Lock por padr‚Äûo), se dispon¬°vel.");
 				break;
 			}
 		}
