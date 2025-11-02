@@ -1105,8 +1105,8 @@ struct DBP_MapperMenuState final : DBP_MenuState
 		if (edit_mode == NOT_EDITING && !is_presets_menu())
 		{
 			int x_change = 0, x1 = l-(wide?50:0), x2 = r-25+(wide?50:0);
-			if (buf.DrawButtonAt(blend, hdr-lh-6, lh, 3, 2, x1, x1+25, false, m, "") && m.click) x_change = -1;
-			if (buf.DrawButtonAt(blend, hdr-lh-6, lh, 3, 2, x2, x2+25, false, m, "") && m.click) x_change = 1;
+			if (buf.DrawButtonAt(blend, hdr-lh-6, lh, 3, 2, x1, x1+25, false, m, "\x1B") && m.click) x_change = -1;
+			if (buf.DrawButtonAt(blend, hdr-lh-6, lh, 3, 2, x2, x2+25, false, m, "\x1A") && m.click) x_change = 1;
 			if (x_change) menu_top(x_change);
 
 			if (m.y >= 0 && m.y <= hdr)
@@ -1401,9 +1401,9 @@ struct DBP_PureMenuState final : DBP_MenuState
 				buf.DrawBox(w-68, bot, 60, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
 				buf.DrawBox(w-217, bot, 150, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
 				buf.DrawBox(w-312, bot, 96, lh+3, buf.BGCOL_HEADER | blend, buf.COL_LINEBOX);
-				buf.PrintCenteredOutlined(lh, w-68, 60, bot+2, "\x7 Executar", buf.COL_BTNTEXT);
-				buf.PrintCenteredOutlined(lh, w-217, 150, bot+2, " Definir Auto-iniciar", buf.COL_BTNTEXT);
-				buf.PrintCenteredOutlined(lh, w-312, 96, bot+2, " Rolar", buf.COL_BTNTEXT);
+				buf.PrintCenteredOutlined(lh, w-68, 60, bot+2, "\x7 Run", buf.COL_BTNTEXT);
+				buf.PrintCenteredOutlined(lh, w-217, 150, bot+2, "\x1A\x1B Definir Auto-iniciar", buf.COL_BTNTEXT);
+				buf.PrintCenteredOutlined(lh, w-312, 96, bot+2, "\x18\x19 Rolar", buf.COL_BTNTEXT);
 			}
 
 			if (m.y >= bot && m.y <= bot+lh+3)
