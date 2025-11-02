@@ -660,7 +660,7 @@ struct DBP_SystemMenuState final : DBP_MenuState
 #endif
 
 static const Bit8u DBP_MapperJoypadNums[] = { RETRO_DEVICE_ID_JOYPAD_UP, RETRO_DEVICE_ID_JOYPAD_DOWN, RETRO_DEVICE_ID_JOYPAD_LEFT, RETRO_DEVICE_ID_JOYPAD_RIGHT, RETRO_DEVICE_ID_JOYPAD_B, RETRO_DEVICE_ID_JOYPAD_A, RETRO_DEVICE_ID_JOYPAD_Y, RETRO_DEVICE_ID_JOYPAD_X, RETRO_DEVICE_ID_JOYPAD_SELECT, RETRO_DEVICE_ID_JOYPAD_START, RETRO_DEVICE_ID_JOYPAD_L, RETRO_DEVICE_ID_JOYPAD_R, RETRO_DEVICE_ID_JOYPAD_L2, RETRO_DEVICE_ID_JOYPAD_R2, RETRO_DEVICE_ID_JOYPAD_L3, RETRO_DEVICE_ID_JOYPAD_R3 };
-static const char* DBP_MapperJoypadNames[] = { "Cima", "Baixo", "Esquerda", "Direita", "B (Baixo)", "A (Direita)", "Y (Esquerda)", "X (Cima)", "SELECT", "START", "L", "R", "L2", "R2", "L3", "R3" };
+static const char* DBP_MapperJoypadNames[] = { "Cima", "Baixo", "Esq.", "Dir.", "B (Baixo)", "A (Direita)", "Y (Esquerda)", "X (Cima)", "SELECT", "START", "L", "R", "L2", "R2", "L3", "R3" };
 
 struct DBP_MapperMenuState final : DBP_MenuState
 {
