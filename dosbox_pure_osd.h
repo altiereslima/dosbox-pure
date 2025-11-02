@@ -1354,7 +1354,7 @@ struct DBP_PureMenuState final : DBP_MenuState
 			{
 				bool mounted = dbp_images[item.info].mounted;
 				int xdiff = (w - buf.CW*(strlen + 7)), mntx = (xdiff >= 0 ? xdiff / 2 : w - (buf.CW*9)), strx = (xdiff >= 0 ? mntx + (buf.CW*7) : xdiff - (buf.CW*3));
-				buf.Print(lh, mntx + ((mounted && xdiff >= 0) ? buf.CW : 0), y, (mounted ? "EJETAR " : "INSERIR "), (i == se ? buf.COL_HIGHLIGHT : buf.COL_NORMAL));
+				buf.Print(lh, mntx + ((mounted && xdiff >= 0) ? buf.CW : 0), y, (mounted ? "EJETAR-" : "INSERIR-"), (i == se ? buf.COL_HIGHLIGHT : buf.COL_NORMAL));
 				buf.Print(lh, strx, y, item.str.c_str(), (i == se ? buf.COL_HIGHLIGHT : buf.COL_NORMAL));
 			}
 			else if (item.type == IT_RUN || item.type == IT_BOOTOS || item.type == IT_BOOTIMG_MACHINE || item.type == IT_RUNSHELL)
